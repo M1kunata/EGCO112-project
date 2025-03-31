@@ -1,6 +1,7 @@
 #include <iostream>
 using namespace std;
-#include "userclass.h"
+#include<fstream>
+#include "jobseeker.h"
 void resgister();
 int main()
 {   
@@ -8,9 +9,17 @@ int main()
 }
 void resgister()
 {
-    user m;
     string username,password,mail,name;
     cout<<"create register your account"<<endl;
-    cout<<"username:";cin>>username;
-    cout<<username;
+    //cin.ignore();//clear buffer
+    cout<<"name:";    
+    getline(cin, username);//get input with white space
+    cout<<"password:";
+    getline(cin,password);
+    cout<<"mail:";
+    getline(cin,mail);
+    cout<<"username:";
+    getline(cin,name);
+    user t;
+    t.regisster(username,password,mail,name);
 }
