@@ -10,16 +10,17 @@ int main()
 }
 void resgister()
 {
-    user m;
     string username,password,mail,name;
     cout<<"create register your account"<<endl;
-    cout<<"name:";
-    getline(cin,name);
+    //cin.ignore();//clear buffer
+    cout<<"name:";    
+    getline(cin, name);//get input with white space
     cout<<"password:";
-    cin>>password;
-    cout<<"email:";
-    cin>>mail;
+    getline(cin,password);
+    cout<<"mail:";
+    getline(cin,mail);
     cout<<"username:";
-    cin>>username;
-    m.regisster(name,password,mail,username);
+    getline(cin,username);
+    user t;
+    t.regisster(name,password,mail,username);
 }

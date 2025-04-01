@@ -6,7 +6,7 @@ class user{
     string name;
 public:
     void regisster(string fullname,string pas,string mail,string user);
-   
+    void edit_data(string username);
 };
 void user::regisster(string fullname,string pas,string mail,string user)
 {
