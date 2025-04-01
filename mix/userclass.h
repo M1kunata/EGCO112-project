@@ -29,12 +29,13 @@ void user::edit_user()
         iss>>id>>name>>password>>email>>username;//แยกข้อมูลใส่ตัวแปร
     }
     }
+    else cout<<"regis no data";
     Out.close();
 }
 void user::regisster(string fullname,string pas,string mail,string user)
 {
     ifstream Out("user_data.txt");
-    if(!Out)
+    if(Out)
     {
     string line;
     while(getline(Out,line))//อ่านค่าจากไฟล์
