@@ -1,50 +1,60 @@
 #ifndef bst_h
 #define bst_h
 #include "jobclass.h"
-class tree
-{
-    private:
-        tree* right;
-        job* sort;
-        tree* left; 
-    public:
-        tree();
-        void leftside(tree* a);
-        void rightside(tree *a);
-};
-tree::tree()
-{
-    left=NULL;
-    right=NULL;
-}
-void tree::leftside(tree *a)
-{
-    left=a;
-}
-void tree::rightside(tree *a)
-{
-    right=a;
-}
-class bst:public tree
-{
-    private:
-        int size=0;
-        tree* root=NULL;
-    public:
-       // bst(tree* root=NULL);
-        void insert(bst *g,job *s);
-};
-void bst::insert(bst *g,job *s)
-{
-    tree* t=g->root;
-    tree* newtree;
+struct TreeNode {                                           
+    struct TreeNode *leftPtr; // pointer to left subtree
+    job* data; // node value                               
+    struct TreeNode *rightPtr; // pointer to right subtree
+}; // end structure treeNode 
+        
+typedef struct TreeNode * TreeNodePtr; // synonym for TreeNode*
+                    
+typedef struct {
+	int size;
+	TreeNodePtr root;
+}BST;
+
+void insertNode( BST *,job * );
+void insertNode( BST *b, job* t ){
+    TreeNodePtr t =b->root,new_node;
     int inserted=0;
-    newtree=new tree();
-    if(!g->root) g->root=newtree;
-    t->leftside(newtree);
-}
-
-
+   new_node =(TreeNodePtr) malloc(sizeof(struct TreeNode));
+   if(new_node){
+       new_node->leftPtr=NULL;
+       new_node->rightPtr=NULL;
+       new_node->data=t;
+  }
+       /*First Node*/
+       if(!b->root)	b->root=new_node;
+       else {
+while(!inserted){
+  if(new_node->data >=){
+    /* move/insert to the left*/
+     if(t->leftPtr==NULL)
+     {
+        t->leftPtr=new_node;
+        inserted=1;
+     }
+        else{
+        t=t->leftPtr;
+     }
+     }
+  else{
+         /* move/ insert to the right*/
+     if(t->rightPtr==NULL){
+     t->rightPtr=new_node;
+     inserted=1;}
+     else{
+        t=t->rightPtr;
+     }
+   }
+   }//end while
+  
+ }//end else;
+ b->size++;
+ }
+ 
+//end function
 
 
 
