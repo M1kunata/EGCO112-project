@@ -16,9 +16,9 @@ typedef struct
    TreeNodePtr root=NULL;
 } BST;
 
-void insertNode(BST *, job);
+void insertNode(BST *, job ,string);
 void inorder(TreeNodePtr t);
-void insertNode(BST *b, job g)
+void insertNode(BST *b, job g,string sor)
 {
    TreeNodePtr t = b->root, new_node;
    int inserted = 0;

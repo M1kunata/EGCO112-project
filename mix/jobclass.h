@@ -24,7 +24,12 @@ public:
     void edit_job();
     void clear_vector();
     void display();
+    bool check(string comcheck);
 };
+bool job::check(string comcheck)
+{
+    return company==comcheck;
+}
 void job::display()
 {
     cout << tag_num << jobtype << endl;
@@ -61,7 +66,7 @@ bool job::operator<=(job &another)
 {
     return tag_num <= another.tag_num;
 }
-void input()
+void input(string name)
 {
     string type, compa, loca, req;
     double max, min;
@@ -74,8 +79,9 @@ void input()
     getline(cin, req);
     cout << "location:";
     getline(cin, loca);
-    cout << "BY company:";
-    getline(cin, compa);
+    /*cout << "BY company:";
+    getline(cin, compa);*/
+    compa=name;
     cout << "max salary:";
     cin >> max;
     cout << "min salary:";
