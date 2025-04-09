@@ -14,102 +14,210 @@ private:
     string phone;
     string document;
     string role;
+    string skills; // เก็บเฉพาะฝั่ง jobseeker
 
 public:
-    user() = default; // constructor เปล่า
+    user() = default;
 
-    user(string u, string p, string n, string e, string ph, string doc, string r) {
-        username = u;
-        password = p;
-        name = n;
-        email = e;
-        phone = ph;
-        document = doc;
-        role = r;
+    user(string u, string p, string n, string e, string ph, string doc, string r, string sk = "")
+        : username(u), password(p), name(n), email(e), phone(ph), document(doc), role(r), skills(sk) {}
+
+        void display() const {
+            cout << "Username: " << username << "\nName: " << name
+                 << "\nEmail: " << email << "\nPhone: " << phone
+                 << "\nRole: " << role;
+        
+            if (role == "jobseeker") {
+                cout << "\nResume: " << document;
+                cout << "\nSkills: " << skills;
+            } else if (role == "company") {
+                cout << "\nDescription: " << document;
+                cout << "\nJobs Offered: " << skills;
+            }
+        
+            cout << endl;
+        }
+
+    string getRole() const { return role; }
+    string getUsername() const { return username; }
+    string getPassword() const { return password; }
+    string getSkills() const { return skills; }
+
+    static void save_user_to_file(const string& userfile, const string& jobfile, const string& companyfile, const user& new_user) {
+        // เขียน user.txt
+        ofstream ufile(userfile, ios::app);
+        ufile << new_user.username << " " << new_user.password << " DummySchool DummyPet DummyColor\n";
+        ufile.close();
+
+        // เขียน jobseeker หรือ company
+        ofstream outfile;
+        if (new_user.role == "jobseeker") {
+            outfile.open(jobfile, ios::app);
+            outfile << new_user.username << " " << new_user.email << " " << new_user.phone << " "
+                    << new_user.document << " " << new_user.skills << "\n";
+        } else if (new_user.role == "company") {
+            outfile.open(companyfile, ios::app);
+            outfile << new_user.username << " " << new_user.email << " " << new_user.phone << " "
+                    << new_user.name << " " << new_user.document << "\n"; // ใช้ name เป็นชื่อบริษัท
+        }
+        outfile.close();
     }
 
-    void display() {
-        cout << "Username: " << username << "\nName: " << name
-             << "\nEmail: " << email << "\nPhone: " << phone
-             << "\nDocument: " << document << "\nRole: " << role << endl;
-    }
-
-    string getRole() {
-        return role;
-    }
-
-    string getUsername() {
-        return username;
-    }
-
-    string getPassword() {
-        return password;
-    }
-
-    // ฟังก์ชันโหลดจากไฟล์
-    static vector<user> load_users_from_file(const string& filename) {
-        vector<user> users;
+    static user* login(const string& filename, const string& uname, const string& pass) {
         ifstream infile(filename);
         string line;
         while (getline(infile, line)) {
             istringstream iss(line);
-            string u, p, n, e, ph, doc, r;
-            if (iss >> u >> p >> n >> e >> ph >> doc >> r) {
-                users.emplace_back(u, p, n, e, ph, doc, r);
-            }
-        }
-        return users;
-    }
-
-    static void save_user_to_file(const string& filename, const user& new_user) {
-        ifstream checkfile(filename);
-        bool need_newline = false;
-        if (checkfile.peek() != EOF) { // มีข้อมูลในไฟล์
-            checkfile.seekg(-1, ios::end);
-            char lastChar;
-            checkfile.get(lastChar);
-            if (lastChar != '\n') {
-                need_newline = true;
-            }
-        }
-        checkfile.close();
-    
-        ofstream outfile(filename, ios::app); // append mode
-        if (need_newline) outfile << '\n'; // ⭐ บรรทัดสำคัญ
-    
-        outfile << new_user.username << " " << new_user.password << " " << new_user.name << " "
-                << new_user.email << " " << new_user.phone << " " << new_user.document << " "
-                << new_user.role << "\n";
-    
-        outfile.close();
-    }
-    
-
-    static user* login(const string& filename, const string& uname, const string& pass) {
-        vector<user> users = load_users_from_file(filename);
-        for (auto& u : users) {
-            if (u.getUsername() == uname && u.getPassword() == pass) {
-                cout << "\n✅ Login success! Welcome, " << uname << " (" << u.getRole() << ")\n";
-                return new user(u); // คืน object user ที่ login สำเร็จ
+            string u, p, school, pet, color;
+            if (iss >> u >> p >> school >> pet >> color) {
+                if (u == uname && p == pass) {
+                    cout << "\n✅ Login success! Welcome, " << uname << "\n";
+                    return new user(u, p, "N/A", "N/A", "N/A", "N/A", "unknown");
+                }
             }
         }
         cout << "\n❌ Login failed: Invalid username or password.\n";
         return nullptr;
     }
 
-    static void register_user(const string& filename) {
-        string uname, pass, name, email, phone, doc, role;
-        cout << "\n=== Register ===\n";
-        cout << "Username: "; cin >> uname;
+    static void register_user(const string& userfile, const string& jobfile, const string& companyfile) {
+        string uname, pass, name, email, phone, doc, role, skills;
+        string school, pet, color;
+        int role_choice;
+    
+        cout << "\n== Register ==" << endl;
+        cout << "1. Job Seeker" << endl;
+        cout << "2. Company" << endl;
+        cout << "Choose role: ";
+        cin >> role_choice;
+    
+        if (role_choice == 1) {
+            role = "jobseeker";
+        } else if (role_choice == 2) {
+            role = "company";
+        } else {
+            cout << "❌ Invalid role. Registration cancelled.\n";
+            return;
+        }
+    
+        cout << "\nUsername: "; cin >> uname;
         cout << "Password: "; cin >> pass;
-        cout << "Full Name (use _ instead of space): "; cin >> name;
+        if (role == "company") {
+            cout << "Company Name: "; cin >> name;
+        } else {
+            cout << "Full Name: "; cin >> name;
+        }
         cout << "Email: "; cin >> email;
         cout << "Phone: "; cin >> phone;
         cout << "Document Filename: "; cin >> doc;
-        cout << "Role (jobseeker/company): "; cin >> role;
-
-        user new_user(uname, pass, name, email, phone, doc, role);
-        save_user_to_file(filename, new_user);
-        cout << "\n✅ Registered successfully!\n";
-    }
+    
+        //  Security questions (ทุกคนกรอก)
+        cout << "School you graduated from: "; cin >> school;
+        cout << "First pet's name: "; cin >> pet;
+        cout << "Favorite color: "; cin >> color;
+    
+        if (role == "jobseeker") {
+            cout << "Skills (comma separated): "; cin >> skills;
+        }
+    
+        // บันทึก user.txt
+        ofstream ufile(userfile, ios::app);
+        ufile << uname << " " << pass << " " << school << " " << pet << " " << color << "\n";
+        ufile.close();
+    
+        if (role == "company") {
+            string company_desc, jobs;
+            cout << "Company Description (ใช้ _ แทนช่องว่าง): "; cin >> company_desc;
+            cout << "Jobs Offered (comma-separated): "; cin >> jobs;
+        
+            ofstream comp(companyfile, ios::app);
+            comp << uname << " " << email << " " << phone << " "
+                 << name << " " << company_desc << " " << jobs << "\n";
+            comp.close();
+        }
+    
+        cout << "\n✅ Registered successfully as " << role << "!\n";
+    }    
 };
+void user_register() {
+    user::register_user("user.txt", "jobseeker.txt", "company.txt");
+}
+
+user* user_login() {
+    string uname, pass;
+    cout << "== Login ==" << endl;
+    cout << "Username: "; cin >> uname;
+    cout << "Password: "; cin >> pass;
+
+    ifstream userfile("user.txt");
+    string line;
+    while (getline(userfile, line)) {
+        istringstream iss(line);
+        string u, p, school, pet, color;
+        if (iss >> u >> p >> school >> pet >> color) {
+            if (u == uname && p == pass) {
+                cout << "\n✅ Login success! Welcome, " << uname << "\n";
+
+                // ลองหาข้อมูลใน jobseeker
+                ifstream job("jobseeker.txt");
+                while (getline(job, line)) {
+                    istringstream jobiss(line);
+                    string ju, email, phone, doc, skills;
+                    if (jobiss >> ju >> email >> phone >> doc >> skills && ju == uname) {
+                        job.close();
+                        return new user(ju, p, ju, email, phone, doc, "jobseeker", skills);
+                    }
+                }
+                job.close();
+
+                // หรือ company
+                ifstream comp("company.txt");
+                    while (getline(comp, line)) {
+                        istringstream compiss(line);
+                        string cu, email, phone, compname, compdesc, jobs;
+                         if (compiss >> cu >> email >> phone >> compname >> compdesc >> jobs && cu == uname) {
+                        comp.close();
+                return new user(cu, p, compname, email, phone, compdesc, "company", jobs);
+
+    }
+}
+                comp.close();
+            }
+        }
+    }
+
+    cout << "\n❌ Login failed: Invalid username or password.\n";
+    return nullptr;
+}
+void user_dashboard(user* currentUser) {
+    int choice;
+    do {
+        cout << "\n=== User Dashboard ===\n";
+        cout << "Welcome, " << currentUser->getUsername() << " (" << currentUser->getRole() << ")\n";
+        cout << "1. View My Profile\n";
+        cout << "2. Edit My Info (ยังไม่ทำ)\n";
+        cout << "3. Logout\n";
+        cout << "Choose: ";
+        cin >> choice;
+        cin.ignore(); // เคลียร์ '\n'
+
+        if (choice == 1) {
+            system("clear");
+            currentUser->display();
+            cout << "\n[Press Enter to go back to the menu]";
+            cin.get(); // รอกด Enter ก่อนกลับ
+        }
+        else if (choice == 2) {
+            cout << "🛠 ฟังก์ชันแก้ไขข้อมูลอยู่ระหว่างพัฒนา\n";
+            cout << "[Press Enter to return to the menu]";
+            cin.get();
+        }
+        else if (choice != 3) {
+            cout << "Invalid choice.\n";
+            cout << "[Press Enter to return to the menu]";
+            cin.get();
+        }
+        system("clear");
+    } while (choice != 3);
+}
+

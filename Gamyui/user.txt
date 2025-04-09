@@ -1,17 +1,16 @@
-somsak01 P@ssword123 Somsak_Jaidee somsak.j@example.com 0811111111 resume_somsak.pdf jobseeker
-nurse_ploy PloyNurse@2023 Ploy_Chanaporn ploy.c@example.com 0822222222 resume_ploy.pdf jobseeker
-keng_mechanic M3chaN1c!45 Keng_Maneekul keng.m@example.com 0833333333 resume_keng.pdf jobseeker
-maria_artist ArtLover#29 Maria_Kittisak maria.k@example.com 0844444444 resume_maria.pdf jobseeker
-beam_account Acct2025$ Beam_Wannisa beam.w@example.com 0855555555 resume_beam.pdf jobseeker
-ton_dev DevT0n@Code Ton_Chatchai ton.c@example.com 0866666666 resume_ton.pdf jobseeker
-wan_arch Wan@BuildIt2024 Wanchana_Lee wanchana.l@example.com 0877777777 resume_wan.pdf jobseeker
-aom_chef Aom#Cooking88 Aom_Thitima aom.t@example.com 0888888888 resume_aom.pdf jobseeker
-noom_sales SaleS@999 Noom_Teerawat noom.t@example.com 0899999999 resume_noom.pdf jobseeker
-fon_digital F0n!Media Fon_Saetang fon.s@example.com 0800000000 resume_fon.pdf jobseeker
-buildtech01 BtAdmin#2024 BuildTech_Co.,Ltd hr@buildtech.com 0212345678 profile_buildtech.pdf company
-medicare_hr MediHR@2023 MediCare_Hospital hr@medicare.com 0267891234 profile_medicare.pdf company
-foodiez_admin Foodie!Boss Foodiez_Group contact@foodiez.co.th 0278945612 profile_foodiez.pdf company
-futuresoft_hr FS2025! HR_FutureSoft hr@futuresoft.dev 0234567890 profile_futuresoft.pdf company
-greenhome_admin GreenHome88 Green_Home_Design admin@greenhome.co 0256789012 profile_greenhome.pdf company
-artcore_admin ArtCore@Design ArtCore_Studios admin@artcore.co.th 0243216789 profile_artcore.pdf company
-
+somsak01 P@ssword123 Sarasas_Donmuang Dog Blue
+nurse_ploy PloyNurse@2023 Saint_Joseph Cat Pink
+keng_mechanic M3chaN1c!45 Rajamangala Fish Black
+maria_artist ArtLover#29 Chula_Rama5 Parrot Purple
+beam_account Acct2025$ Thammasat Rabbit Green
+ton_dev DevT0n@Code KMITL Hamster Orange
+wan_arch Wan@BuildIt2024 KMUTT Cat Brown
+aom_chef Aom#Cooking88 Dusit_Culinary Dog Red
+noom_sales SaleS@999 ABAC Snake Grey
+fon_digital F0n!Media Rangsit Cat Yellow
+buildtech01 BtAdmin#2024 TNI Owl Blue
+medicare_hr MediHR@2023 Mahidol Dog White
+foodiez_admin Foodie!Boss Le_Cordon_Blue Rat Pink
+futuresoft_hr FS2025! Chiangmai_Uni Cat Black
+greenhome_admin GreenHome88 Kasetsart Fish Green
+artcore_admin ArtCore@Design Silpakorn Lizard Purple
