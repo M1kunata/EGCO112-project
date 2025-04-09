@@ -21,18 +21,29 @@ public:
     bool operator>(job &another);
     void add_job(string jobtype, string company, string requir, string location, double max, double min, string status = "recruiting");
     void update_numofjob();
-    void edit_job();
     void clear_vector();
     void display();
     bool check(string comcheck);
+    bool compare(string sor,job &another);
 };
+bool job::compare(string sor,job &another)
+{
+    if(sor=="max_salary")
+    {
+        return max_salary<=another.max_salary;
+    }
+    else if (sor=="min_salary")
+    {
+        return min_salary<=another.min_salary;
+    }
+}
 bool job::check(string comcheck)
 {
     return company==comcheck;
 }
 void job::display()
 {
-    cout << tag_num << jobtype << endl;
+    cout << tag_num <<" "<< jobtype << endl;
     cout << company << endl;
     cout << location << endl;
     cout << max_salary << ":" << min_salary << endl;
@@ -70,22 +81,37 @@ void input(string name)
 {
     string type, compa, loca, req;
     double max, min;
+    req="";
     // clear screen!
     cout << "JOB:" << endl;
     cin.ignore(); // ถ้ามีbufferเอาคอมเมนออก
     cout << "JOB type:";
     getline(cin, type);
-    cout << "requirment(,):";
-    getline(cin, req);
+    while(1)
+    {
+        string skill;
+        cout << "requirment(stop type back):";
+        cin>>skill;
+        if(skill=="back")
+             break;
+        else req+=(skill+",");
+    }
     cout << "location:";
     getline(cin, loca);
     /*cout << "BY company:";
     getline(cin, compa);*/
     compa=name;
+    cin.ignore();
     cout << "max salary:";
     cin >> max;
+    while(1)
+    {
     cout << "min salary:";
     cin >> min;
+    if(min<max)
+        break;
+    else cout<<"pls input the real infomation"<<endl;
+    }
     job neow;
     neow.add_job(type, compa, req, loca, max, min);
 }
@@ -96,7 +122,7 @@ void job::add_job(string jobtype, string company, string requir, string loca, do
     tag_num++;
     ofstream F;
     F.open("job_data.txt", ios::app); // เปิดไฟล์โหมดเติมท้ายกับสร้าง
-    F << "\"" << tag_num << "\",\"" << jobtype << "\",\"" << company << "\",\"" << requir << "\",\"" << loca << "\",\"" << max << "\",\"" << min << "\",\"" << stas << "\"" << endl;
+    F << "\"" << tag_num << "\" \"" << jobtype << "\" \"" << company << "\" \"" << requir << "\" \"" << loca << "\" \"" << max << "\" \"" << min << "\" \"" << stas << "\"" << endl;
     F.close();
 }
 void clear_qoate(stringstream &qoute)
