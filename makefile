@@ -1,9 +1,9 @@
-compile: new.cpp
-	 g++ new.cpp -o jobseeker_company
+compile: compafun.cpp
+	 g++ compafun.cpp -o company
 
-run: jobseeker_company
-	 ./jobseeker_company
+run: company
+	 ./company
 
 
-clean: jobseeker_company
-	 rm jobseeker_company
+clean: company
+	 rm company
