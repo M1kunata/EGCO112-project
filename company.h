@@ -5,25 +5,21 @@ void company_menu(string companyname)
 {   
     while(1)
     {
-        cout << "\033[2J\033[1;1H";//clear screen
-        cout<<"--Company menu--"<<endl;
-        cout<<"1.job announcement"<<endl;
-        cout<<"2.view job"<<endl;
-        cout<<"3.exit"<<endl;
-        cout<<"choose:";char choice[10];cin>>choice;
+        display_choose_company_menu();
+        string choice;
+        cin>>choice;
+        return choice;
         if(strcmp(choice,"1")==0)
         {
             while(1)
             {
                 string in;
                 input(companyname);
-                cout<<"Do you want to add another?"<<endl;
-                cout<<"1.yes"<<endl;
-                cout<<"2.no"<<endl;
-                cout<<"choose:";
+                display_add_another();
                 cin>>in;
                 if(in=="1")
-                    cout << "\033[2J\033[1;1H";//clear screen
+                    clear_screen();//clear screen
+                    //เพิ่มงาน
                 else if(in=="2")
                     break;
             }
@@ -34,14 +30,11 @@ void company_menu(string companyname)
             char where[10]="0";
             while(1)
             {
-            cout<<"-----------------"<<endl;
-            cout<<"1.all job"<<endl;
-            cout<<"2.with filter"<<endl;
-            cout<<"choose:";
+            display_Manage_Posted_Jobs();
             cin>>isfilter;
             if(strcmp(isfilter,"1")==0)
             {
-                read_job(companyname,"nofilter");//แค้เฉพาะบริษัท
+                read_job(companyname,"nofilter");//แค่เฉพาะบริษัท
                 cout<<"where you want to go next?"<<endl;
                 cout<<"1.choose view again"<<endl;
                 cout<<"2.back to menu"<<endl;
@@ -49,7 +42,7 @@ void company_menu(string companyname)
                 cin>>where;
                 if(strcmp(where,"1")==0)
                 {
-                    cout << "\033[2J\033[1;1H";//clear screen
+                    clear_screen();//clear screen
                 }
                 else if(strcmp(where,"2")==0)
                 {
