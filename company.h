@@ -67,7 +67,15 @@ void company_menu(string companyname)
                         if(search_check(edit_root.root,id))
                             break;
                         else{
+                            string ok="";
+                            while(1)
+                            {
                             cout<<"pls choose the correct id!!"<<endl;
+                            cout<<"OK?"<<endl<<"1.ok"<<endl<<"2.no";
+                            cin>>ok;
+                            if(ok=="1")
+                                break;
+                            }
                         }
                     }
                     cout << "begin to edt...." << endl;
