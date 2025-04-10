@@ -119,6 +119,8 @@ void company_menu(string companyname)
                     rewrite.close();
                     clone_to_file(collection.root);
                 }
+                else if(strcmp(isfilter,"3")==0)
+                    break;
             }
         }
         else if (strcmp(choice, "3") == 0)

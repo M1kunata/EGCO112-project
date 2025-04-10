@@ -27,6 +27,7 @@ void display_Manage_Posted_Jobs(){
     cout<<"Manage Posted Jobs"<<endl;
     cout<<"1.Only view"<<endl;
     cout<<"2.view to edit"<<endl;
+    cout<<"3.back"<<endl;
     cout<<"choose:";
 }
 
