@@ -1,5 +1,3 @@
-#ifndef bst_h
-#define bst_h
 #include "jobclass.h"
 struct TreeNode
 {
@@ -15,7 +13,9 @@ typedef struct
    int size;
    TreeNodePtr root=NULL;
 } BST;
-
+void search(TreeNodePtr, int id,job);
+void clone_to_file(TreeNodePtr);
+bool search_check(TreeNodePtr,int id);
 void insertNode(BST *, job ,string);
 void inorder(TreeNodePtr t);
 void insertNode(BST *b, job g,string sor)
@@ -77,6 +77,41 @@ void inorder(TreeNodePtr t)
       inorder(t->rightPtr);
    }
 }
-// end function
-
-#endif
+void search(TreeNodePtr node,int id ,job edit) {
+   if(node!=NULL)
+   {
+   if (node->data.compare("equal",id)) 
+   {
+      node->data=edit;
+   }
+   if (node->data.compare("less",id))
+      search(node->leftPtr, id,edit);
+   else
+      search(node->rightPtr, id,edit);  
+   }
+}
+   // end function
+bool search_check(TreeNodePtr check,int id)
+{
+      if (!check) return false;
+      if (check->data.compare("equal",id)) return true;
+      if (check->data.compare("less",id))
+          return search_check(check->leftPtr, id);
+      else
+          return search_check(check->rightPtr, id);
+}
+void clone_to_file(TreeNodePtr clone)
+{
+   if(clone!=NULL)
+   {
+      ofstream rewrite("job_data.txt",ios::app);
+      clone_to_file(clone->leftPtr);
+      int tag_num;
+      string jobtype,company,requir,loca,stas;
+      double max,min;
+      clone->data.getdata(tag_num,jobtype,company,loca,max,min,stas,requir);
+      rewrite << "\"" << tag_num << "\" \"" << jobtype << "\" \"" << company << "\" \"" << requir << "\" \"" << loca << "\" \"" << max << "\" \"" << min << "\" \"" << stas << "\"" << endl;
+      clone_to_file(clone->rightPtr);
+      rewrite.close();
+   }
+}

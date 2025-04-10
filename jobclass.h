@@ -2,9 +2,9 @@
 #define jobclass_h
 #include <iostream>
 #include <vector>
+#include <limits>  // สำคัญสำหรับ numeric_limits
 #include <sstream>
 #include <fstream>
-#include "bst.h"
 using namespace std;
 void input();
 class job
@@ -23,21 +23,36 @@ public:
     void update_numofjob();
     void clear_vector();
     void display();
-    bool check(string comcheck);
-    bool compare(string sor,job &another);
+    bool check_com(string comcheck);
+    bool compare(string sor,int data);
+    void getdata(int &tag,string &job, string &compa, string &loca,double &max_salary,double &min_salary, string &stat, string &skill);
 };
-bool job::compare(string sor,job &another)
+void job::getdata(int &tag,string &job, string &compa, string &loca,double &max,double& min, string &stat, string &skill)
 {
-    if(sor=="max_salary")
+    tag=tag_num;
+    job=jobtype;
+    compa=company;
+    loca=location;
+    max=max_salary;
+    min=min_salary;
+    stat=status;
+    for(int i=0;i<requiresskill.size();i++)
     {
-        return max_salary<=another.max_salary;
+            skill+=(requiresskill[i]+",");
+    }    
+}
+bool job::compare(string sor,int data)
+{
+    if(sor=="equal")
+    {
+        return data==tag_num;
     }
-    else if (sor=="min_salary")
+    else if(sor=="less")
     {
-        return min_salary<=another.min_salary;
+        return data<tag_num;
     }
 }
-bool job::check(string comcheck)
+bool job::check_com(string comcheck)
 {
     return company==comcheck;
 }
@@ -96,19 +111,19 @@ void input(string name)
              break;
         else req+=(skill+",");
     }
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
     cout << "location:";
     getline(cin, loca);
     /*cout << "BY company:";
     getline(cin, compa);*/
     compa=name;
-    cin.ignore();
     cout << "max salary:";
     cin >> max;
     while(1)
     {
     cout << "min salary:";
     cin >> min;
-    if(min<max)
+    if(min<=max)
         break;
     else cout<<"pls input the real infomation"<<endl;
     }
