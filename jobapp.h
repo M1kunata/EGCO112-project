@@ -4,7 +4,7 @@
 #include <iomanip>
 using namespace std;
 
-void apply_job();
+void apply_job(string user_id, string job_id);
 void addNewApplication(string user_id, string job_id);
 int read_jobs();
 vector<vector<string>> read_applications();
