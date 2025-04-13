@@ -3,6 +3,9 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <algorithm> 
+#include <cctype>    
+
 using namespace std;
 
 class user {
@@ -107,9 +110,61 @@ public:
         } else {
             cout << "Full Name: "; cin >> name;
         }
-        cout << "Email: "; cin >> email;
-        cout << "Phone: "; cin >> phone;
-        cout << "Document Filename: "; cin >> doc;
+        do {
+            cout << "Email: ";
+            cin >> email;
+        
+            if (email.find('@') == string::npos) {
+                cout << "❌ Invalid email. Email must contain '@'. Please try again.\n";
+            }
+        
+        } while (email.find('@') == string::npos);
+        
+        do {
+            cout << "Phone: ";
+            cin >> phone;
+        
+            bool valid = (phone.length() == 10);
+        
+            for (char c : phone) {
+                if (!isdigit(c)) {
+                    valid = false;
+                    break;
+                }
+            }
+        
+            if (!valid) {
+                cout << "❌ Invalid phone number. Must be 10 digits only.\n";
+            }
+        
+        } while (
+            phone.length() != 10 || 
+            !all_of(phone.begin(), phone.end(), ::isdigit)
+        );
+
+    
+    do {
+        cout << "Document Filename: ";
+        cin >> doc;
+
+        if (
+        doc.find(".pdf") == string::npos &&
+        doc.find(".jpg") == string::npos &&
+        doc.find(".png") == string::npos &&
+        doc.find(".jpeg") == string::npos &&
+        doc.find(".doc") == string::npos
+    ) {
+        cout << "❌ Invalid file format. Please use .pdf, .jpg, .png, .jpeg, or .doc\n";
+    }
+
+    } while (
+        doc.find(".pdf") == string::npos &&
+        doc.find(".jpg") == string::npos &&
+        doc.find(".png") == string::npos &&
+        doc.find(".jpeg") == string::npos &&
+        doc.find(".doc") == string::npos
+    );
+
     
         //  Security questions (ทุกคนกรอก)
         cout << "School you graduated from: "; cin >> school;
@@ -139,6 +194,68 @@ public:
         cout << "\n✅ Registered successfully as " << role << "!\n";
     }    
 };
+void forget_password(const string& userfile) {
+    string uname;
+    cout << "\n== 🔐 Forgot Password ==" << endl;
+    cout << "Enter your username: ";
+    cin >> uname;
+
+    int q_choice;
+    cout << "\nChoose a security question to answer:\n";
+    cout << "1. School you graduated from\n";
+    cout << "2. First pet's name\n";
+    cout << "3. Favorite color\n";
+    cout << "Enter choice (1-3): ";
+    cin >> q_choice;
+
+    string answer;
+    cout << "Your answer: ";
+    cin >> answer;
+
+    ifstream infile(userfile);
+    vector<string> lines;
+    string line;
+    bool reset_success = false;
+
+    while (getline(infile, line)) {
+        istringstream iss(line);
+        string u, p, s, pet, color;
+        if (iss >> u >> p >> s >> pet >> color) {
+            if (u == uname) {
+                bool match = false;
+                if (q_choice == 1 && answer == s) match = true;
+                else if (q_choice == 2 && answer == pet) match = true;
+                else if (q_choice == 3 && answer == color) match = true;
+
+                if (match) {
+                    string new_pass;
+                    cout << "✅ Verified. Enter new password: ";
+                    cin >> new_pass;
+
+                    ostringstream updated;
+                    updated << u << " " << new_pass << " " << s << " " << pet << " " << color;
+                    lines.push_back(updated.str());
+                    reset_success = true;
+                    continue;
+                }
+            }
+        }
+        lines.push_back(line); // keep เดิม
+    }
+    infile.close();
+
+    if (reset_success) {
+        ofstream outfile(userfile);
+        for (const auto& l : lines) {
+            outfile << l << '\n';
+        }
+        outfile.close();
+        cout << "🔁 Password reset successfully!\n";
+    } else {
+        cout << "❌ Verification failed. Cannot reset password.\n";
+    }
+}
+
 void user_register() {
     user::register_user("user.txt", "jobseeker.txt", "company.txt");
 }
@@ -187,6 +304,17 @@ user* user_login() {
     }
 
     cout << "\n❌ Login failed: Invalid username or password.\n";
+
+
+    // เสนอลืมรหัสผ่าน
+    char opt;
+    cout << "Forgot your password? (y/n): ";
+    cin >> opt;
+
+    if (opt == 'y' || opt == 'Y') {
+    forget_password("user.txt");
+    }
+
     return nullptr;
 }
 void user_dashboard(user* currentUser) {
