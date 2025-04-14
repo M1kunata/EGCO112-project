@@ -1,5 +1,5 @@
-#include "bst.h"
 #include "display.h"
+#include "bstclass.h"
 #include <cstring>
 void read_job(BST &, string, string);
 void company_menu(string companyname)
@@ -64,7 +64,7 @@ void company_menu(string companyname)
                         string sid;
                         cin >> sid;
                         id = stoi(sid);
-                        if(search_check(edit_root.root,id))
+                        if(edit_root.exists(id))
                             break;
                         else{
                             string ok="";
@@ -114,10 +114,10 @@ void company_menu(string companyname)
                     }
                     cout<<"status(recuiting OR end):";cin>>status;
                     job edit(id,type,companyname,loca,max,min,status,req);
-                    search(collection.root, id, edit);
+                    collection.editJob(id, edit);
                     ofstream rewrite("job_data.txt");
                     rewrite.close();
-                    clone_to_file(collection.root);
+                    collection.saveToFile("job_data.txt");
                 }
                 else if(strcmp(isfilter,"3")==0)
                     break;
@@ -161,19 +161,19 @@ void read_job(BST &one, string comname, string sor) // เพื่อเพิ�
             job n1(tag, type, compa, loca, max, min, stat, require);
             if(comname=="all")
             {
-                insertNode(&one,n1,sor);
+                one.insertNode(n1,sor);
                 n1.clear_vector();
             }
             else{
                 if (n1.check_com(comname))
                 {
-                    insertNode(&one, n1, sor); // ยัดเข้าbst
+                    one.insertNode(n1, sor); // ยัดเข้าbst
                 }
                 n1.clear_vector();
             }
         }
         if(comname!="all")
-             inorder(one.root); // เรียงออกมาให้ดูตอนนี้เรียงตามลำดับid
+             one.displayInOrder(); // เรียงออกมาให้ดูตอนนี้เรียงตามลำดับid
     }
     Out.close();
 }

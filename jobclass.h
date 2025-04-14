@@ -7,7 +7,15 @@
 #include <fstream>
 using namespace std;
 void input();
-class job
+class data
+{
+    public:
+        virtual void anounment()
+        {
+            cout<<"ready to get data:"<<endl;
+        }
+};
+class job:public data
 {
 private:
     int tag_num;
@@ -26,6 +34,10 @@ public:
     bool check_com(string comcheck);
     bool compare(string sor,int data);
     void getdata(int &tag,string &job, string &compa, string &loca,double &max_salary,double &min_salary, string &stat, string &skill);
+    void anounment() override
+    {
+        cout<<"already add job!!"<<endl;
+    }
 };
 void job::getdata(int &tag,string &job, string &compa, string &loca,double &max,double& min, string &stat, string &skill)
 {
@@ -94,9 +106,12 @@ bool job::operator<=(job &another)
 }
 void input(string name)
 {
+    clear_screen();
+    data *temo;
     string type, compa, loca, req;
     double max, min;
     req="";
+    temo->data::anounment();
     // clear screen!
     cout << "JOB:" << endl;
     cin.ignore(); // ถ้ามีbufferเอาคอมเมนออก
@@ -127,8 +142,12 @@ void input(string name)
         break;
     else cout<<"pls input the real infomation"<<endl;
     }
+    clear_screen();
+    cout<<endl;
     job neow;
     neow.add_job(type, compa, req, loca, max, min);
+    temo=&neow;
+    temo->anounment();
 }
 
 void job::add_job(string jobtype, string company, string requir, string loca, double max, double min, string stas)
