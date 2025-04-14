@@ -1,10 +1,14 @@
+#ifndef USERGAMYUI_H
+#define USERGAMYUI_H
+
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
 #include <sstream>
 #include <algorithm> 
-#include <cctype>    
+#include <cctype>
+#include "../display.h"    
 
 using namespace std;
 
@@ -24,6 +28,11 @@ public:
 
     user(string u, string p, string n, string e, string ph, string doc, string r, string sk = "")
         : username(u), password(p), name(n), email(e), phone(ph), document(doc), role(r), skills(sk) {}
+        string getEmail() const { return email; }
+        string getPhone() const { return phone; }
+        string getDocument() const { return document; }
+        void setPassword(const string& newpass) { password = newpass; }
+        void setUsername(const string& newuser) { username = newuser; }
 
         void display() const {
             cout << "Username: " << username << "\nName: " << name
@@ -317,13 +326,15 @@ user* user_login() {
 
     return nullptr;
 }
+
+void editUserInfo(user* currentUser);
 void user_dashboard(user* currentUser) {
     int choice;
     do {
         cout << "\n=== User Dashboard ===\n";
         cout << "Welcome, " << currentUser->getUsername() << " (" << currentUser->getRole() << ")\n";
         cout << "1. View My Profile\n";
-        cout << "2. Edit My Info (ยังไม่ทำ)\n";
+        cout << "2. Edit My Info\n";
         cout << "3. Logout\n";
         cout << "Choose: ";
         cin >> choice;
@@ -336,9 +347,10 @@ void user_dashboard(user* currentUser) {
             cin.get(); // รอกด Enter ก่อนกลับ
         }
         else if (choice == 2) {
-            cout << "🛠 ฟังก์ชันแก้ไขข้อมูลอยู่ระหว่างพัฒนา\n";
-            cout << "[Press Enter to return to the menu]";
-            cin.get();
+            //cout << "🛠 ฟังก์ชันแก้ไขข้อมูลอยู่ระหว่างพัฒนา\n";
+            editUserInfo(currentUser);
+            //cout << "[Press Enter to return to the menu]";
+            //cin.get();
         }
         else if (choice != 3) {
             cout << "Invalid choice.\n";
@@ -349,3 +361,4 @@ void user_dashboard(user* currentUser) {
     } while (choice != 3);
 }
 
+#endif

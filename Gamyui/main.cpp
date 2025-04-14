@@ -1,3 +1,5 @@
+#include "../display.h"
+#include "edit.h"
 #include "usergamyui.h"
 void welcome();
 void main_menu();
