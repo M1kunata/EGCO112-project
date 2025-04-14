@@ -70,11 +70,13 @@ bool job::check_com(string comcheck)
 }
 void job::display()
 {
-    cout << tag_num <<" "<< jobtype << endl;
-    cout << company << endl;
-    cout << location << endl;
-    cout << max_salary << ":" << min_salary << endl;
-    cout << status << endl;
+    cout<<"JOB::"<<endl;
+    cout <<"ID: "<<tag_num <<endl;
+    cout<<"Name: "<< jobtype << endl;
+    cout <<"By: "<< company << endl;
+    cout <<"Work at: "<< location << endl;
+    cout <<"salary(max:min): "<< max_salary << ":" << min_salary << endl;
+    cout <<"Status: "<< status << endl;
 }
 void job::clear_vector()
 {
