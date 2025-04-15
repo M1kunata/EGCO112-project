@@ -3,44 +3,31 @@
 #include "jobapp.h"
 #include <cstring>
 void read_job(BST &, string, string);
+void add_job(string compa);
+void rechecktomenu();
+void edit_job(string);
 void company_menu(string companyname)
 {
     while (1)
-    {
+    { // เริ่ม ลูปเมนู
         display_choose_company_menu();
         char choice[10];
         cin >> choice;
         if (strcmp(choice, "1") == 0)
         {
-            while (1)
-            {
-                string in;
-                input(companyname);
-                display_add_another();
-                cin >> in;
-                if (in == "1")
-                    clear_screen(); // clear screen
-                // เพิ่มงาน
-                else if (in == "2")
-                    break;
-            }
+            add_job(companyname);
         }
         else if (strcmp(choice, "2") == 0)
         {
             char isfilter[10];
-            char where[10] = "0";
             while (1)
             {
                 display_Manage_Posted_Jobs();
                 cin >> isfilter;
                 if (strcmp(isfilter, "1") == 0)
                 {
-                    BST dis_root;
-                    read_job(dis_root, companyname, "nofilter"); // แค่เฉพาะบริษัท
-                    cout << "where you want to go next?" << endl;
-                    cout << "1.choose view again" << endl;
-                    cout << "2.back to menu" << endl;
-                    cout << "choose:";
+                    rechecktomenu(companyname);
+                    char where[10] = "0";
                     cin >> where;
                     if (strcmp(where, "1") == 0)
                     {
@@ -53,76 +40,7 @@ void company_menu(string companyname)
                 }
                 else if (strcmp(isfilter, "2") == 0)
                 {
-                    int id;
-                    BST edit_root, collection;
-                    read_job(collection, "all", "nofilter");
-                    while (1)
-                    {
-                        char thing[10];
-                        read_job(edit_root, companyname, "nofilter");
-                        cout << "which id you want to edit?" << endl;
-                        cout << "choose:";
-                        string sid;
-                        cin >> sid;
-                        id = stoi(sid);
-                        if (edit_root.exists(id))
-                            break;
-                        else
-                        {
-                            string ok = "";
-                            while (1)
-                            {
-                                cout << "pls choose the correct id!!" << endl;
-                                cout << "OK?" << endl
-                                     << "1.ok" << endl
-                                     << "2.no";
-                                cin >> ok;
-                                if (ok == "1")
-                                    break;
-                            }
-                        }
-                    }
-                    cout << "begin to edt...." << endl;
-                    string type, compa, loca, req, status;
-                    double max, min;
-                    req = "";
-                    // clear screen!
-                    cout << "JOB:" << endl;
-                    cin.ignore(); // ถ้ามีbufferเอาคอมเมนออก
-                    cout << "JOB type:";
-                    getline(cin, type);
-                    while (1)
-                    {
-                        string skill;
-                        cout << "requirment(stop type back):";
-                        cin >> skill;
-                        if (skill == "back")
-                            break;
-                        else
-                            req += (skill + ",");
-                    }
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    cout << "location:";
-                    getline(cin, loca);
-                    // cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    cout << "max salary:";
-                    cin >> max;
-                    while (1)
-                    {
-                        cout << "min salary:";
-                        cin >> min;
-                        if (min <= max)
-                            break;
-                        else
-                            cout << "pls input the real infomation" << endl;
-                    }
-                    cout << "status(recuiting OR end):";
-                    cin >> status;
-                    job edit(id, type, companyname, loca, max, min, status, req);
-                    collection.editJob(id, edit);
-                    ofstream rewrite("job_data.txt");
-                    rewrite.close();
-                    collection.saveToFile("job_data.txt");
+                    edit_job(companyname);
                 }
                 else if (strcmp(isfilter, "3") == 0)
                     break;
@@ -131,8 +49,10 @@ void company_menu(string companyname)
         else if (strcmp(choice, "3") == 0)
         {
             view_applications_by_company(companyname);
-            string ok;
-            cin>>ok;
+            cout << "choose job ID:" << endl;
+            cout << "" << endl;
+            string editsta;
+            cin >> editsta;
             /*int tag_num;
             ifstream Out("application_data.txt");
             if (Out)
@@ -151,9 +71,105 @@ void company_menu(string companyname)
                 Out.close();
             }
            */
-            
         }
         else if (strcmp(choice, "4") == 0)
+            break;
+    }
+}
+void edit_job(string companyname)
+{
+    int id;
+    BST edit_root, collection;
+    read_job(collection, "all", "nofilter");
+    while (1)
+    {
+        char thing[10];
+        read_job(edit_root, companyname, "nofilter");
+        cout << "which id you want to edit?" << endl;
+        cout << "choose:";
+        string sid;
+        cin >> sid;
+        id = stoi(sid);
+        if (edit_root.exists(id))
+            break;
+        else
+        {
+            string ok = "";
+            while (1)
+            {
+                cout << "pls choose the correct id!!" << endl;
+                cout << "OK?" << endl
+                     << "1.ok" << endl
+                     << "2.no";
+                cin >> ok;
+                if (ok == "1")
+                    break;
+            }
+        }
+    }
+    cout << "begin to edt...." << endl;
+    string type, compa, loca, req, status;
+    double max, min;
+    req = "";
+    // clear screen!
+    cout << "JOB:" << endl;
+    cin.ignore(); // ถ้ามีbufferเอาคอมเมนออก
+    cout << "JOB type:";
+    getline(cin, type);
+    while (1)
+    {
+        string skill;
+        cout << "requirment(stop type back):";
+        cin >> skill;
+        if (skill == "back")
+            break;
+        else
+            req += (skill + ",");
+    }
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cout << "location:";
+    getline(cin, loca);
+    // cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cout << "max salary:";
+    cin >> max;
+    while (1)
+    {
+        cout << "min salary:";
+        cin >> min;
+        if (min <= max)
+            break;
+        else
+            cout << "pls input the real infomation" << endl;
+    }
+    cout << "status(recuiting OR end):";
+    cin >> status;
+    job edit(id, type, companyname, loca, max, min, status, req);
+    collection.editJob(id, edit);
+    ofstream rewrite("job_data.txt");
+    rewrite.close();
+    collection.saveToFile("job_data.txt");
+}
+void rechecktomenu(string compa)
+{
+    BST dis_root;
+    read_job(dis_root, compa, "nofilter"); // แค่เฉพาะบริษัท
+    cout << "where you want to go next?" << endl;
+    cout << "1.choose view again" << endl;
+    cout << "2.back to menu" << endl;
+    cout << "choose:";
+}
+void add_job(string compa)
+{
+    while (1)
+    { // ลูปเพิ่มงาน
+        string in;
+        input(compa);
+        display_add_another();
+        cin >> in;
+        if (in == "1")
+            clear_screen(); // clear screen
+        // เพิ่มงาน
+        else if (in == "2")
             break;
     }
 }
