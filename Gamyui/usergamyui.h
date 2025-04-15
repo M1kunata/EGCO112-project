@@ -12,6 +12,12 @@
 
 using namespace std;
 
+class user;
+void display_register();
+void display_security();
+void display_user_dashboard(user* currentUser);
+void clear_screen();
+
 class user {
 private:
     string username;
@@ -95,20 +101,19 @@ public:
     static void register_user(const string& userfile, const string& jobfile, const string& companyfile) {
         string uname, pass, name, email, phone, doc, role, skills;
         string school, pet, color;
-        int role_choice;
-    
-        cout << "\n== Register ==" << endl;
-        cout << "1. Job Seeker" << endl;
-        cout << "2. Company" << endl;
-        cout << "Choose role: ";
-        cin >> role_choice;
-    
-        if (role_choice == 1) {
+        string role_input;
+        display_register();
+        getline(cin, role_input);
+
+        if (role_input == "1") {
             role = "jobseeker";
-        } else if (role_choice == 2) {
+        } else if (role_input == "2") {
             role = "company";
+        } else if (role_input == "3") {
+            cout << "↩️  Back to main menu.\n";
+            return;
         } else {
-            cout << "❌ Invalid role. Registration cancelled.\n";
+            cout << "❌ Invalid choice. Registration cancelled.\n";
             return;
         }
     
@@ -209,12 +214,8 @@ void forget_password(const string& userfile) {
     cout << "Enter your username: ";
     cin >> uname;
 
+    display_security();
     int q_choice;
-    cout << "\nChoose a security question to answer:\n";
-    cout << "1. School you graduated from\n";
-    cout << "2. First pet's name\n";
-    cout << "3. Favorite color\n";
-    cout << "Enter choice (1-3): ";
     cin >> q_choice;
 
     string answer;
@@ -331,12 +332,7 @@ void editUserInfo(user* currentUser);
 void user_dashboard(user* currentUser) {
     int choice;
     do {
-        cout << "\n=== User Dashboard ===\n";
-        cout << "Welcome, " << currentUser->getUsername() << " (" << currentUser->getRole() << ")\n";
-        cout << "1. View My Profile\n";
-        cout << "2. Edit My Info\n";
-        cout << "3. Logout\n";
-        cout << "Choose: ";
+        display_user_dashboard(currentUser);
         cin >> choice;
         cin.ignore(); // เคลียร์ '\n'
 
@@ -357,7 +353,7 @@ void user_dashboard(user* currentUser) {
             cout << "[Press Enter to return to the menu]";
             cin.get();
         }
-        system("clear");
+        clear_screen();
     } while (choice != 3);
 }
 

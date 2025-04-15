@@ -45,7 +45,7 @@ inline void editUserInfo(user* currentUser) {
         user tempUser(username, password, username, email, phone, document, role, skills);
         display_userInfo(&tempUser);
 
-        cout << "🔧 Enter the number to edit, or type:"<<endl<<"   s or save  - to confirm all changes"<<endl<< "   b or back  - to return to menu without saving"<<endl<< "   cc or cancel - to cancel all edits"<<endl<< "Your choice: ";
+        cout << "🔧 Enter the number to edit, or type"<<endl<<"   s or save  - to confirm all changes"<<endl<< "   b or back  - to return to menu without saving"<<endl<< "   cc or cancel - to cancel all edits"<<endl<< "Your choice: ";
         getline(cin, input);
 
         if (input == "cc" || input == "CC" || input == "cancel" || input == "Cancel") {
