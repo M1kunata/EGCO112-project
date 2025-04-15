@@ -113,4 +113,8 @@ public:
     int getSize() const {
         return size;
     }
+    void update_status()
+    {
+        
+    }
 };

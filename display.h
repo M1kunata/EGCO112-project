@@ -84,7 +84,8 @@ void display_choose_company_menu()
     cout<<"--Company menu--"<<endl;
     cout<<"1.Add job"<<endl;
     cout<<"2.Manage Posted Jobs"<<endl;
-    cout<<"3.exit"<<endl;
+    cout<<"3.accept job"<<endl;
+    cout<<"4.exit"<<endl;
     cout<<"choose:";
 }
 
