@@ -75,7 +75,7 @@ inline void editUserInfo(user* currentUser) {
         if (input == "1") {
             while (true) {
                 string new_uname;
-                cout << "New Username (or type 'cc' to cancel all edits): ";
+                cout << "New Username (or type 'cc' to cancel): ";
                 getline(cin, new_uname);
                 if (new_uname == "cc" || new_uname == "CC") break;
                 if (new_uname == username) cout << "⚠️  Same as old username. Try again.\n";
@@ -85,14 +85,14 @@ inline void editUserInfo(user* currentUser) {
         } else if (input == "2") {
             while (true) {
                 string old_pass;
-                cout << "Enter old password (or type 'cc' to cancel all edits): ";
+                cout << "Enter old password (or type 'cc' to cancel): ";
                 getline(cin, old_pass);
                 if (old_pass == "cc" || old_pass == "CC") break;
                 if (old_pass != password) {
                     cout << "❌ Incorrect password. Try again.\n";
                     continue;
                 }
-                cout << "Enter new password (or type 'cc' to cancel all edits): ";
+                cout << "Enter new password (or type 'cc' to cancel): ";
                 string new_pass;
                 getline(cin, new_pass);
                 if (new_pass != "cc" && new_pass != "CC") password = new_pass;
@@ -100,7 +100,7 @@ inline void editUserInfo(user* currentUser) {
             }
         } else if (input == "3") {
             do {
-                cout << "New Email (or type 'cc' to cancel all edits): ";
+                cout << "New Email (or type 'cc' to cancel): ";
                 getline(cin, email);
                 if (email == "cc" || email == "CC") break;
                 if (email.find('@') == string::npos) cout << "❌ Invalid email. Try again.\n";
@@ -117,7 +117,7 @@ inline void editUserInfo(user* currentUser) {
             } while (true);
         } else if (input == "5") {
             do {
-                cout << "New Document Filename (or type 'cc' to cancel all edits): ";
+                cout << "New Document Filename (or type 'cc' to cancel): ";
                 getline(cin, document);
                 if (document == "cc" || document == "CC") break;
                 if (document.find(".pdf") == string::npos && document.find(".jpg") == string::npos &&
@@ -127,7 +127,7 @@ inline void editUserInfo(user* currentUser) {
                 } else break;
             } while (true);
         } else if (input == "6" && role == "jobseeker") {
-            cout << "New Skills (or type 'cc' to cancel all edits): ";
+            cout << "New Skills (or type 'cc' to cancel): ";
             string s;
             getline(cin, s);
             if (s != "cc" && s != "CC") skills = s;
@@ -183,6 +183,14 @@ inline void editUserInfo(user* currentUser) {
     infile.close();
     ofstream outfile(filename);
     for (const string& l : lines) outfile << l << '\n';
+    currentUser->setUsername(username);
+    currentUser->setPassword(password);
+    currentUser->setEmail(email);
+    currentUser->setPhone(phone);
+    currentUser->setDocument(document);
+    if (role == "jobseeker") {
+        currentUser->setSkills(skills);
+    }
 
     cout << "\n✅ User info updated successfully!\n";
 }

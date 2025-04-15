@@ -1,5 +1,5 @@
-somsak01 somsak.j@example.com 0811111111 resume_somsak.pdf Python,C++,Java
-nurse_ploy ploy.c@example.com 0822222222 resume_ploy.pdf Nursing,Patient_Care,First_Aid
+somsee somsak.j@example.com 0811111111 resume_somsak.pdf Python,C++,Java
+ployploy ploy.c@example.com 0822222222 resume_ploy.pdf Nursing,Patient_Care,First_Aid
 keng_mechanic keng.m@example.com 0833333333 resume_keng.pdf Engine_Repair,Diagnostics,Welding
 maria_artist maria.k@example.com 0844444444 resume_maria.pdf Drawing,Illustration,Acrylic_Painting
 beam_account beam.w@example.com 0855555555 resume_beam.pdf Accounting,Excel,Tax_Planning
