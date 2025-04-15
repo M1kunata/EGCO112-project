@@ -175,7 +175,7 @@ void job::update_numofjob()
         while (getline(Out, line)) // อ่านค่าจากไฟล์
         {
             stringstream iss(line);
-            string require, st_req, quote, num;
+            string num;
             clear_qoate(iss);
             getline(iss, num, '"');
             tag_num = stoi(num);

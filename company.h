@@ -53,9 +53,9 @@ void company_menu(string companyname)
                 else if (strcmp(isfilter, "2") == 0)
                 {
                     int id;
-                    BST edit_root,collection;
-                    read_job(collection,"all","nofilter");
-                    while(1)
+                    BST edit_root, collection;
+                    read_job(collection, "all", "nofilter");
+                    while (1)
                     {
                         char thing[10];
                         read_job(edit_root, companyname, "nofilter");
@@ -64,22 +64,25 @@ void company_menu(string companyname)
                         string sid;
                         cin >> sid;
                         id = stoi(sid);
-                        if(edit_root.exists(id))
+                        if (edit_root.exists(id))
                             break;
-                        else{
-                            string ok="";
-                            while(1)
+                        else
+                        {
+                            string ok = "";
+                            while (1)
                             {
-                            cout<<"pls choose the correct id!!"<<endl;
-                            cout<<"OK?"<<endl<<"1.ok"<<endl<<"2.no";
-                            cin>>ok;
-                            if(ok=="1")
-                                break;
+                                cout << "pls choose the correct id!!" << endl;
+                                cout << "OK?" << endl
+                                     << "1.ok" << endl
+                                     << "2.no";
+                                cin >> ok;
+                                if (ok == "1")
+                                    break;
                             }
                         }
                     }
                     cout << "begin to edt...." << endl;
-                    string type, compa, loca, req,status;
+                    string type, compa, loca, req, status;
                     double max, min;
                     req = "";
                     // clear screen!
@@ -100,7 +103,7 @@ void company_menu(string companyname)
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
                     cout << "location:";
                     getline(cin, loca);
-                    //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    // cin.ignore(numeric_limits<streamsize>::max(), '\n');
                     cout << "max salary:";
                     cin >> max;
                     while (1)
@@ -112,18 +115,40 @@ void company_menu(string companyname)
                         else
                             cout << "pls input the real infomation" << endl;
                     }
-                    cout<<"status(recuiting OR end):";cin>>status;
-                    job edit(id,type,companyname,loca,max,min,status,req);
+                    cout << "status(recuiting OR end):";
+                    cin >> status;
+                    job edit(id, type, companyname, loca, max, min, status, req);
                     collection.editJob(id, edit);
                     ofstream rewrite("job_data.txt");
                     rewrite.close();
                     collection.saveToFile("job_data.txt");
                 }
-                else if(strcmp(isfilter,"3")==0)
+                else if (strcmp(isfilter, "3") == 0)
                     break;
             }
         }
         else if (strcmp(choice, "3") == 0)
+        {
+            int tag_num;
+            ifstream Out("application_data.txt");
+            if (Out)
+            {
+                string line;
+                while (getline(Out, line)) // อ่านค่าจากไฟล์
+                {
+                    stringstream iss(line);
+                    string  num;
+                    clear_qoate(iss);
+                    getline(iss, num, '"');
+                    clear_qoate(iss);
+                    getline(iss, num, '"');
+                    tag_num=stoi(num);
+                }
+                Out.close();
+            }
+           
+        }
+        else if (strcmp(choice, "4") == 0)
             break;
     }
 }
@@ -159,12 +184,13 @@ void read_job(BST &one, string comname, string sor) // เพื่อเพิ�
             clear_qoate(iss);
             getline(iss, stat, '"');
             job n1(tag, type, compa, loca, max, min, stat, require);
-            if(comname=="all")
+            if (comname == "all")
             {
-                one.insertNode(n1,sor);
+                one.insertNode(n1, sor);
                 n1.clear_vector();
             }
-            else{
+            else
+            {
                 if (n1.check_com(comname))
                 {
                     one.insertNode(n1, sor); // ยัดเข้าbst
@@ -172,8 +198,8 @@ void read_job(BST &one, string comname, string sor) // เพื่อเพิ�
                 n1.clear_vector();
             }
         }
-        if(comname!="all")
-             one.displayInOrder(); // เรียงออกมาให้ดูตอนนี้เรียงตามลำดับid
+        if (comname != "all")
+            one.displayInOrder(); // เรียงออกมาให้ดูตอนนี้เรียงตามลำดับid
     }
     Out.close();
 }
