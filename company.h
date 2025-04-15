@@ -1,5 +1,6 @@
 #include "display.h"
 #include "bstclass.h"
+#include "jobapp.h"
 #include <cstring>
 void read_job(BST &, string, string);
 void company_menu(string companyname)
@@ -129,7 +130,10 @@ void company_menu(string companyname)
         }
         else if (strcmp(choice, "3") == 0)
         {
-            int tag_num;
+            view_applications_by_company(companyname);
+            string ok;
+            cin>>ok;
+            /*int tag_num;
             ifstream Out("application_data.txt");
             if (Out)
             {
@@ -146,7 +150,8 @@ void company_menu(string companyname)
                 }
                 Out.close();
             }
-           
+           */
+            
         }
         else if (strcmp(choice, "4") == 0)
             break;
