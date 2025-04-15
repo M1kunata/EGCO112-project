@@ -37,13 +37,15 @@ public:
         string getEmail() const { return email; }
         string getPhone() const { return phone; }
         string getDocument() const { return document; }
+        string getName() const { return name; }
         void setPassword(const string& newpass) { password = newpass; }
         void setUsername(const string& newuser) { username = newuser; }
+        void setName(const string& newname) { name = newname; }
         void setEmail(const string& e) { email = e; }
         void setPhone(const string& p) { phone = p; }
         void setDocument(const string& d) { document = d; }
         void setSkills(const string& s) { skills = s; }
-
+        
         void display() const {
             cout << "Username: " << username << "\nName: " << name
                  << "\nEmail: " << email << "\nPhone: " << phone

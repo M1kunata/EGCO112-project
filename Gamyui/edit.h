@@ -33,6 +33,7 @@ inline void editUserInfo(user* currentUser) {
     string original_username = currentUser->getUsername();
     string username = original_username;
     string password = currentUser->getPassword();
+    string name = currentUser->getName();
     string email = currentUser->getEmail();
     string phone = currentUser->getPhone();
     string document = currentUser->getDocument();
@@ -40,12 +41,13 @@ inline void editUserInfo(user* currentUser) {
 
     string input;
     bool editing = true;
+    string warning = "";
 
     while (editing) {
-        user tempUser(username, password, username, email, phone, document, role, skills);
-        display_userInfo(&tempUser);
-
-        cout << "🔧 Enter the number to edit, or type"<<endl<<"   s or save  - to confirm all changes"<<endl<< "   b or back  - to return to menu without saving"<<endl<< "   cc or cancel - to cancel all edits"<<endl<< "Your choice: ";
+        clear_screen();
+        user tempUser(username, password, name, email, phone, document, role, skills);
+        display_userInfo(&tempUser, warning);
+        warning = "";
         getline(cin, input);
 
         if (input == "cc" || input == "CC" || input == "cancel" || input == "Cancel") {
@@ -56,40 +58,78 @@ inline void editUserInfo(user* currentUser) {
                 cout << "❎ Edit canceled.\n";
                 cout << "🔄 Reverting to original data...\n";
                 display_userInfo(currentUser);
-                username = original_username;
-                password = currentUser->getPassword();
-                email = currentUser->getEmail();
-                phone = currentUser->getPhone();
-                document = currentUser->getDocument();
-                skills = currentUser->getSkills();
-                continue;
+                return;
             } else continue;
         }
-        if (input == "save" || input == "s" || input == "S"|| input == "Save") {
-            break; // ไปบันทึก
+        if (input == "save" || input == "s" || input == "S" || input == "Save") {
+            break;
         }
-        if (input == "back" || input == "b" || input == "B"|| input == "Back") {
+        if (input == "back" || input == "b" || input == "B" || input == "Back") {
             return;
         }
 
         if (input == "1") {
             while (true) {
-                string new_uname;
+                string temp_input;
                 cout << "New Username (or type 'cc' to cancel): ";
-                getline(cin, new_uname);
-                if (new_uname == "cc" || new_uname == "CC") break;
-                if (new_uname == username) cout << "⚠️  Same as old username. Try again.\n";
-                else if (is_username_taken(new_uname)) cout << "❌ Username taken. Try again.\n";
-                else { username = new_uname; break; }
+                getline(cin, temp_input);
+                if (temp_input == "cc" || temp_input == "CC") break;
+                if (temp_input == username) cout << "⚠️  Same as old username. Please try again.\n";
+                else if (is_username_taken(temp_input)) cout << "❌ Username already taken. Please try another.\n";
+                else { username = temp_input; break; }
             }
         } else if (input == "2") {
+            string temp_input;
+            cout << "New Full Name (or type 'cc' to cancel): ";
+            getline(cin, temp_input);
+            if (temp_input != "cc" && temp_input != "CC") name = temp_input;
+        } else if (input == "3") {
+            while (true) {
+                string temp_input;
+                cout << "New Email (or type 'cc' to cancel): ";
+                getline(cin, temp_input);
+                if (temp_input == "cc" || temp_input == "CC") break;
+                if (temp_input.find('@') == string::npos) cout << "❌ Invalid email. Email must contain '@'. Please try again.\n";
+                else { email = temp_input; break; }
+            }
+        } else if (input == "4") {
+            while (true) {
+                string temp_input;
+                cout << "New Phone (10 digits, or type 'cc' to cancel): ";
+                getline(cin, temp_input);
+                if (temp_input == "cc" || temp_input == "CC") break;
+                bool valid = (temp_input.length() == 10 && all_of(temp_input.begin(), temp_input.end(), ::isdigit));
+                if (!valid) cout << "❌ Invalid phone number. Must be 10 digits only.\n";
+                else { phone = temp_input; break; }
+            }
+        } else if (input == "5") {
+            string temp_input;
+            cout << (role == "company" ? "New Description" : "New Resume") << " (or type 'cc' to cancel): ";
+            getline(cin, temp_input);
+            if (temp_input != "cc" && temp_input != "CC") {
+                if (role == "jobseeker") {
+                    if (temp_input.find(".pdf") == string::npos && temp_input.find(".jpg") == string::npos &&
+                        temp_input.find(".png") == string::npos && temp_input.find(".jpeg") == string::npos &&
+                        temp_input.find(".doc") == string::npos) {
+                        cout << "❌ Invalid file format. Please use .pdf, .jpg, .png, .jpeg, or .doc\n";
+                    } else document = temp_input;
+                } else {
+                    document = temp_input;
+                }
+            }
+        } else if (input == "6") {
+            string temp_input;
+            cout << (role == "company" ? "New Jobs Offered" : "New Skills") << " (or type 'cc' to cancel): ";
+            getline(cin, temp_input);
+            if (temp_input != "cc" && temp_input != "CC") skills = temp_input;
+        } else if (input == "7") {
             while (true) {
                 string old_pass;
                 cout << "Enter old password (or type 'cc' to cancel): ";
                 getline(cin, old_pass);
                 if (old_pass == "cc" || old_pass == "CC") break;
                 if (old_pass != password) {
-                    cout << "❌ Incorrect password. Try again.\n";
+                    cout << "❌ Incorrect password. Please try again.\n";
                     continue;
                 }
                 cout << "Enter new password (or type 'cc' to cancel): ";
@@ -98,46 +138,12 @@ inline void editUserInfo(user* currentUser) {
                 if (new_pass != "cc" && new_pass != "CC") password = new_pass;
                 break;
             }
-        } else if (input == "3") {
-            do {
-                cout << "New Email (or type 'cc' to cancel): ";
-                getline(cin, email);
-                if (email == "cc" || email == "CC") break;
-                if (email.find('@') == string::npos) cout << "❌ Invalid email. Try again.\n";
-                else break;
-            } while (true);
-        } else if (input == "4") {
-            do {
-                cout << "New Phone (10 digits, or type 'cc' to cancel all edits): ";
-                getline(cin, phone);
-                if (phone == "cc" || phone == "CC") break;
-                bool valid = (phone.length() == 10 && all_of(phone.begin(), phone.end(), ::isdigit));
-                if (!valid) cout << "❌ Invalid phone number. Try again.\n";
-                else break;
-            } while (true);
-        } else if (input == "5") {
-            do {
-                cout << "New Document Filename (or type 'cc' to cancel): ";
-                getline(cin, document);
-                if (document == "cc" || document == "CC") break;
-                if (document.find(".pdf") == string::npos && document.find(".jpg") == string::npos &&
-                    document.find(".png") == string::npos && document.find(".jpeg") == string::npos &&
-                    document.find(".doc") == string::npos) {
-                    cout << "❌ Invalid file format. Try again.\n";
-                } else break;
-            } while (true);
-        } else if (input == "6" && role == "jobseeker") {
-            cout << "New Skills (or type 'cc' to cancel): ";
-            string s;
-            getline(cin, s);
-            if (s != "cc" && s != "CC") skills = s;
         } else {
-            cout << "❌ Invalid choice.\n";
+            warning = "❌ Invalid choice. Please try again.";
             continue;
         }
     }
 
-    // Save to user.txt
     ifstream userfile("user.txt");
     vector<string> userlines;
     string line;
@@ -155,44 +161,71 @@ inline void editUserInfo(user* currentUser) {
         }
     }
     userfile.close();
-    ofstream uout("user.txt");
-    for (auto& l : userlines) uout << l << "\n";
+    ofstream userout("user.txt");
+    for (const auto& l : userlines) userout << l << '\n';
+    userout.close();
 
-    // Save to jobseeker/company
-    string filename = (role == "jobseeker") ? "jobseeker.txt" : "company.txt";
-    ifstream infile(filename);
-    vector<string> lines;
-    while (getline(infile, line)) {
-        istringstream iss(line);
-        string u;
-        iss >> u;
-        if (u == original_username) {
-            ostringstream updated;
-            if (role == "jobseeker") {
-                updated << username << " " << email << " " << phone << " " << document << " " << skills;
-            } else {
-                string old_email, old_phone, name, desc, jobs;
-                iss >> old_email >> old_phone >> name >> desc >> jobs;
-                updated << username << " " << email << " " << phone << " " << name << " " << document << " " << jobs;
+    if (role == "jobseeker") {
+        ifstream fin("jobseeker.txt");
+        vector<string> lines;
+        while (getline(fin, line)) {
+            istringstream iss(line);
+            string u, n, e, ph, docx;
+            string sk;
+            if (!(iss >> u >> n >> e >> ph >> docx)) {
+                cout << "❌Failed to parse line: " << line << endl;
+                lines.push_back(line);
+                continue;
             }
-            lines.push_back(updated.str());
-        } else {
-            lines.push_back(line);
+            getline(iss, sk);
+            size_t start = sk.find_first_not_of(" \t");
+            if (start != string::npos) sk = sk.substr(start);
+            else sk = "";
+
+            if (u == original_username) {
+                ostringstream updated;
+                updated << username << " " << name << " " << email << " " << phone << " " << document << " " << skills;
+                lines.push_back(updated.str());
+            } else lines.push_back(line);
         }
+        fin.close();
+        ofstream fout("jobseeker.txt");
+        for (const auto& l : lines) fout << l << '\n';
+        fout.close();
+    } else if (role == "company") {
+        ifstream fin("company.txt");
+        vector<string> lines;
+        while (getline(fin, line)) {
+            istringstream iss(line);
+            string u, n, e, ph, desc, jobs;
+            if (!(iss >> u >> n >> e >> ph >> desc >> jobs)) {
+                cout << "❌Failed to parse line: " << line << endl;
+                lines.push_back(line);
+                continue;
+            }
+            if (u == original_username) {
+                ostringstream updated;
+                updated << username << " " << name << " " << email << " " << phone << " " << document << " " << skills;
+                lines.push_back(updated.str());
+            } else lines.push_back(line);
+        }
+        fin.close();
+        ofstream fout("company.txt");
+        for (const auto& l : lines) fout << l << '\n';
+        fout.close();
     }
-    infile.close();
-    ofstream outfile(filename);
-    for (const string& l : lines) outfile << l << '\n';
+
     currentUser->setUsername(username);
     currentUser->setPassword(password);
+    currentUser->setName(name);
     currentUser->setEmail(email);
     currentUser->setPhone(phone);
     currentUser->setDocument(document);
-    if (role == "jobseeker") {
-        currentUser->setSkills(skills);
-    }
+    currentUser->setSkills(skills);
 
-    cout << "\n✅ User info updated successfully!\n";
+    cout << "\n[SUCCESS] User info updated successfully!\n";
 }
+
+
 
 #endif
