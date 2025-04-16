@@ -4,7 +4,8 @@ void main_menu();
 void exit();
 void user_register();
 user* user_login();             
-void user_dashboard(user* u);  
+void company_dashboard(user* currentUser);
+void jobseeker_dashboard(user* currentUser);  
 
 void welcome()
 {
@@ -37,13 +38,17 @@ void main_menu()
         }
         else if (main_choice == 2) {
             system("clear");
-            currentUser = user_login();
-
+            user* currentUser = user_login();
             if (currentUser != nullptr) {
-                user_dashboard(currentUser); 
+                if (currentUser->getRole() == "jobseeker") {
+                    jobseeker_dashboard(currentUser);
+                } else if (currentUser->getRole() == "company") {
+                    company_dashboard(currentUser);
+                }
                 delete currentUser;
                 currentUser = nullptr;
             }
+            
         }
         else if (main_choice == 3) {
             system("clear");
