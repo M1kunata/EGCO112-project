@@ -1,12 +1,22 @@
+#ifndef USERGAMYUI_H
+#define USERGAMYUI_H
+
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
 #include <sstream>
 #include <algorithm> 
-#include <cctype>    
+#include <cctype>
+#include "../display.h"    
 
 using namespace std;
+
+class user;
+void display_register();
+void display_security();
+void display_user_dashboard(user* currentUser);
+void clear_screen();
 
 class user {
 private:
@@ -24,7 +34,18 @@ public:
 
     user(string u, string p, string n, string e, string ph, string doc, string r, string sk = "")
         : username(u), password(p), name(n), email(e), phone(ph), document(doc), role(r), skills(sk) {}
-
+        string getEmail() const { return email; }
+        string getPhone() const { return phone; }
+        string getDocument() const { return document; }
+        string getName() const { return name; }
+        void setPassword(const string& newpass) { password = newpass; }
+        void setUsername(const string& newuser) { username = newuser; }
+        void setName(const string& newname) { name = newname; }
+        void setEmail(const string& e) { email = e; }
+        void setPhone(const string& p) { phone = p; }
+        void setDocument(const string& d) { document = d; }
+        void setSkills(const string& s) { skills = s; }
+        
         void display() const {
             cout << "Username: " << username << "\nName: " << name
                  << "\nEmail: " << email << "\nPhone: " << phone
@@ -87,20 +108,19 @@ public:
     static void register_user(const string& userfile, const string& jobfile, const string& companyfile) {
         string uname, pass, name, email, phone, doc, role, skills;
         string school, pet, color;
-        int role_choice;
-    
-        cout << "\n== Register ==" << endl;
-        cout << "1. Job Seeker" << endl;
-        cout << "2. Company" << endl;
-        cout << "Choose role: ";
-        cin >> role_choice;
-    
-        if (role_choice == 1) {
+        string role_input;
+        display_register();
+        getline(cin, role_input);
+
+        if (role_input == "1") {
             role = "jobseeker";
-        } else if (role_choice == 2) {
+        } else if (role_input == "2") {
             role = "company";
+        } else if (role_input == "3") {
+            cout << "↩️  Back to main menu.\n";
+            return;
         } else {
-            cout << "❌ Invalid role. Registration cancelled.\n";
+            cout << "❌ Invalid choice. Registration cancelled.\n";
             return;
         }
     
@@ -207,12 +227,8 @@ void forget_password(const string& userfile) {
     cout << "Enter your username: ";
     cin >> uname;
 
+    display_security();
     int q_choice;
-    cout << "\nChoose a security question to answer:\n";
-    cout << "1. School you graduated from\n";
-    cout << "2. First pet's name\n";
-    cout << "3. Favorite color\n";
-    cout << "Enter choice (1-3): ";
     cin >> q_choice;
 
     string answer;
@@ -324,6 +340,7 @@ user* user_login() {
 
     return nullptr;
 }
+<<<<<<< HEAD
 void jobseeker_dashboard(user* currentUser) {
     int choice;
     do {
@@ -334,6 +351,14 @@ void jobseeker_dashboard(user* currentUser) {
         cout << "3. Browse Jobs \n";
         cout << "4. Logout\n";
         cout << "Choose: ";
+=======
+
+void editUserInfo(user* currentUser);
+void user_dashboard(user* currentUser) {
+    int choice;
+    do {
+        display_user_dashboard(currentUser);
+>>>>>>> 8312d9331107a0f4f6e1459714d396fa7b4cca52
         cin >> choice;
         cin.ignore();
 
@@ -341,7 +366,17 @@ void jobseeker_dashboard(user* currentUser) {
             system("clear");
             currentUser->display();
             cout << "\n[Press Enter to go back to the menu]";
+<<<<<<< HEAD
             cin.get();
+=======
+            cin.get(); // รอกด Enter ก่อนกลับ
+        }
+        else if (choice == 2) {
+            //cout << "🛠 ฟังก์ชันแก้ไขข้อมูลอยู่ระหว่างพัฒนา\n";
+            editUserInfo(currentUser);
+            //cout << "[Press Enter to return to the menu]";
+            //cin.get();
+>>>>>>> 8312d9331107a0f4f6e1459714d396fa7b4cca52
         }
         else if (choice == 2) {
             
@@ -355,6 +390,7 @@ void jobseeker_dashboard(user* currentUser) {
             cout << "Invalid choice.\n";
             cin.get();
         }
+<<<<<<< HEAD
         system("clear");
     } while (choice != 4);
 }
@@ -394,3 +430,10 @@ void company_dashboard(user* currentUser) {
 }
 
 
+=======
+        clear_screen();
+    } while (choice != 3);
+}
+
+#endif
+>>>>>>> 8312d9331107a0f4f6e1459714d396fa7b4cca52

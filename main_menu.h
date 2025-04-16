@@ -31,22 +31,25 @@ void main_menu()
         switch(main_choice)
         {
             case 1:
-            system("clear");
+            clear_screen();
             user_register();
             break;
 
             case 2:
-            system("clear");
+            //system("clear");
+            clear_screen();
             user_login();
             break;
 
             case 3:
-            system("clear");
+            //system("clear");
+            clear_screen();
             exit();
             break;
 
             default:
-            system("clear");
+            //system("clear");
+            clear_screen();
             cout<<"Invalid choice. Please enter a number between 1 and 3."<<endl;
             break;
         }

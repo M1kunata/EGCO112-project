@@ -1,4 +1,4 @@
-compile: compafun.cpp
+compile: main.cpp
 	 g++ main.cpp -o GG
 
 run: GG

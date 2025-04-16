@@ -1,4 +1,5 @@
-"1" "ko" "o" "print," "" "2" "1" "recruiting"
+"1" "jo" "o" "k," "lop" "4" "3" "end"
 "2" "jo" "o" "home,bcc," "" "1" "1" "recruiting"
 "3" "ji" "o" "ho," "" "2" "1" "recruiting"
 "4" "joo" "o" "hoho," "mine" "4" "3" "end"
+"5" "joo" "oko" "hoo," "nene" "4" "3" "end"

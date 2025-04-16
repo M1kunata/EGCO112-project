@@ -1,5 +1,5 @@
-somsak01 P@ssword123 Sarasas_Donmuang Dog Blue
-nurse_ploy PloyNurse@2023 Saint_Joseph Cat Pink
+somsak P@ssword123 Sarasas_Donmuang Dog Blue
+ployploy PloyNurse@2023 Saint_Joseph Cat Pink
 keng_mechanic M3chaN1c!45 Rajamangala Fish Black
 maria_artist ArtLover#29 Chula_Rama5 Parrot Purple
 beam_account Acct2025$ Thammasat Rabbit Green
@@ -13,4 +13,8 @@ medicare_hr MediHr123 Mahidol Dog White
 foodiez_admin Foodie!Boss Le_Cordon_Blue Rat Pink
 futuresoft_hr FS2025! Chiangmai_Uni Cat Black
 greenhome_admin GreenHome88 Kasetsart Fish Green
+<<<<<<< HEAD
 artcore_admin ArtCore@Design Silpakorn Lizard Purple
+=======
+artcore_admin ArtCore@Design Silpakorn Lizard Purple
+>>>>>>> 8312d9331107a0f4f6e1459714d396fa7b4cca52

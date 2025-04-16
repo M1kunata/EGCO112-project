@@ -7,7 +7,15 @@
 #include <fstream>
 using namespace std;
 void input();
-class job
+class data
+{
+    public:
+        virtual void anounment()
+        {
+            cout<<"ready to get data:"<<endl;
+        }
+};
+class job:public data
 {
 private:
     int tag_num;
@@ -26,6 +34,10 @@ public:
     bool check_com(string comcheck);
     bool compare(string sor,int data);
     void getdata(int &tag,string &job, string &compa, string &loca,double &max_salary,double &min_salary, string &stat, string &skill);
+    void anounment() override
+    {
+        cout<<"already add job!!"<<endl;
+    }
 };
 void job::getdata(int &tag,string &job, string &compa, string &loca,double &max,double& min, string &stat, string &skill)
 {
@@ -58,11 +70,13 @@ bool job::check_com(string comcheck)
 }
 void job::display()
 {
-    cout << tag_num <<" "<< jobtype << endl;
-    cout << company << endl;
-    cout << location << endl;
-    cout << max_salary << ":" << min_salary << endl;
-    cout << status << endl;
+    cout<<"JOB::"<<endl;
+    cout <<"ID: "<<tag_num <<endl;
+    cout<<"Name: "<< jobtype << endl;
+    cout <<"By: "<< company << endl;
+    cout <<"Work at: "<< location << endl;
+    cout <<"salary(max:min): "<< max_salary << ":" << min_salary << endl;
+    cout <<"Status: "<< status << endl;
 }
 void job::clear_vector()
 {
@@ -94,9 +108,12 @@ bool job::operator<=(job &another)
 }
 void input(string name)
 {
+    clear_screen();
+    data *temo;
     string type, compa, loca, req;
     double max, min;
     req="";
+    temo->data::anounment();
     // clear screen!
     cout << "JOB:" << endl;
     cin.ignore(); // ถ้ามีbufferเอาคอมเมนออก
@@ -127,8 +144,12 @@ void input(string name)
         break;
     else cout<<"pls input the real infomation"<<endl;
     }
+    clear_screen();
+    cout<<endl;
     job neow;
     neow.add_job(type, compa, req, loca, max, min);
+    temo=&neow;
+    temo->anounment();
 }
 
 void job::add_job(string jobtype, string company, string requir, string loca, double max, double min, string stas)
@@ -154,7 +175,7 @@ void job::update_numofjob()
         while (getline(Out, line)) // อ่านค่าจากไฟล์
         {
             stringstream iss(line);
-            string require, st_req, quote, num;
+            string num;
             clear_qoate(iss);
             getline(iss, num, '"');
             tag_num = stoi(num);
