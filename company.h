@@ -8,7 +8,7 @@ void read_job(BST &, string, string);
 void add_job(string compa);
 void rechecktomenu(string);
 void edit_job(string);
-void updatestatusfromappli(string id_job,string);
+void updatestatusfromappli(string id_job, string);
 void company_dashboard(user *company)
 {
     string companyname = company->getUsername();
@@ -58,7 +58,7 @@ void company_dashboard(user *company)
                     break;
             }
         }
-        else if (strcmp(choice, "4") == 0)//อันนี้นะไรอัน
+        else if (strcmp(choice, "4") == 0) // อันนี้นะไรอัน
         {
             view_applications_by_company(companyname);
             cout << "choose job ID:" << endl;
@@ -71,7 +71,7 @@ void company_dashboard(user *company)
                 cout << "choose[back,noone,one or many]:";
                 cin >> numtoaccept;
                 // transform(numtoaccept.begin(), numtoaccept.end(), numtoaccept.begin(), ::tolower);
-                if(strcmp(numtoaccept,"back")==0)
+                if (strcmp(numtoaccept, "back") == 0)
                 {
                     break;
                 }
@@ -82,11 +82,11 @@ void company_dashboard(user *company)
                     for (const auto &changestatus : changestatus)
                         if (changestatus[1] == id_job)
                         {
-
                         }
                 }
                 else if (strcmp(numtoaccept, "one") == 0)
                 {
+                    updateApplicationStatus(id_job, "accepted");
                     break;
                 }
                 else if (strcmp(numtoaccept, "many") == 0)
@@ -119,10 +119,10 @@ void company_dashboard(user *company)
                 }
                */
             }
-            if((strcmp(numtoaccept,"many")==0)||(strcmp(numtoaccept,"one")==0))//อัพเดทสถาะงานของไฟล์ทางบริษัท
+            if ((strcmp(numtoaccept, "many") == 0) || (strcmp(numtoaccept, "one") == 0)) // อัพเดทสถาะงานของไฟล์ทางบริษัท
             {
-                updatestatusfromappli(id_job,"accept");//อยู่ข้างล่าง
-            }   
+                updatestatusfromappli(id_job, "accept"); // อยู่ข้างล่าง
+            }
         }
         else if (strcmp(choice, "5") == 0)
             break;
@@ -199,7 +199,7 @@ void edit_job(string companyname)
     collection.editJob(id, edit);
     ofstream rewrite("job_data.txt");
     rewrite.close();
-    collection.saveToFile("job_data.txt","NULL");
+    collection.saveToFile("job_data.txt", "NULL");
 }
 void rechecktomenu(string compa)
 {
@@ -276,21 +276,21 @@ void read_job(BST &one, string comname, string sor) // เพื่อเพิ�
     }
     Out.close();
 }
-void updatestatusfromappli(string id_job,string stat)
+void updatestatusfromappli(string id_job, string stat)
 {
-    int tag_num,tag;
-    string jobtype, company, location, status,requir; // status pending end
+    int tag_num, tag;
+    string jobtype, company, location, status, requir; // status pending end
     double max_sal, min_sal;
     BST update;
-    read_job(update,"all","nofilter");
+    read_job(update, "all", "nofilter");
     job updateappli;
-    tag=stoi(id_job);
-    update.read_bst(tag,updateappli);
-    updateappli.getdata(tag_num,jobtype,company,location,max_sal,min_sal,status,requir);
-    status=stat;
-    job readytoup(tag_num,jobtype,company,location,max_sal,min_sal,status,requir);
-    update.editJob(tag,readytoup);
+    tag = stoi(id_job);
+    update.read_bst(tag, updateappli);
+    updateappli.getdata(tag_num, jobtype, company, location, max_sal, min_sal, status, requir);
+    status = stat;
+    job readytoup(tag_num, jobtype, company, location, max_sal, min_sal, status, requir);
+    update.editJob(tag, readytoup);
     ofstream rewrite("job_data.txt");
     rewrite.close();
-    update.saveToFile("job_data.txt","NULL");
+    update.saveToFile("job_data.txt", "NULL");
 }

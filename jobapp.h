@@ -20,6 +20,47 @@ void apply_job(string user_id, string job_id)
     addNewApplication(user_id, to_string(selected_job));
 }
 
+std::string rebuildLine(const std::vector<std::string> &fields)
+{
+    std::string result;
+    for (size_t i = 0; i < fields.size(); ++i)
+    {
+        result += "\"" + fields[i] + "\"";
+        if (i != fields.size() - 1)
+            result += " ";
+    }
+    return result;
+}
+
+void updateApplicationStatus(string application_id, string status)
+{
+
+    ifstream inFile("application_data.txt");
+    vector<string> lines;
+    string line;
+    int targetline = stoi(application_id);
+    int currentline = 1;
+    while (getline(inFile, line))
+    {
+        auto fields = extractFields(line);
+        if (fields[0] == application_id)
+        {
+            fields[3] = status;
+            line = rebuildLine(fields);
+        }
+        lines.push_back(line);
+        currentline++;
+    }
+    inFile.close();
+
+    std::ofstream outFile("application_data.txt");
+    for (const auto &l : lines)
+    {
+        outFile << l << "\n";
+    }
+    outFile.close();
+}
+
 void addNewApplication(string user_id, string job_id)
 {
     ifstream file("application_data.txt");

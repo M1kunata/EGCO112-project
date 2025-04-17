@@ -22,3 +22,4 @@ noom_sales noom.t@example.com 0899999999 resume_noom.pdf Sales,Negotiation,CRM
 fon_digital fon.s@example.com 0800000000 resume_fon.pdf Content_Creation,Social_Media,Video_Editing
 >>>>>>> 8312d9331107a0f4f6e1459714d396fa7b4cca52
 
+ryan gleeson.ryanj@gmail.com 0811111111 Ryan ryan.png C++,Java,Docker,Python,WebDev
