@@ -8,7 +8,7 @@ void read_job(BST &, string, string);
 void add_job(string compa);
 void rechecktomenu(string);
 void edit_job(string);
-void updatestatusfromappli(string id_job);
+void updatestatusfromappli(string id_job,string);
 void company_dashboard(user *company)
 {
     string companyname = company->getUsername();
@@ -119,10 +119,10 @@ void company_dashboard(user *company)
                 }
                */
             }
-            if((strcmp(numtoaccept,"many")==0)||(strcmp(numtoaccept,"one")==0))
+            if((strcmp(numtoaccept,"many")==0)||(strcmp(numtoaccept,"one")==0))//อัพเดทสถาะงานของไฟล์ทางบริษัท
             {
-                updatestatusfromappli(id_job);//อยู่ข้างล่าง
-            }
+                updatestatusfromappli(id_job,"accept");//อยู่ข้างล่าง
+            }   
         }
         else if (strcmp(choice, "5") == 0)
             break;
@@ -276,7 +276,7 @@ void read_job(BST &one, string comname, string sor) // เพื่อเพิ�
     }
     Out.close();
 }
-void updatestatusfromappli(string id_job)
+void updatestatusfromappli(string id_job,string stat)
 {
     int tag_num,tag;
     string jobtype, company, location, status,requir; // status pending end
@@ -287,7 +287,7 @@ void updatestatusfromappli(string id_job)
     tag=stoi(id_job);
     update.read_bst(tag,updateappli);
     updateappli.getdata(tag_num,jobtype,company,location,max_sal,min_sal,status,requir);
-    status="accept";
+    status=stat;
     job readytoup(tag_num,jobtype,company,location,max_sal,min_sal,status,requir);
     update.editJob(tag,readytoup);
     ofstream rewrite("job_data.txt");
