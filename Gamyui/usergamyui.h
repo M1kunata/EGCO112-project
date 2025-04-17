@@ -9,7 +9,6 @@
 #include <algorithm> 
 #include <cctype>
 #include "../display.h"    
-
 using namespace std;
 
 class user;
@@ -340,7 +339,6 @@ user* user_login() {
 
     return nullptr;
 }
-<<<<<<< HEAD
 void jobseeker_dashboard(user* currentUser) {
     int choice;
     do {
@@ -351,14 +349,6 @@ void jobseeker_dashboard(user* currentUser) {
         cout << "3. Browse Jobs \n";
         cout << "4. Logout\n";
         cout << "Choose: ";
-=======
-
-void editUserInfo(user* currentUser);
-void user_dashboard(user* currentUser) {
-    int choice;
-    do {
-        display_user_dashboard(currentUser);
->>>>>>> 8312d9331107a0f4f6e1459714d396fa7b4cca52
         cin >> choice;
         cin.ignore();
 
@@ -366,17 +356,7 @@ void user_dashboard(user* currentUser) {
             system("clear");
             currentUser->display();
             cout << "\n[Press Enter to go back to the menu]";
-<<<<<<< HEAD
             cin.get();
-=======
-            cin.get(); // รอกด Enter ก่อนกลับ
-        }
-        else if (choice == 2) {
-            //cout << "🛠 ฟังก์ชันแก้ไขข้อมูลอยู่ระหว่างพัฒนา\n";
-            editUserInfo(currentUser);
-            //cout << "[Press Enter to return to the menu]";
-            //cin.get();
->>>>>>> 8312d9331107a0f4f6e1459714d396fa7b4cca52
         }
         else if (choice == 2) {
             
@@ -390,12 +370,13 @@ void user_dashboard(user* currentUser) {
             cout << "Invalid choice.\n";
             cin.get();
         }
-<<<<<<< HEAD
         system("clear");
     } while (choice != 4);
 }
-void company_dashboard(user* currentUser) {
-    int choice;
+/*void company_dashboard(user* currentUser) {
+    string use=currentUser->getUsername();
+    company_menu(use);
+    /*int choice;
     do {
         cout << "\n=== Company Dashboard ===\n";
         cout << "Welcome, " << currentUser->getUsername() << " (" << currentUser->getRole() << ")\n";
@@ -428,12 +409,5 @@ void company_dashboard(user* currentUser) {
         system("clear");
     } while (choice != 4);
 }
-
-
-=======
-        clear_screen();
-    } while (choice != 3);
-}
-
+*/
 #endif
->>>>>>> 8312d9331107a0f4f6e1459714d396fa7b4cca52

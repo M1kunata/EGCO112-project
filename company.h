@@ -1,23 +1,34 @@
 #include "display.h"
 #include "bstclass.h"
 #include "jobapp.h"
+#include "Gamyui/usergamyui.h"
 #include <cstring>
+using namespace std;
 void read_job(BST &, string, string);
 void add_job(string compa);
-void rechecktomenu();
+void rechecktomenu(string );
 void edit_job(string);
-void company_menu(string companyname)
+void company_dashboard(user* company)
 {
+    string companyname=company->getUsername();
     while (1)
     { // เริ่ม ลูปเมนู
-        display_choose_company_menu();
+        display_choose_company_menu(companyname);
         char choice[10];
         cin >> choice;
-        if (strcmp(choice, "1") == 0)
+        if(strcmp(choice,"1")==0)
         {
-            add_job(companyname);
+            system("clear");
+            company->display();
+            cout << "\n[Press Enter to go back to the menu]";
+            cin.ignore();
+            cin.get();
         }
         else if (strcmp(choice, "2") == 0)
+        {
+            add_job(companyname);//อยู่ข้างล่าง
+        }
+        else if (strcmp(choice, "3") == 0)
         {
             char isfilter[10];
             while (1)
@@ -46,13 +57,25 @@ void company_menu(string companyname)
                     break;
             }
         }
-        else if (strcmp(choice, "3") == 0)
+        else if (strcmp(choice, "4") == 0)
         {
             view_applications_by_company(companyname);
             cout << "choose job ID:" << endl;
-            cout << "" << endl;
-            string editsta;
-            cin >> editsta;
+            string id_job,nametoaccept,num,numtoaccept;
+            cin >> id_job;
+            cout << "How many to accept" << endl;
+            cout<<"choose[no,one or many]:"<<endl;
+            cin>>numtoaccept;
+            transform(numtoaccept.begin(), numtoaccept.end(),numtoaccept.begin(), ::tolower);
+             if(nametoaccept=="no")
+            {
+                vector<vector<string>> changestatus=read_applications();
+                for(const auto &changestatus : changestatus)
+                if(changestatus[1] == id_job)
+                {
+                    
+                }
+            }
             /*int tag_num;
             ifstream Out("application_data.txt");
             if (Out)
@@ -71,8 +94,8 @@ void company_menu(string companyname)
                 Out.close();
             }
            */
-        }
-        else if (strcmp(choice, "4") == 0)
+        } 
+        else if (strcmp(choice, "5") == 0)
             break;
     }
 }
