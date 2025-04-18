@@ -73,7 +73,7 @@ inline void display_user_dashboard(user* currentUser) {
 void display_register()
 {
     clear_screen();
-    cout << "\n== Register ==" << endl;
+    cout << "== Register ==" << endl;
     cout << "1. Job Seeker" << endl;
     cout << "2. Company" << endl;
     cout << "3. Back" << endl;
@@ -122,7 +122,7 @@ void display_Manage_Posted_Jobs(){
     cout<<"choose:";
 }
 
-inline void display_userInfo(user* u, const string& warning = "") {
+inline void display_userInfo(user* u, const string& warning) {
     if (!u) {
         cout << "⚠️  No user to display.\n";
         return;
@@ -143,6 +143,36 @@ inline void display_userInfo(user* u, const string& warning = "") {
     cout << "🔧 Enter the number to edit, or type\n"
          << "   s or save  - to confirm all changes\n"
          << "   b or back  - to return to menu without saving\n"
+         << "   cc or cancel - to cancel all edits\n";
+
+    if (!warning.empty()) {
+        cout << warning << "\n";
+    } else {
+        cout << endl;
+    }
+    cout << "Your choice: ";
+}
+
+inline void display_regisInfo(user* u, const string& warning) {
+    if (!u) {
+        cout << "⚠️  No user to display.\n";
+        return;
+    }
+    clear_screen();
+    cout << "📄 === User Info ===\n";
+    cout << "1. Username        : " << u->getUsername() << endl;
+    cout << "2. Name            : " << u->getName() << endl;
+    cout << "3. Password        : ********" << endl;
+    cout << "4. Email           : " << u->getEmail() << endl;
+    cout << "5. Phone           : " << u->getPhone() << endl;
+    cout << "6. " << (u->getRole() == "jobseeker" ? "Resume      " : "Description ")
+         << "    : " << u->getDocument() << endl;
+    cout << "7. " << (u->getRole() == "jobseeker" ? "Skills       " : "Jobs Offered ")
+         << "   : " << u->getSkills() << endl;
+    cout << "** Role            : " << u->getRole() << " (cannot edit)" << endl;
+
+    cout << "🔧 Enter the number to edit, or type\n"
+         << "   s or save  - to confirm all changes\n"
          << "   cc or cancel - to cancel all edits\n";
 
     if (!warning.empty()) {
