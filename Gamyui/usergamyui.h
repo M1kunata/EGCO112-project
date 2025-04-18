@@ -9,7 +9,6 @@
 #include <algorithm> 
 #include <cctype>
 #include "../display.h"    
-
 using namespace std;
 
 class user;
@@ -374,8 +373,10 @@ void jobseeker_dashboard(user* currentUser) {
         system("clear");
     } while (choice != 4);
 }
-void company_dashboard(user* currentUser) {
-    int choice;
+/*void company_dashboard(user* currentUser) {
+    string use=currentUser->getUsername();
+    company_menu(use);
+    /*int choice;
     do {
         cout << "\n=== Company Dashboard ===\n";
         cout << "Welcome, " << currentUser->getUsername() << " (" << currentUser->getRole() << ")\n";

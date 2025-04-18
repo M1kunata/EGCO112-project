@@ -45,17 +45,30 @@ private:
         else
             return search_check(node->rightPtr, id);
     }
-
-    void clone_to_file(TreeNode* node, ofstream& out) {
+    void get_job_from_bst(TreeNode* node, int id, job& getdata)
+    {
         if (node != nullptr) {
-            clone_to_file(node->leftPtr, out);
+            if (node->data.compare("equal", id)) {
+                getdata.setjob(node->data);
+            } else if (node->data.compare("less", id)) {
+                search(node->leftPtr, id, getdata);
+            } else {
+                search(node->rightPtr, id, getdata);
+            }
+        }
+    }
+    void clone_to_file(TreeNode* node, ofstream& out,string stats) {
+        if (node != nullptr) {
+            clone_to_file(node->leftPtr, out,stats);
             int tag_num;
             string jobtype, company, requir, loca, stas;
             double max, min;
             node->data.getdata(tag_num, jobtype, company, loca, max, min, stas, requir);
+            if(stats!="NULL")
+                stas=stats;
             out << "\"" << tag_num << "\" \"" << jobtype << "\" \"" << company << "\" \"" << requir
                 << "\" \"" << loca << "\" \"" << max << "\" \"" << min << "\" \"" << stas << "\"" << endl;
-            clone_to_file(node->rightPtr, out);
+            clone_to_file(node->rightPtr, out,stats);
         }
     }
 
@@ -102,19 +115,18 @@ public:
         return search_check(root, id);
     }
 
-    void saveToFile(const string& filename) {
+    void saveToFile(const string& filename,string stats) {
         ofstream out(filename, ios::app);
         if (out.is_open()) {
-            clone_to_file(root, out);
+            clone_to_file(root, out,stats);
             out.close();
         }
     }
-
+    void read_bst(int id,job &getinfo)
+    {
+        get_job_from_bst(root,id,getinfo);
+    }
     int getSize() const {
         return size;
-    }
-    void update_status()
-    {
-        
     }
 };

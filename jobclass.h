@@ -26,6 +26,7 @@ private:
 public:
     job(int tag_num = 0, string jobtype = "unknown", string company = "unknown", string location = "unknown",double max_salary=0,double min_salary=0, string status = "recruiting", string skill = "unknown");
     bool operator<=(job &another);
+    void setjob(job &another);
     bool operator>(job &another);
     void add_job(string jobtype, string company, string requir, string location, double max, double min, string status = "recruiting");
     void update_numofjob();
@@ -39,6 +40,17 @@ public:
         cout<<"already add job!!"<<endl;
     }
 };
+void job::setjob(job &another)
+{
+    tag_num=another.tag_num;
+    jobtype=another.jobtype;
+    company=another.company;
+    location=another.location;
+    status=another.status;
+    requiresskill=another.requiresskill;
+    max_salary=another.max_salary;
+    min_salary=another.min_salary;
+}
 void job::getdata(int &tag,string &job, string &compa, string &loca,double &max,double& min, string &stat, string &skill)
 {
     tag=tag_num;

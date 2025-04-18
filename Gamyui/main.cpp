@@ -1,6 +1,7 @@
 #include "../display.h"
 #include "edit.h"
 #include "usergamyui.h"
+#include "../company.h"
 void welcome();
 void main_menu();
 void exit();
@@ -24,7 +25,7 @@ do {
             system("clear");
             user_register();
         }
-        else if (main_choice == 2) {
+        else if (main_input == "2") {
             system("clear");
             user* currentUser = user_login();
             if (currentUser != nullptr) {
@@ -38,7 +39,7 @@ do {
             }
             
         }
-        else if (main_choice == 3) {
+        else if (main_input == "3") {
             system("clear");
             exit();
         }
@@ -46,15 +47,6 @@ do {
             system("clear");
             cout << "Invalid choice. Please enter a number between 1 and 3." << endl;
         }
-    }
-    else if (main_input == "3") {
-        exit();
-    }
-    else {
-        clear_screen();
-        cout << "Invalid choice. Please enter a number between 1 and 3." << endl;
-    }
-
     } while (main_input != "3");
 }
 

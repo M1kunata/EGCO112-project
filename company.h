@@ -1,23 +1,35 @@
 #include "display.h"
 #include "bstclass.h"
 #include "jobapp.h"
+#include "Gamyui/usergamyui.h"
 #include <cstring>
+using namespace std;
 void read_job(BST &, string, string);
 void add_job(string compa);
-void rechecktomenu();
+void rechecktomenu(string);
 void edit_job(string);
-void company_menu(string companyname)
+void updatestatusfromappli(string id_job, string);
+void company_dashboard(user *company)
 {
+    string companyname = company->getUsername();
     while (1)
     { // เริ่ม ลูปเมนู
-        display_choose_company_menu();
+        display_choose_company_menu(companyname);
         char choice[10];
         cin >> choice;
         if (strcmp(choice, "1") == 0)
         {
-            add_job(companyname);
+            system("clear");
+            company->display();
+            cout << "\n[Press Enter to go back to the menu]";
+            cin.ignore();
+            cin.get();
         }
         else if (strcmp(choice, "2") == 0)
+        {
+            add_job(companyname); // อยู่ข้างล่าง
+        }
+        else if (strcmp(choice, "3") == 0)
         {
             char isfilter[10];
             while (1)
@@ -46,33 +58,73 @@ void company_menu(string companyname)
                     break;
             }
         }
-        else if (strcmp(choice, "3") == 0)
+        else if (strcmp(choice, "4") == 0) // อันนี้นะไรอัน
         {
             view_applications_by_company(companyname);
             cout << "choose job ID:" << endl;
-            cout << "" << endl;
-            string editsta;
-            cin >> editsta;
-            /*int tag_num;
-            ifstream Out("application_data.txt");
-            if (Out)
+            string id_job, nametoaccept;
+            char numtoaccept[10];
+            cin >> id_job;
+            while (1)
             {
-                string line;
-                while (getline(Out, line)) // อ่านค่าจากไฟล์
+                cout << "How many to accept" << endl;
+                cout << "choose[back,noone,one or many]:";
+                cin >> numtoaccept;
+                // transform(numtoaccept.begin(), numtoaccept.end(), numtoaccept.begin(), ::tolower);
+                if (strcmp(numtoaccept, "back") == 0)
                 {
-                    stringstream iss(line);
-                    string  num;
-                    clear_qoate(iss);
-                    getline(iss, num, '"');
-                    clear_qoate(iss);
-                    getline(iss, num, '"');
-                    tag_num=stoi(num);
+                    break;
                 }
-                Out.close();
+                else if (strcmp(numtoaccept, "noone") == 0)
+                {
+                    break;
+                    vector<vector<string>> changestatus = read_applications();
+                    for (const auto &changestatus : changestatus)
+                        if (changestatus[1] == id_job)
+                        {
+                        }
+                }
+                else if (strcmp(numtoaccept, "one") == 0)
+                {
+                    updateApplicationStatus(id_job, "accepted");
+                    break;
+                }
+                else if (strcmp(numtoaccept, "many") == 0)
+                {
+                    break;
+                }
+                else
+                {
+                    string ok;
+                    cout << "pls choose in bracket(enter)";
+                    cin.ignore();
+                    cin.get();
+                }
+                /*int tag_num;
+                ifstream Out("application_data.txt");
+                if (Out)
+                {
+                    string line;
+                    while (getline(Out, line)) // อ่านค่าจากไฟล์
+                    {
+                        stringstream iss(line);
+                        string  num;
+                        clear_qoate(iss);
+                        getline(iss, num, '"');
+                        clear_qoate(iss);
+                        getline(iss, num, '"');
+                        tag_num=stoi(num);
+                    }
+                    Out.close();
+                }
+               */
             }
-           */
+            if ((strcmp(numtoaccept, "many") == 0) || (strcmp(numtoaccept, "one") == 0)) // อัพเดทสถาะงานของไฟล์ทางบริษัท
+            {
+                updatestatusfromappli(id_job, "accept"); // อยู่ข้างล่าง
+            }
         }
-        else if (strcmp(choice, "4") == 0)
+        else if (strcmp(choice, "5") == 0)
             break;
     }
 }
@@ -147,7 +199,7 @@ void edit_job(string companyname)
     collection.editJob(id, edit);
     ofstream rewrite("job_data.txt");
     rewrite.close();
-    collection.saveToFile("job_data.txt");
+    collection.saveToFile("job_data.txt", "NULL");
 }
 void rechecktomenu(string compa)
 {
@@ -223,4 +275,22 @@ void read_job(BST &one, string comname, string sor) // เพื่อเพิ�
             one.displayInOrder(); // เรียงออกมาให้ดูตอนนี้เรียงตามลำดับid
     }
     Out.close();
+}
+void updatestatusfromappli(string id_job, string stat)
+{
+    int tag_num, tag;
+    string jobtype, company, location, status, requir; // status pending end
+    double max_sal, min_sal;
+    BST update;
+    read_job(update, "all", "nofilter");
+    job updateappli;
+    tag = stoi(id_job);
+    update.read_bst(tag, updateappli);
+    updateappli.getdata(tag_num, jobtype, company, location, max_sal, min_sal, status, requir);
+    status = stat;
+    job readytoup(tag_num, jobtype, company, location, max_sal, min_sal, status, requir);
+    update.editJob(tag, readytoup);
+    ofstream rewrite("job_data.txt");
+    rewrite.close();
+    update.saveToFile("job_data.txt", "NULL");
 }

@@ -2,8 +2,8 @@
 #define DISPLAY_H
 
 #include <iostream>
-#include "Gamyui/usergamyui.h"
 using namespace std;
+#include "Gamyui/usergamyui.h"
 
 void clear_screen()
 {
@@ -78,15 +78,17 @@ void display_register()
 
 
 //company.h
-void display_choose_company_menu()
+void display_choose_company_menu(string compa)
 {
     clear_screen();
-    cout<<"--Company menu--"<<endl;
-    cout<<"1.Add job"<<endl;
-    cout<<"2.Manage Posted Jobs"<<endl;
-    cout<<"3.accept job"<<endl;
-    cout<<"4.exit"<<endl;
-    cout<<"choose:";
+    cout << "\n=== Company Dashboard ===\n";
+        cout << "Welcome, " << compa << " (" << "company" << ")\n";
+        cout << "1. View Company Profile\n";
+        cout << "2. Post Job \n";
+        cout << "3. Edit Job\n";
+        cout << "4. View Applicants\n";
+        cout << "5. Logout\n";
+        cout << "Choose: ";
 }
 
 void display_add_another(){

@@ -9,3 +9,4 @@ aom_chef aom.t@example.com 0888888888 Aom_Thitima resume_aom.pdf Thai_Cuisine,Ba
 noom_sales noom.t@example.com 0899999999 Noom_Teerawat resume_noom.pdf Sales,Negotiation,CRM
 fon_digital fon.s@example.com 0800000000 Fon_Saetang resume_fon.pdf Content_Creation,Social_Media,Video_Editing
 
+ryan gleeson.ryanj@gmail.com 0811111111 Ryan ryan.png C++,Java,Docker,Python,WebDev
