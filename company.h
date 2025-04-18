@@ -25,11 +25,15 @@ void company_dashboard(user *company)
             cin.ignore();
             cin.get();
         }
-        else if (strcmp(choice, "2") == 0)
+        else if(strcmp(choice,"2")==0)
+        {
+            editUserInfo(company);
+        }
+        else if (strcmp(choice, "3") == 0)
         {
             add_job(companyname); // อยู่ข้างล่าง
         }
-        else if (strcmp(choice, "3") == 0)
+        else if (strcmp(choice, "4") == 0)
         {
             char isfilter[10];
             while (1)
@@ -58,7 +62,7 @@ void company_dashboard(user *company)
                     break;
             }
         }
-        else if (strcmp(choice, "4") == 0) // อันนี้นะไรอัน
+        else if (strcmp(choice, "5") == 0) // อันนี้นะไรอัน
         {
             view_applications_by_company(companyname);
             cout << "choose job ID:" << endl;
@@ -124,7 +128,7 @@ void company_dashboard(user *company)
                 updatestatusfromappli(id_job, "accept"); // อยู่ข้างล่าง
             }
         }
-        else if (strcmp(choice, "5") == 0)
+        else if (strcmp(choice, "6") == 0)
             break;
     }
 }

@@ -84,10 +84,11 @@ void display_choose_company_menu(string compa)
     cout << "\n=== Company Dashboard ===\n";
         cout << "Welcome, " << compa << " (" << "company" << ")\n";
         cout << "1. View Company Profile\n";
-        cout << "2. Post Job \n";
-        cout << "3. Edit Job\n";
-        cout << "4. View Applicants\n";
-        cout << "5. Logout\n";
+        cout << "2. Edit Company Profile\n";
+        cout << "3. Post Job \n";
+        cout << "4. Edit Job\n";
+        cout << "5. View Applicants\n";
+        cout << "6. Logout\n";
         cout << "Choose: ";
 }
 
@@ -124,6 +125,7 @@ inline void display_userInfo(user* u) {
     } else {
         cout << "** Role       : " << u->getRole() << " (cannot edit)" << endl;
     }
+    cout<<"[back] to back:";
 }
 
 
