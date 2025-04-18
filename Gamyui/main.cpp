@@ -2,6 +2,7 @@
 #include "edit.h"
 #include "usergamyui.h"
 #include "../company.h"
+
 void welcome();
 void main_menu();
 void exit();

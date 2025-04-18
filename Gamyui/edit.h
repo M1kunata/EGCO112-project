@@ -86,17 +86,16 @@ inline void editUserInfo(user* currentUser) {
             if (temp_input != "cc" && temp_input != "CC") name = temp_input;
         } else if (input == "3") {
             while (true) {
-                string old_pass;
+                /*string old_pass;
                 cout << "Enter old password (or type 'cc' to cancel): ";
-                getline(cin, old_pass);
+                getline(cin, old_pass);*/
+                string old_pass = getPasswordMaskedPreview("Enter old password (or type 'cc' to cancel): ");
                 if (old_pass == "cc" || old_pass == "CC") break;
                 if (old_pass != password) {
                     cout << "❌ Incorrect password. Please try again.\n";
                     continue;
                 }
-                cout << "Enter new password (or type 'cc' to cancel): ";
-                string new_pass;
-                getline(cin, new_pass);
+                string new_pass = getPasswordMaskedPreview("Enter new password (or type 'cc' to cancel): ");
                 if (new_pass != "cc" && new_pass != "CC") password = new_pass;
                 break;
             }
@@ -135,11 +134,42 @@ inline void editUserInfo(user* currentUser) {
                 }
             }
         } else if (input == "7") {
-            string temp_input;
-            cout << (role == "company" ? "New Jobs Offered" : "New Skills") << " (or type 'cc' to cancel): ";
-            getline(cin, temp_input);
-            if (temp_input != "cc" && temp_input != "CC") skills = temp_input;
-        } else {
+            vector<string> items;
+        
+            while (true) {
+                string input_item;
+                cout << (role == "company" ? "Enter new jobs offered (or type 'cc' to cancel, 'cf' to confirm): " : "Enter new skills (or type 'cc' to cancel, 'cf' to confirm): ");
+                getline(cin, input_item);
+        
+                if (input_item == "cc" || input_item == "cancel") break;
+        
+                if (input_item == "cf" || input_item == "confirm") {
+                    if (items.empty()) {
+                        cout << "❌ You must enter at least one item before confirming.\n";
+                        continue;
+                    }
+                    // รวมเป็น string
+                    skills = "";
+                    for (size_t i = 0; i < items.size(); ++i) {
+                        skills += items[i];
+                        if (i < items.size() - 1) skills += ",";
+                    }
+                    break;
+                }
+        
+                if (input_item.empty()) {
+                    cout << "❌ This field cannot be empty.\n";
+                    continue;
+                }
+        
+                if (find(items.begin(), items.end(), input_item) != items.end()) {
+                    cout << "⚠️  \"" << input_item << "\" is already added.\n";
+                    continue;
+                }
+        
+                items.push_back(input_item);
+            }
+        }else {
             warning = "❌ Invalid choice. Please try again.";
             continue;
         }
