@@ -107,32 +107,35 @@ void display_Manage_Posted_Jobs(){
     cout<<"choose:";
 }
 
-inline void display_userInfo(user* u) {
+inline void display_userInfo(user* u, const string& warning = "") {
     if (!u) {
         cout << "⚠️  No user to display.\n";
         return;
     }
-    clear_screen();
+
     cout << "📄 === User Info ===\n";
-    cout << "1. Username   : " << u->getUsername() << endl;
-    cout << "2. Password   : " << u->getPassword() << endl;
-    cout << "3. Email      : " << u->getEmail() << endl;
-    cout << "4. Phone      : " << u->getPhone() << endl;
-    cout << "5. Document   : " << u->getDocument() << endl;
-    if (u->getRole() == "jobseeker") {
-        cout << "6. Skills     : " << u->getSkills() << endl;
-        cout << "** Role       : " << u->getRole() << " (cannot edit)" << endl;
-    } else {
-        cout << "** Role       : " << u->getRole() << " (cannot edit)" << endl;
+    cout << "1. Username        : " << u->getUsername() << endl;
+    cout << "2. Name            : " << u->getName() << endl;
+    cout << "3. Email           : " << u->getEmail() << endl;
+    cout << "4. Phone           : " << u->getPhone() << endl;
+    cout << "5. " << (u->getRole() == "jobseeker" ? "Resume      " : "Description ")
+         << "    : " << u->getDocument() << endl;
+    cout << "6. " << (u->getRole() == "jobseeker" ? "Skills       " : "Jobs Offered ")
+         << "   : " << u->getSkills() << endl;
+    cout << "** Role            : " << u->getRole() << " (cannot edit)" << endl;
+    cout << "7. Password        : ********\n";
+
+    cout << "🔧 Enter the number to edit, or type\n"
+         << "   s or save  - to confirm all changes\n"
+         << "   b or back  - to return to menu without saving\n"
+         << "   cc or cancel - to cancel all edits\n";
+         
+    if (!warning.empty()) {
+        cout << warning << "\n";
     }
-    cout<<"[back] to back:";
+    else {cout << endl;}
+    cout << "Your choice: ";
 }
 
-
-/*void display_
-
-void display_
-
-void display_*/
 
 #endif
