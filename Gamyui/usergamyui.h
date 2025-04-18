@@ -303,11 +303,11 @@ user* user_login() {
                     istringstream jobiss(line);
                     string ju, email, phone, name, doc, skills;
                     if (jobiss >> ju >> email >> phone >> name >> doc >> skills && ju == uname) {
+                        job.close();
                         return new user(ju, p, name, email, phone, doc, "jobseeker", skills);
                     }
-
                 }
-                job.close();
+                job.close(); 
 
                 // หรือ company
                 ifstream comp("company.txt");
