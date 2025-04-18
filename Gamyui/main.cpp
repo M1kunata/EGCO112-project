@@ -20,7 +20,6 @@ do {
     display_mainmenu();
     getline(cin, main_input); // เปลี่ยนจาก cin >> เป็น getline
 
-<<<<<<< HEAD
         if (main_choice == 1) {
             system("clear");
             user_register();
@@ -46,20 +45,6 @@ do {
         else {
             system("clear");
             cout << "Invalid choice. Please enter a number between 1 and 3." << endl;
-=======
-    if (main_input == "1") {
-        system("clear");
-        user_register();
-    }
-    else if (main_input == "2") {
-        system("clear");
-        currentUser = user_login();
-
-        if (currentUser != nullptr) {
-            user_dashboard(currentUser); 
-            delete currentUser;
-            currentUser = nullptr;
->>>>>>> 8312d9331107a0f4f6e1459714d396fa7b4cca52
         }
     }
     else if (main_input == "3") {

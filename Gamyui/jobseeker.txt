@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 somsak01 somsak.j@example.com 0811111111 Somsak_Jaidee resume_somsak.pdf Python,C++,Java
 nurse_ploy ploy.c@example.com 0822222222 Ploy_Chanaporn resume_ploy.pdf Nursing,Patient_Care,First_Aid
 keng_mechanic keng.m@example.com 0833333333 Keng_Maneekul resume_keng.pdf Engine_Repair,Diagnostics,Welding
@@ -9,16 +8,4 @@ wan_arch wanchana.l@example.com 0877777777 Wanchana_Lee resume_wan.pdf AutoCAD,S
 aom_chef aom.t@example.com 0888888888 Aom_Thitima resume_aom.pdf Thai_Cuisine,Baking,Menu_Planning
 noom_sales noom.t@example.com 0899999999 Noom_Teerawat resume_noom.pdf Sales,Negotiation,CRM
 fon_digital fon.s@example.com 0800000000 Fon_Saetang resume_fon.pdf Content_Creation,Social_Media,Video_Editing
-=======
-somsak somsak.j@example.com 0811111111 resume_somsak.pdf Python,C++,Java
-ployploy ploy.c@example.com 0822222222 resume_ploy.pdf Nursing,Patient_Care,First_Aid
-keng_mechanic keng.m@example.com 0833333333 resume_keng.pdf Engine_Repair,Diagnostics,Welding
-maria_artist maria.k@example.com 0844444444 resume_maria.pdf Drawing,Illustration,Acrylic_Painting
-beam_account beam.w@example.com 0855555555 resume_beam.pdf Accounting,Excel,Tax_Planning
-ton_dev ton.c@example.com 0866666666 resume_ton.pdf Python,React,Node.js
-wan_arch wanchana.l@example.com 0877777777 resume_wan.pdf AutoCAD,SketchUp,Building_Codes
-aom_chef aom.t@example.com 0888888888 resume_aom.pdf Thai_Cuisine,Baking,Menu_Planning
-noom_sales noom.t@example.com 0899999999 resume_noom.pdf Sales,Negotiation,CRM
-fon_digital fon.s@example.com 0800000000 resume_fon.pdf Content_Creation,Social_Media,Video_Editing
->>>>>>> 8312d9331107a0f4f6e1459714d396fa7b4cca52
 
