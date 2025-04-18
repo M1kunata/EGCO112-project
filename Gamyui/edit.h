@@ -46,7 +46,7 @@ inline void editUserInfo(user* currentUser) {
     while (editing) {
         clear_screen();
         user tempUser(username, password, name, email, phone, document, role, skills);
-        display_userInfo(&tempUser);
+        display_userInfo(&tempUser, warning);
         warning = "";
         getline(cin, input);
 

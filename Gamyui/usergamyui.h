@@ -8,6 +8,7 @@
 #include <sstream>
 #include <algorithm> 
 #include <cctype>
+//#include "../edit.h"
 #include "../display.h"    
 using namespace std;
 
@@ -16,7 +17,7 @@ void display_register();
 void display_security();
 void display_user_dashboard(user* currentUser);
 void clear_screen();
-
+void editUserInfo(user* currentUser);
 class user {
 private:
     string username;
@@ -296,13 +297,14 @@ user* user_login() {
         if (iss >> u >> p >> school >> pet >> color) {
             if (u == uname && p == pass) {
                 cout << "\n✅ Login success! Welcome, " << uname << "\n";
-
+                userfile.close();
                 // ลองหาข้อมูลใน jobseeker
                 ifstream job("jobseeker.txt");
                 while (getline(job, line)) {
                     istringstream jobiss(line);
                     string ju, email, phone, name, doc, skills;
                     if (jobiss >> ju >> email >> phone >> name >> doc >> skills && ju == uname) {
+                        job.close();
                         return new user(ju, p, name, email, phone, doc, "jobseeker", skills);
                     }
 
@@ -316,10 +318,9 @@ user* user_login() {
                         string cu, email, phone, compname, compdesc, jobs;
                          if (compiss >> cu >> email >> phone >> compname >> compdesc >> jobs && cu == uname) {
                         comp.close();
-                return new user(cu, p, compname, email, phone, compdesc, "company", jobs);
-
-    }
-}
+                        return new user(cu, p, compname, email, phone, compdesc, "company", jobs);
+                    }
+                }
                 comp.close();
             }
         }
@@ -359,7 +360,7 @@ void jobseeker_dashboard(user* currentUser) {
             cin.get();
         }
         else if (choice == 2) {
-            
+            editUserInfo(currentUser);
             cin.get();
         }
         else if (choice == 3) {
