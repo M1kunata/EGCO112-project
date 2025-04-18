@@ -68,13 +68,10 @@ void job::getdata(int &tag,string &job, string &compa, string &loca,double &max,
 bool job::compare(string sor,int data)
 {
     if(sor=="equal")
-    {
         return data==tag_num;
-    }
     else if(sor=="less")
-    {
         return data<tag_num;
-    }
+    else return 0;
 }
 bool job::check_com(string comcheck)
 {
