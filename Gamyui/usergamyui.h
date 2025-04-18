@@ -408,6 +408,6 @@ void jobseeker_dashboard(user* currentUser) {
         }
         system("clear");
     } while (choice != 4);
-}
-
+}*/
+#endif
 

@@ -21,7 +21,7 @@ do {
     display_mainmenu();
     getline(cin, main_input); // เปลี่ยนจาก cin >> เป็น getline
 
-        if (main_choice == 1) {
+        if (main_input == "1") {
             system("clear");
             user_register();
         }
