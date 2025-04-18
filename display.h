@@ -7,7 +7,11 @@ using namespace std;
 
 void clear_screen()
 {
-    cout << "\033[2J\033[1;1H";//clear screent
+    #ifdef _WIN32
+    system("cls");
+    #else
+    system("clear");
+    #endif
 }
 
 
@@ -75,13 +79,24 @@ void display_register()
     cout << "3. Back" << endl;
     cout << "Choose role: ";
 }
+void display_jobseeker_dashboard(user* currentUser){
+    clear_screen();
+    cout << "=== Jobseeker Dashboard ===\n";
+    cout << "Welcome, " << currentUser->getUsername() << " (" << currentUser->getRole() << ")\n";
+    cout << "1. View My Profile\n";
+    cout << "2. Edit My Info \n";
+    cout << "3. Browse Jobs \n";
+    cout << "4. Logout\n";
+    cout << "Choose: ";
+}
+
 
 
 //company.h
 void display_choose_company_menu(string compa)
 {
     clear_screen();
-    cout << "\n=== Company Dashboard ===\n";
+    cout << "=== Company Dashboard ===\n";
         cout << "Welcome, " << compa << " (" << "company" << ")\n";
         cout << "1. View Company Profile\n";
         cout << "2. Edit Company Profile\n";
@@ -112,28 +127,29 @@ inline void display_userInfo(user* u, const string& warning = "") {
         cout << "⚠️  No user to display.\n";
         return;
     }
-
+    clear_screen();
     cout << "📄 === User Info ===\n";
     cout << "1. Username        : " << u->getUsername() << endl;
     cout << "2. Name            : " << u->getName() << endl;
-    cout << "3. Email           : " << u->getEmail() << endl;
-    cout << "4. Phone           : " << u->getPhone() << endl;
-    cout << "5. " << (u->getRole() == "jobseeker" ? "Resume      " : "Description ")
+    cout << "3. Password        : ********" << endl;
+    cout << "4. Email           : " << u->getEmail() << endl;
+    cout << "5. Phone           : " << u->getPhone() << endl;
+    cout << "6. " << (u->getRole() == "jobseeker" ? "Resume      " : "Description ")
          << "    : " << u->getDocument() << endl;
-    cout << "6. " << (u->getRole() == "jobseeker" ? "Skills       " : "Jobs Offered ")
+    cout << "7. " << (u->getRole() == "jobseeker" ? "Skills       " : "Jobs Offered ")
          << "   : " << u->getSkills() << endl;
     cout << "** Role            : " << u->getRole() << " (cannot edit)" << endl;
-    cout << "7. Password        : ********\n";
 
     cout << "🔧 Enter the number to edit, or type\n"
          << "   s or save  - to confirm all changes\n"
          << "   b or back  - to return to menu without saving\n"
          << "   cc or cancel - to cancel all edits\n";
-         
+
     if (!warning.empty()) {
         cout << warning << "\n";
+    } else {
+        cout << endl;
     }
-    else {cout << endl;}
     cout << "Your choice: ";
 }
 
