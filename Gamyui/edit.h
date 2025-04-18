@@ -14,6 +14,7 @@ inline bool is_username_taken(const string& uname) {
     ifstream infile("user.txt");
     string line;
     while (getline(infile, line)) {
+        if (line.empty()) continue;
         istringstream iss(line);
         string u, p, s, pet, color;
         if (iss >> u >> p >> s >> pet >> color && u == uname) {
@@ -85,45 +86,6 @@ inline void editUserInfo(user* currentUser) {
             if (temp_input != "cc" && temp_input != "CC") name = temp_input;
         } else if (input == "3") {
             while (true) {
-                string temp_input;
-                cout << "New Email (or type 'cc' to cancel): ";
-                getline(cin, temp_input);
-                if (temp_input == "cc" || temp_input == "CC") break;
-                if (temp_input.find('@') == string::npos) cout << "❌ Invalid email. Email must contain '@'. Please try again.\n";
-                else { email = temp_input; break; }
-            }
-        } else if (input == "4") {
-            while (true) {
-                string temp_input;
-                cout << "New Phone (10 digits, or type 'cc' to cancel): ";
-                getline(cin, temp_input);
-                if (temp_input == "cc" || temp_input == "CC") break;
-                bool valid = (temp_input.length() == 10 && all_of(temp_input.begin(), temp_input.end(), ::isdigit));
-                if (!valid) cout << "❌ Invalid phone number. Must be 10 digits only.\n";
-                else { phone = temp_input; break; }
-            }
-        } else if (input == "5") {
-            string temp_input;
-            cout << (role == "company" ? "New Description" : "New Resume") << " (or type 'cc' to cancel): ";
-            getline(cin, temp_input);
-            if (temp_input != "cc" && temp_input != "CC") {
-                if (role == "jobseeker") {
-                    if (temp_input.find(".pdf") == string::npos && temp_input.find(".jpg") == string::npos &&
-                        temp_input.find(".png") == string::npos && temp_input.find(".jpeg") == string::npos &&
-                        temp_input.find(".doc") == string::npos) {
-                        cout << "❌ Invalid file format. Please use .pdf, .jpg, .png, .jpeg, or .doc\n";
-                    } else document = temp_input;
-                } else {
-                    document = temp_input;
-                }
-            }
-        } else if (input == "6") {
-            string temp_input;
-            cout << (role == "company" ? "New Jobs Offered" : "New Skills") << " (or type 'cc' to cancel): ";
-            getline(cin, temp_input);
-            if (temp_input != "cc" && temp_input != "CC") skills = temp_input;
-        } else if (input == "7") {
-            while (true) {
                 string old_pass;
                 cout << "Enter old password (or type 'cc' to cancel): ";
                 getline(cin, old_pass);
@@ -138,6 +100,45 @@ inline void editUserInfo(user* currentUser) {
                 if (new_pass != "cc" && new_pass != "CC") password = new_pass;
                 break;
             }
+        } else if (input == "4") {
+            while (true) {
+                string temp_input;
+                cout << "New Email (or type 'cc' to cancel): ";
+                getline(cin, temp_input);
+                if (temp_input == "cc" || temp_input == "CC") break;
+                if (temp_input.find('@') == string::npos) cout << "❌ Invalid email. Email must contain '@'. Please try again.\n";
+                else { email = temp_input; break; }
+            }
+        } else if (input == "5") {
+            while (true) {
+                string temp_input;
+                cout << "New Phone (10 digits, or type 'cc' to cancel): ";
+                getline(cin, temp_input);
+                if (temp_input == "cc" || temp_input == "CC") break;
+                bool valid = (temp_input.length() == 10 && all_of(temp_input.begin(), temp_input.end(), ::isdigit));
+                if (!valid) cout << "❌ Invalid phone number. Must be 10 digits only.\n";
+                else { phone = temp_input; break; }
+            }
+        } else if (input == "6") {
+            string temp_input;
+            cout << (role == "company" ? "New Description" : "New Resume") << " (or type 'cc' to cancel): ";
+            getline(cin, temp_input);
+            if (temp_input != "cc" && temp_input != "CC") {
+                if (role == "jobseeker") {
+                    if (temp_input.find(".pdf") == string::npos && temp_input.find(".jpg") == string::npos &&
+                        temp_input.find(".png") == string::npos && temp_input.find(".jpeg") == string::npos &&
+                        temp_input.find(".doc") == string::npos) {
+                        cout << "❌ Invalid file format. Please use .pdf, .jpg, .png, .jpeg, or .doc\n";
+                    } else document = temp_input;
+                } else {
+                    document = temp_input;
+                }
+            }
+        } else if (input == "7") {
+            string temp_input;
+            cout << (role == "company" ? "New Jobs Offered" : "New Skills") << " (or type 'cc' to cancel): ";
+            getline(cin, temp_input);
+            if (temp_input != "cc" && temp_input != "CC") skills = temp_input;
         } else {
             warning = "❌ Invalid choice. Please try again.";
             continue;
@@ -167,37 +168,41 @@ inline void editUserInfo(user* currentUser) {
 
     if (role == "jobseeker") {
         ifstream fin("jobseeker.txt");
-        vector<string> lines;
-        while (getline(fin, line)) {
-            istringstream iss(line);
-            string u, n, e, ph, docx;
-            string sk;
-            if (!(iss >> u >> n >> e >> ph >> docx)) {
-                cout << "❌Failed to parse line: " << line << endl;
-                lines.push_back(line);
-                continue;
-            }
-            getline(iss, sk);
-            size_t start = sk.find_first_not_of(" \t");
-            if (start != string::npos) sk = sk.substr(start);
-            else sk = "";
+vector<string> lines;
+while (getline(fin, line)) {
+        istringstream iss(line);
+        string u, e, ph, n, docx;
+        string sk;
 
-            if (u == original_username) {
-                ostringstream updated;
-                updated << username << " " << name << " " << email << " " << phone << " " << document << " " << skills;
-                lines.push_back(updated.str());
-            } else lines.push_back(line);
+        if (!(iss >> u >> e >> ph >> n >> docx)) {
+            cout << "❌Failed to parse line: " << line << endl;
+            lines.push_back(line);
+            continue;
         }
-        fin.close();
-        ofstream fout("jobseeker.txt");
-        for (const auto& l : lines) fout << l << '\n';
-        fout.close();
+
+        getline(iss, sk);
+        size_t start = sk.find_first_not_of(" \t");
+        if (start != string::npos) sk = sk.substr(start);
+        else sk = "";
+
+        if (u == original_username) {
+            ostringstream updated;
+            updated << username << " " << email << " " << phone << " " << name << " " << document << " " << skills;
+            lines.push_back(updated.str());
+        } else {
+            lines.push_back(line);
+        }
+    }
+    fin.close();
+    ofstream fout("jobseeker.txt");
+    for (const auto& l : lines) fout << l << '\n';
+    fout.close();
     } else if (role == "company") {
         ifstream fin("company.txt");
         vector<string> lines;
         while (getline(fin, line)) {
             istringstream iss(line);
-            string u, n, e, ph, desc, jobs;
+            string u, e, ph, n, desc, jobs;
             if (!(iss >> u >> n >> e >> ph >> desc >> jobs)) {
                 cout << "❌Failed to parse line: " << line << endl;
                 lines.push_back(line);
@@ -205,7 +210,7 @@ inline void editUserInfo(user* currentUser) {
             }
             if (u == original_username) {
                 ostringstream updated;
-                updated << username << " " << name << " " << email << " " << phone << " " << document << " " << skills;
+                updated << username << " " << email << " " << phone << " " << name << " " << document << " " << skills;
                 lines.push_back(updated.str());
             } else lines.push_back(line);
         }

@@ -1,4 +1,4 @@
-somsee Somsak_Jaidee somsak.j@example.com 0811111111 resume_somsak.pdf Python,C++,Java
+somsak somsak.j@example.com 0811111111 Somsak_Jaidee resume_somsak.pdf Python,C++,Java
 nurse_ploy ploy.c@example.com 0822222222 Ploy_Chanaporn resume_ploy.pdf Nursing,Patient_Care,First_Aid
 keng_mechanic keng.m@example.com 0833333333 Keng_Maneekul resume_keng.pdf Engine_Repair,Diagnostics,Welding
 maria_artist maria.k@example.com 0844444444 Maria_Kittisak resume_maria.pdf Drawing,Illustration,Acrylic_Painting
