@@ -8,6 +8,7 @@
 #include <sstream>
 #include <algorithm> 
 #include <cctype>
+//#include "../edit.h"
 #include "../display.h"    
 using namespace std;
 
@@ -16,6 +17,10 @@ void display_register();
 void display_security();
 void display_user_dashboard(user* currentUser);
 void clear_screen();
+void editUserInfo(user* currentUser);
+void display_jobseeker_dashboard(user* currentUser);
+void forget_password(const string& userfile);
+void apply_job(string user_id, string job_id);
 
 class user {
 private:
@@ -96,13 +101,48 @@ public:
             if (iss >> u >> p >> school >> pet >> color) {
                 if (u == uname && p == pass) {
                     cout << "\n✅ Login success! Welcome, " << uname << "\n";
-                    return new user(u, p, "N/A", "N/A", "N/A", "N/A", "unknown");
+                    infile.close();
+    
+                    // jobseeker
+                    ifstream job("jobseeker.txt");
+                    while (getline(job, line)) {
+                        istringstream jobiss(line);
+                        string ju, email, phone, name, doc, skills;
+                        if (jobiss >> ju >> email >> phone >> name >> doc >> skills && ju == uname) {
+                            job.close();
+                            return new user(ju, p, name, email, phone, doc, "jobseeker", skills);
+                        }
+                    }
+                    job.close();
+    
+                    // company
+                    ifstream comp("company.txt");
+                    while (getline(comp, line)) {
+                        istringstream compiss(line);
+                        string cu, email, phone, compname, compdesc, jobs;
+                        if (compiss >> cu >> email >> phone >> compname >> compdesc >> jobs && cu == uname) {
+                            comp.close();
+                            return new user(cu, p, compname, email, phone, compdesc, "company", jobs);
+                        }
+                    }
+                    comp.close();
                 }
             }
         }
+    
         cout << "\n❌ Login failed: Invalid username or password.\n";
+    
+        // forgot password
+        char opt;
+        cout << "Forgot your password? (y/n): ";
+        cin >> opt;
+        if (opt == 'y' || opt == 'Y') {
+            forget_password("user.txt");
+        }
+    
         return nullptr;
     }
+    
 
     static void register_user(const string& userfile, const string& jobfile, const string& companyfile) {
         string uname, pass, name, email, phone, doc, role, skills;
@@ -212,8 +252,8 @@ public:
         }
         else {
             ofstream job(jobfile, ios::app);
-            job << uname << " " << email << " " << phone << " "
-                << name << " " << doc << " " << skills << "\n";
+            job << uname << " " << name << " " << email << " " << phone << " "
+            << doc << " " << skills << "\n";
             job.close();
         }
     
@@ -296,7 +336,7 @@ user* user_login() {
         if (iss >> u >> p >> school >> pet >> color) {
             if (u == uname && p == pass) {
                 cout << "\n✅ Login success! Welcome, " << uname << "\n";
-
+                userfile.close();
                 // ลองหาข้อมูลใน jobseeker
                 ifstream job("jobseeker.txt");
                 while (getline(job, line)) {
@@ -316,10 +356,9 @@ user* user_login() {
                         string cu, email, phone, compname, compdesc, jobs;
                          if (compiss >> cu >> email >> phone >> compname >> compdesc >> jobs && cu == uname) {
                         comp.close();
-                return new user(cu, p, compname, email, phone, compdesc, "company", jobs);
-
-    }
-}
+                        return new user(cu, p, compname, email, phone, compdesc, "company", jobs);
+                    }
+                }
                 comp.close();
             }
         }
@@ -342,35 +381,29 @@ user* user_login() {
 void jobseeker_dashboard(user* currentUser) {
     int choice;
     do {
-        cout << "\n=== Jobseeker Dashboard ===\n";
-        cout << "Welcome, " << currentUser->getUsername() << " (" << currentUser->getRole() << ")\n";
-        cout << "1. View My Profile\n";
-        cout << "2. Edit My Info \n";
-        cout << "3. Browse Jobs \n";
-        cout << "4. Logout\n";
-        cout << "Choose: ";
+        display_jobseeker_dashboard(currentUser);
         cin >> choice;
         cin.ignore();
 
         if (choice == 1) {
-            system("clear");
+            clear_screen();
             currentUser->display();
             cout << "\n[Press Enter to go back to the menu]";
             cin.get();
         }
         else if (choice == 2) {
-            
+            editUserInfo(currentUser);
             cin.get();
         }
         else if (choice == 3) {
-            
+            apply_job(currentUser->getUsername(), "");
             cin.get();
         }
         else if (choice != 4) {
             cout << "Invalid choice.\n";
             cin.get();
         }
-        system("clear");
+        clear_screen();
     } while (choice != 4);
 }
 /*void company_dashboard(user* currentUser) {
@@ -389,7 +422,7 @@ void jobseeker_dashboard(user* currentUser) {
         cin.ignore();
 
         if (choice == 1) {
-            system("clear");
+            clear_screen();
             currentUser->display();
             cout << "\n[Press Enter to go back to the menu]";
             cin.get();
@@ -406,7 +439,7 @@ void jobseeker_dashboard(user* currentUser) {
             cout << "Invalid choice.\n";
             cin.get();
         }
-        system("clear");
+        clear_screen();
     } while (choice != 4);
 }*/
 #endif

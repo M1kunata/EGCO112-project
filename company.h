@@ -142,68 +142,74 @@ void edit_job(string companyname)
         char thing[10];
         read_job(edit_root, companyname, "nofilter");
         cout << "which id you want to edit?" << endl;
-        cout << "choose:";
-        string sid;
-        cin >> sid;
-        id = stoi(sid);
-        if (edit_root.exists(id))
-            break;
+        cout<<"[back] to back:";
+        char back[10];
+        cin>>back;
+        if(strcmp(back,"back")==0)break;
         else
-        {
-            string ok = "";
-            while (1)
+        { cout << "choose:";
+            string sid;
+            cin >> sid;
+            id = stoi(sid);
+            if (edit_root.exists(id))
+                break;
+            else
             {
-                cout << "pls choose the correct id!!" << endl;
-                cout << "OK?" << endl
-                     << "1.ok" << endl
-                     << "2.no";
-                cin >> ok;
-                if (ok == "1")
-                    break;
+                string ok = "";
+                while (1)
+                {
+                    cout << "pls choose the correct id!!" << endl;
+                    cout << "OK?" << endl
+                         << "1.ok" << endl
+                         << "2.no";
+                    cin >> ok;
+                    if (ok == "1")
+                        break;
+                }
             }
         }
+        cout << "begin to edt...." << endl;
+        string type, compa, loca, req, status;
+        double max, min;
+        req = "";
+        // clear screen!
+        cout << "JOB:" << endl;
+        cin.ignore(); // ถ้ามีbufferเอาคอมเมนออก
+        cout << "JOB type:";
+        getline(cin, type);
+        while (1)
+        {
+            string skill;
+            cout << "requirment(stop type back):";
+            cin >> skill;
+            if (skill == "back")
+                break;
+            else
+                req += (skill + ",");
+        }
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "location:";
+        getline(cin, loca);
+        // cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "max salary:";
+        cin >> max;
+        while (1)
+        {
+            cout << "min salary:";
+            cin >> min;
+            if (min <= max)
+                break;
+            else
+                cout << "pls input the real infomation" << endl;
+        }
+        cout << "status(recuiting OR end):";
+        cin >> status;
+        job edit(id, type, companyname, loca, max, min, status, req);
+        collection.editJob(id, edit);
+        ofstream rewrite("job_data.txt");
+        rewrite.close();
+        collection.saveToFile("job_data.txt", "NULL");
     }
-    cout << "begin to edt...." << endl;
-    string type, compa, loca, req, status;
-    double max, min;
-    req = "";
-    // clear screen!
-    cout << "JOB:" << endl;
-    cin.ignore(); // ถ้ามีbufferเอาคอมเมนออก
-    cout << "JOB type:";
-    getline(cin, type);
-    while (1)
-    {
-        string skill;
-        cout << "requirment(stop type back):";
-        cin >> skill;
-        if (skill == "back")
-            break;
-        else
-            req += (skill + ",");
-    }
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    cout << "location:";
-    getline(cin, loca);
-    // cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    cout << "max salary:";
-    cin >> max;
-    while (1)
-    {
-        cout << "min salary:";
-        cin >> min;
-        if (min <= max)
-            break;
-        else
-            cout << "pls input the real infomation" << endl;
-    }
-    cout << "status(recuiting OR end):";
-    cin >> status;
-    job edit(id, type, companyname, loca, max, min, status, req);
-    collection.editJob(id, edit);
-    ofstream rewrite("job_data.txt");
-    rewrite.close();
-    collection.saveToFile("job_data.txt", "NULL");
 }
 void rechecktomenu(string compa)
 {
