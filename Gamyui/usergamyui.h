@@ -9,7 +9,6 @@
 #include <algorithm> 
 #include <cctype>
 #include "../display.h"    
-
 using namespace std;
 
 class user;
@@ -78,7 +77,8 @@ public:
         if (new_user.role == "jobseeker") {
             outfile.open(jobfile, ios::app);
             outfile << new_user.username << " " << new_user.email << " " << new_user.phone << " "
-                    << new_user.document << " " << new_user.skills << "\n";
+                    << new_user.name << " " << new_user.document << " " << new_user.skills << "\n";
+        
         } else if (new_user.role == "company") {
             outfile.open(companyfile, ios::app);
             outfile << new_user.username << " " << new_user.email << " " << new_user.phone << " "
@@ -210,6 +210,12 @@ public:
                  << name << " " << company_desc << " " << jobs << "\n";
             comp.close();
         }
+        else {
+            ofstream job(jobfile, ios::app);
+            job << uname << " " << email << " " << phone << " "
+                << name << " " << doc << " " << skills << "\n";
+            job.close();
+        }
     
         cout << "\n✅ Registered successfully as " << role << "!\n";
     }    
@@ -295,11 +301,11 @@ user* user_login() {
                 ifstream job("jobseeker.txt");
                 while (getline(job, line)) {
                     istringstream jobiss(line);
-                    string ju, email, phone, doc, skills;
-                    if (jobiss >> ju >> email >> phone >> doc >> skills && ju == uname) {
-                        job.close();
-                        return new user(ju, p, ju, email, phone, doc, "jobseeker", skills);
+                    string ju, email, phone, name, doc, skills;
+                    if (jobiss >> ju >> email >> phone >> name >> doc >> skills && ju == uname) {
+                        return new user(ju, p, name, email, phone, doc, "jobseeker", skills);
                     }
+
                 }
                 job.close();
 
@@ -333,34 +339,75 @@ user* user_login() {
 
     return nullptr;
 }
-
-void editUserInfo(user* currentUser);
-void user_dashboard(user* currentUser) {
+void jobseeker_dashboard(user* currentUser) {
     int choice;
     do {
-        display_user_dashboard(currentUser);
+        cout << "\n=== Jobseeker Dashboard ===\n";
+        cout << "Welcome, " << currentUser->getUsername() << " (" << currentUser->getRole() << ")\n";
+        cout << "1. View My Profile\n";
+        cout << "2. Edit My Info \n";
+        cout << "3. Browse Jobs \n";
+        cout << "4. Logout\n";
+        cout << "Choose: ";
         cin >> choice;
-        cin.ignore(); // เคลียร์ '\n'
+        cin.ignore();
 
         if (choice == 1) {
             system("clear");
             currentUser->display();
             cout << "\n[Press Enter to go back to the menu]";
-            cin.get(); // รอกด Enter ก่อนกลับ
-        }
-        else if (choice == 2) {
-            //cout << "🛠 ฟังก์ชันแก้ไขข้อมูลอยู่ระหว่างพัฒนา\n";
-            editUserInfo(currentUser);
-            //cout << "[Press Enter to return to the menu]";
-            //cin.get();
-        }
-        else if (choice != 3) {
-            cout << "Invalid choice.\n";
-            cout << "[Press Enter to return to the menu]";
             cin.get();
         }
-        clear_screen();
-    } while (choice != 3);
+        else if (choice == 2) {
+            
+            cin.get();
+        }
+        else if (choice == 3) {
+            
+            cin.get();
+        }
+        else if (choice != 4) {
+            cout << "Invalid choice.\n";
+            cin.get();
+        }
+        system("clear");
+    } while (choice != 4);
 }
+/*void company_dashboard(user* currentUser) {
+    string use=currentUser->getUsername();
+    company_menu(use);
+    /*int choice;
+    do {
+        cout << "\n=== Company Dashboard ===\n";
+        cout << "Welcome, " << currentUser->getUsername() << " (" << currentUser->getRole() << ")\n";
+        cout << "1. View Company Profile\n";
+        cout << "2. Post Job \n";
+        cout << "3. View Applicants\n";
+        cout << "4. Logout\n";
+        cout << "Choose: ";
+        cin >> choice;
+        cin.ignore();
 
+        if (choice == 1) {
+            system("clear");
+            currentUser->display();
+            cout << "\n[Press Enter to go back to the menu]";
+            cin.get();
+        }
+        else if (choice == 2) {
+            
+            cin.get();
+        }
+        else if (choice == 3) {
+            
+            cin.get();
+        }
+        else if (choice != 4) {
+            cout << "Invalid choice.\n";
+            cin.get();
+        }
+        system("clear");
+    } while (choice != 4);
+}
+*/
 #endif
