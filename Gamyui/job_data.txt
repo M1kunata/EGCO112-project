@@ -5,3 +5,4 @@
 "5" "FF" "B" "F," "kick" "1" "1" "accept"
 "6" "back" "B" "re," "re" "1" "1" "accept"
 "7" "sd" "B" "a," "d" "1" "1" "recruiting"
+"8" "Programmer" "RYGL" "3rd_year_student" "Bangkok,TH" "100000" "25000" "recruiting"

@@ -8,8 +8,5 @@ wan_arch|wanchana.l@example.com|0877777777|Wanchana Lee|resume_wan.pdf|AutoCAD,S
 aom_chef|aom.t@example.com|0888888888|Aom Thitima|resume_aom.pdf|Thai_Cuisine,Baking,Menu_Planning
 noom_sales|noom.t@example.com|0899999999|Noom Teerawat|resume_noom.pdf|Sales,Negotiation,CRM
 fon_digital|fon.s@example.com|0800000000|Fon Saetang|resume_fon.pdf|Content_Creation,Social_Media,Video_Editing
-
-
-ryan gleeson.ryanj@gmail.com 0811111111 Ryan ryan.png C++,Java,Docker,Python,WebDev
-Korn yui@ 0123456789 korn phu uyi.pdf c++
 C|C@|0215478963|C|.pdf|C
+ryan2|ryan@mail.com|0000000001|Ryan|ryan.pdf|C++,Java,Python
