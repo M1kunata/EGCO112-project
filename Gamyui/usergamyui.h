@@ -79,7 +79,9 @@ public:
     static void save_user_to_file(const string& userfile, const string& jobfile, const string& companyfile, const user& new_user) {
         // เขียน user.txt (ไม่มีช่องว่างในฟิลด์นี้)
         ofstream ufile(userfile, ios::app);
-        ufile << new_user.getUsername() << " " << new_user.getPassword() << " DummySchool DummyPet DummyColor\n";
+        ufile << new_user.getUsername() << "|"
+              << new_user.getPassword() << "|"
+              << "DummySchool|DummyPet|DummyColor" << "\n"; 
         ufile.close();
     
         // jobseeker ใช้ | คั่น
@@ -383,7 +385,12 @@ public:
         cout << "\n✅ Registered successfully as " << role << "!\n";
     }
 };
-
+string trim(const string& str) {
+    size_t first = str.find_first_not_of(" \t\r\n");
+    if (first == string::npos) return "";
+    size_t last = str.find_last_not_of(" \t\r\n");
+    return str.substr(first, (last - first + 1));
+}
 void forget_password(const string& userfile) {
     string uname;
     cout << "\n== 🔐 Forgot Password ==" << endl;
@@ -393,10 +400,11 @@ void forget_password(const string& userfile) {
     display_security();
     int q_choice;
     cin >> q_choice;
+    cin.ignore();
 
     string answer;
     cout << "Your answer: ";
-    cin >> answer;
+    getline(cin, answer);
 
     ifstream infile(userfile);
     vector<string> lines;
@@ -404,29 +412,38 @@ void forget_password(const string& userfile) {
     bool reset_success = false;
 
     while (getline(infile, line)) {
+        cout << "[LINE DEBUG] raw line: " << line << endl;
         istringstream iss(line);
-        string u, p, s, pet, color;
-        if (iss >> u >> p >> s >> pet >> color) {
-            if (u == uname) {
-                bool match = false;
-                if (q_choice == 1 && answer == s) match = true;
-                else if (q_choice == 2 && answer == pet) match = true;
-                else if (q_choice == 3 && answer == color) match = true;
+        string u, p, school, pet, color;
 
-                if (match) {
-                    string new_pass;
-                    cout << "✅ Verified. Enter new password: ";
-                    cin >> new_pass;
+        getline(iss, u, '|');       u = trim(u);
+        getline(iss, p, '|');       p = trim(p);
+        getline(iss, school, '|');  school = trim(school);
+        getline(iss, pet, '|');     pet = trim(pet);
+        getline(iss, color);        color = trim(color);
 
-                    ostringstream updated;
-                    updated << u << " " << new_pass << " " << s << " " << pet << " " << color;
-                    lines.push_back(updated.str());
-                    reset_success = true;
-                    continue;
-                }
+        cout << "[DEBUG] Read from file: " << u << ", " << school << ", " << pet << ", " << color << "\n";
+
+        if (u == uname) {
+            bool match = false;
+            if (q_choice == 1 && answer == school) match = true;
+            else if (q_choice == 2 && answer == pet) match = true;
+            else if (q_choice == 3 && answer == color) match = true;
+
+            if (match) {
+                string new_pass;
+                cout << "✅ Verified. Enter new password: ";
+                cin >> new_pass;
+
+                ostringstream updated;
+                updated << u << "|" << new_pass << "|" << school << "|" << pet << "|" << color;
+                lines.push_back(updated.str());
+                reset_success = true;
+                continue;
             }
         }
-        lines.push_back(line); // keep เดิม
+
+        lines.push_back(line);
     }
     infile.close();
 
@@ -441,6 +458,8 @@ void forget_password(const string& userfile) {
         cout << "❌ Verification failed. Cannot reset password.\n";
     }
 }
+
+
 
 void user_register() {
     user::register_user("user.txt", "jobseeker.txt", "company.txt");
@@ -458,55 +477,59 @@ user* user_login() {
     while (getline(userfile, line)) {
         istringstream iss(line);
         string u, p, school, pet, color;
-        if (iss >> u >> p >> school >> pet >> color) {
-            if (u == uname && p == pass) {
-                userfile.close();
-                cout << "\n✅ Login success! Welcome, " << uname << "\n";
+        getline(iss, u, '|');
+        getline(iss, p, '|');
+        getline(iss, school, '|');
+        getline(iss, pet, '|');
+        getline(iss, color);
 
-                // 👉 ลองหาใน jobseeker
-                ifstream job("jobseeker.txt");
-                string line_job;
-                while (getline(job, line_job)) {
-                    istringstream jobiss(line_job);
-                    string ju, email, phone, name, doc, skills;
+        if (u == uname && p == pass) {
+            userfile.close();
+            cout << "\n✅ Login success! Welcome, " << uname << "\n";
 
-                    getline(jobiss, ju, '|');
-                    getline(jobiss, email, '|');
-                    getline(jobiss, phone, '|');
-                    getline(jobiss, name, '|');
-                    getline(jobiss, doc, '|');
-                    getline(jobiss, skills);
+            // 👉 ลองหาใน jobseeker
+            ifstream job("jobseeker.txt");
+            string line_job;
+            while (getline(job, line_job)) {
+                istringstream jobiss(line_job);
+                string ju, email, phone, name, doc, skills;
 
-                    if (ju == uname) {
-                        job.close();
-                        return new user(ju, p, name, email, phone, doc, "jobseeker", skills);
-                    }
+                getline(jobiss, ju, '|');
+                getline(jobiss, email, '|');
+                getline(jobiss, phone, '|');
+                getline(jobiss, name, '|');
+                getline(jobiss, doc, '|');
+                getline(jobiss, skills);
+
+                if (ju == uname) {
+                    job.close();
+                    return new user(ju, p, name, email, phone, doc, "jobseeker", skills);
                 }
-                job.close();
-
-                // 👉 หรือเป็น company
-                ifstream comp("company.txt");
-                while (getline(comp, line)) {
-                    istringstream compiss(line);
-                    string cu, email, phone, cname, desc, jobs;
-
-                    getline(compiss, cu, '|');
-                    getline(compiss, email, '|');
-                    getline(compiss, phone, '|');
-                    getline(compiss, cname, '|');
-                    getline(compiss, desc, '|');
-                    getline(compiss, jobs);
-
-                    if (cu == uname) {
-                        comp.close();
-                        return new user(cu, p, cname, email, phone, desc, "company", jobs);
-                    }
-                }
-                comp.close();
-
-                // 👉 ถ้าหาใน jobseeker/company ไม่เจอ
-                return new user(u, p, "Unknown", "N/A", "N/A", "N/A", "unknown");
             }
+            job.close();
+
+            // 👉 หรือเป็น company
+            ifstream comp("company.txt");
+            while (getline(comp, line)) {
+                istringstream compiss(line);
+                string cu, email, phone, cname, desc, jobs;
+
+                getline(compiss, cu, '|');
+                getline(compiss, email, '|');
+                getline(compiss, phone, '|');
+                getline(compiss, cname, '|');
+                getline(compiss, desc, '|');
+                getline(compiss, jobs);
+
+                if (cu == uname) {
+                    comp.close();
+                    return new user(cu, p, cname, email, phone, desc, "company", jobs);
+                }
+            }
+            comp.close();
+
+            // 👉 ถ้าหาใน jobseeker/company ไม่เจอ
+            return new user(u, p, "Unknown", "N/A", "N/A", "N/A", "unknown");
         }
     }
 
