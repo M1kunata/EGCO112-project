@@ -77,45 +77,32 @@ void company_dashboard(user *company)
             if (check=="back")
             {
                 break;
-            }else strcpy(numtoaccept,"one");
-            try {
-            while(1)
+            }else 
             {
+                try {
+                int i=0;
+                while(1)
+                {
                 vector<vector<string>> applications;
                 applications = read_applications();
-                int i=0;
                 cout << "choose job ID:" << endl;
                 cin >> id_job;
                 if(cin.fail())
                     throw "Don't stupid!!";
                 for (const auto &application : applications)
                 {
-                    if (application[1] == to_string(id_job))
+                    if (application[0] == to_string(id_job))
+                    {   
                         i=1;
-                }
-                if(i==1)break;
-            }
-                    if (strcmp(numtoaccept, "one") == 0)
-                    {
-                        vector<vector <string>> findid;
-                        findid=read_applications();
-                        for (const auto &find : findid)
-                        {
-                            if (find[1] == to_string(id_job))
-                            {
-                                id=find[1];
-                            }
-                        }      
-                        updateApplicationStatus(id, "accepted");
+                        id=application[1];
                         break;
                     }
-                    else
-                    {
-                        string ok;
-                        cout << "pls choose in bracket(enter)";
-                        cin.ignore();
-                        cin.get();
-                    }
+                }
+                updateApplicationStatus(id, "accepted");//อัพเดทสถานะงานappli
+                updatestatusfromappli(id, "accept");//อัะเดทสถานะไฟล์งานบริษัท
+                if(i==1)break;
+                }
+                   
                     }
                     catch(const char* n)
                     {
@@ -124,14 +111,10 @@ void company_dashboard(user *company)
                         cin.ignore(500,'\n');
                         cout<<n<<endl;
                     }
-                 
-                
+            }
+                    
                 if(p==1)break;
-            }
-            if ((strcmp(numtoaccept, "one") == 0)) // อัพเดทสถาะงานของไฟล์ทางบริษัท
-            {
-                updatestatusfromappli(id, "accept"); // อยู่ข้างล่าง
-            }
+            } 
         }
         else if (strcmp(choice, "6") == 0)
             break;
