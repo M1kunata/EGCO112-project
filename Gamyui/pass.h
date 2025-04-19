@@ -8,7 +8,6 @@
 
 inline string getPasswordMaskedPreview(const string& prompt = "") {
     cout << prompt;
-
     string password;
     char ch;
 
@@ -24,25 +23,35 @@ inline string getPasswordMaskedPreview(const string& prompt = "") {
         ch = getchar();
         tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
 #endif
+
         if (ch == '\n' || ch == '\r') {
+            // ✅ แสดงทั้งหมดเป็น *
+            cout << "\r" << prompt;
+            for (size_t i = 0; i < password.length(); ++i) cout << "*";
             cout << endl;
             break;
         } else if (ch == 127 || ch == '\b') {
             if (!password.empty()) {
                 password.pop_back();
-                cout << "\b \b";
-                // clear ทั้งบรรทัดแล้วแสดงใหม่
-                cout << "\r" << prompt;
-                for (size_t i = 0; i < password.length() - 1; ++i) cout << "*";
-                if (!password.empty()) cout << password.back();
             }
         } else {
             password += ch;
-            cout << "\r" << prompt;
+        }
+
+        // ✅ แสดงผลใหม่: *...*C
+        cout << "\r" << prompt;
+        if (!password.empty()) {
             for (size_t i = 0; i < password.length() - 1; ++i) cout << "*";
             cout << password.back();
         }
+        else {
+            // เคลียร์ถ้าลบจนหมด
+            cout << " ";
+        }
+
+        cout.flush();
     }
 
     return password;
 }
+

@@ -383,6 +383,7 @@ public:
         cout << "\n✅ Registered successfully as " << role << "!\n";
     }
 };
+
 void forget_password(const string& userfile) {
     string uname;
     cout << "\n== 🔐 Forgot Password ==" << endl;
@@ -464,8 +465,9 @@ user* user_login() {
 
                 // 👉 ลองหาใน jobseeker
                 ifstream job("jobseeker.txt");
-                while (getline(job, line)) {
-                    istringstream jobiss(line);
+                string line_job;
+                while (getline(job, line_job)) {
+                    istringstream jobiss(line_job);
                     string ju, email, phone, name, doc, skills;
 
                     getline(jobiss, ju, '|');
