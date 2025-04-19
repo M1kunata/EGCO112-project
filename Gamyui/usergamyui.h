@@ -412,7 +412,7 @@ void forget_password(const string& userfile) {
     bool reset_success = false;
 
     while (getline(infile, line)) {
-        cout << "[LINE DEBUG] raw line: " << line << endl;
+        
         istringstream iss(line);
         string u, p, school, pet, color;
 
@@ -421,8 +421,6 @@ void forget_password(const string& userfile) {
         getline(iss, school, '|');  school = trim(school);
         getline(iss, pet, '|');     pet = trim(pet);
         getline(iss, color);        color = trim(color);
-
-        cout << "[DEBUG] Read from file: " << u << ", " << school << ", " << pet << ", " << color << "\n";
 
         if (u == uname) {
             bool match = false;
