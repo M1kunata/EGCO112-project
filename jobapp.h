@@ -217,8 +217,9 @@ int read_jobs(BST &one, int show,string sort)
         string max = fields[5];
         string min = fields[6];
         string status = fields[7];
+    
         // Data output
-        if (show == 0)
+       /* if (show == 0)
         {
             if (status == "recruiting")
                 cout << left << setw(6) << id
@@ -229,12 +230,13 @@ int read_jobs(BST &one, int show,string sort)
                      << setw(15) << max
                      << setw(15) << min
                      << setw(12) << status << endl;
-        }
-        job n1(stoi(id), job_title, company_name, requirements, stod(max), stod(min), status, requirements);
+        }*/
+        job n1(stoi(id), job_title, company_name, location, stod(max), stod(min), status, requirements);
         if (status == "recruiting")
         one.insertNode(n1, sort); // ยัดเข้าbst
         n1.clear_vector();
     }
+    one.displayInOrder();
     file.close();
     return 0;
 }

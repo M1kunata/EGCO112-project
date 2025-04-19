@@ -18,3 +18,4 @@ A|A|DummySchool|DummyPet|DummyColor
 Korn|yui123546|DummySchool|DummyPet|DummyColor
 ryan2|ryan|DummySchool|DummyPet|DummyColor
 RYGL|ryangl|DummySchool|DummyPet|DummyColor
+C|C|C|C|C

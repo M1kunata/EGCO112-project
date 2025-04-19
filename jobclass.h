@@ -80,13 +80,15 @@ bool job::check_com(string comcheck)
 }
 void job::display()
 {
+    string full;
     cout << left << setw(6) << tag_num
     << setw(15) << jobtype
     << setw(15) << company;
     for (const auto& f : requiresskill) {
-        cout << f <<",";
+        full+=(f+",");
     }
-    cout<< setw(20) << location
+    cout<<setw(25)<<full
+    << setw(20) << location
     << setw(15) << max_salary
     << setw(15) << min_salary
     << setw(12) << status<< endl;

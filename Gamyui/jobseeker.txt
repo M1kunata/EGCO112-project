@@ -9,4 +9,4 @@ aom_chef|aom.t@example.com|0888888888|Aom Thitima|resume_aom.pdf|Thai_Cuisine,Ba
 noom_sales|noom.t@example.com|0899999999|Noom Teerawat|resume_noom.pdf|Sales,Negotiation,CRM
 fon_digital|fon.s@example.com|0800000000|Fon Saetang|resume_fon.pdf|Content_Creation,Social_Media,Video_Editing
 C|C@|0215478963|C|.pdf|C
-ryan2|ryan@mail.com|0000000001|Ryan|ryan.pdf|C++,Java,Python
+ryan2|ryan@mail.com|0000000001|Ryan|ryan.pdf|C++,Java,PythonC|C@|0123456789|C|.pdf|C
