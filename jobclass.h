@@ -2,6 +2,7 @@
 #define jobclass_h
 #include <iostream>
 #include <vector>
+#include <iomanip>
 #include <limits>  // สำคัญสำหรับ numeric_limits
 #include <sstream>
 #include <fstream>
@@ -12,7 +13,7 @@ class data
     public:
         virtual void anounment()
         {
-            cout<<"ready to get data:"<<endl;
+            cout<<"ready to get data"<<endl;
         }
 };
 class job:public data
@@ -79,11 +80,15 @@ bool job::check_com(string comcheck)
 }
 void job::display()
 {
-    cout<<"JOB::"<<endl;
-    cout <<"ID: "<<tag_num <<endl;
-    cout<<"Name: "<< jobtype << endl;
-    cout <<"By: "<< company << endl;
-    cout <<"Work at: "<< location << endl;
+    cout<<"JOB::";
+    cout <<"ID: "<<left<<setw(3)<<tag_num ;
+    cout<<"Name: "<<setw(10)<< jobtype <<endl;
+    cout<<"requirment skill:"; 
+    for (const auto& f : requiresskill) {
+        cout << f <<",";
+    }
+    cout <<"By: "<< setw(10)<<company ;
+    cout <<"Work at: "<<setw(10)<<location ;
     cout <<"salary(max:min): "<< max_salary << ":" << min_salary << endl;
     cout <<"Status: "<< status << endl;
 }
@@ -124,7 +129,7 @@ void input(string name)
     req="";
     temo->data::anounment();
     // clear screen!
-    cout << "JOB:" << endl;
+    cout << "JOB" << endl;
     cin.ignore(); // ถ้ามีbufferเอาคอมเมนออก
     cout << "JOB type:";
     getline(cin, type);
