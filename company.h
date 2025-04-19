@@ -65,68 +65,72 @@ void company_dashboard(user *company)
         }
         else if (strcmp(choice, "5") == 0) // อันนี้นะไรอัน
         {
-            view_applications_by_company(companyname);
-            cout << "choose job ID:" << endl;
-            string id_job, nametoaccept;
+            int p=1;
+            string id,check;
+            int id_job;
             char numtoaccept[10];
-            cin >> id_job;
+            view_applications_by_company(companyname);
             while (1)
             {
-                cout << "How many to accept" << endl;
-                cout << "choose[back,noone,one or many]:";
-                cin >> numtoaccept;
-                // transform(numtoaccept.begin(), numtoaccept.end(), numtoaccept.begin(), ::tolower);
-                if (strcmp(numtoaccept, "back") == 0)
-                {
-                    break;
-                }
-                else if (strcmp(numtoaccept, "noone") == 0)
-                {
-                    break;
-                    vector<vector<string>> changestatus = read_applications();
-                    for (const auto &changestatus : changestatus)
-                        if (changestatus[1] == id_job)
-                        {
-                        }
-                }
-                else if (strcmp(numtoaccept, "one") == 0)
-                {
-                    updateApplicationStatus(id_job, "accepted");
-                    break;
-                }
-                else if (strcmp(numtoaccept, "many") == 0)
-                {
-                    break;
-                }
-                else
-                {
-                    string ok;
-                    cout << "pls choose in bracket(enter)";
-                    cin.ignore();
-                    cin.get();
-                }
-                /*int tag_num;
-                ifstream Out("application_data.txt");
-                if (Out)
-                {
-                    string line;
-                    while (getline(Out, line)) // อ่านค่าจากไฟล์
-                    {
-                        stringstream iss(line);
-                        string  num;
-                        clear_qoate(iss);
-                        getline(iss, num, '"');
-                        clear_qoate(iss);
-                        getline(iss, num, '"');
-                        tag_num=stoi(num);
-                    }
-                    Out.close();
-                }
-               */
-            }
-            if ((strcmp(numtoaccept, "many") == 0) || (strcmp(numtoaccept, "one") == 0)) // อัพเดทสถาะงานของไฟล์ทางบริษัท
+            cout<<"'type back to go back else type anything'"<<endl;
+            cin>>check;
+            if (check=="back")
             {
-                updatestatusfromappli(id_job, "accept"); // อยู่ข้างล่าง
+                break;
+            }else strcpy(numtoaccept,"one");
+            try {
+            while(1)
+            {
+                vector<vector<string>> applications;
+                applications = read_applications();
+                int i=0;
+                cout << "choose job ID:" << endl;
+                cin >> id_job;
+                if(cin.fail())
+                    throw "Don't stupid!!";
+                for (const auto &application : applications)
+                {
+                    if (application[1] == to_string(id_job))
+                        i=1;
+                }
+                if(i==1)break;
+            }
+                    if (strcmp(numtoaccept, "one") == 0)
+                    {
+                        vector<vector <string>> findid;
+                        findid=read_applications();
+                        for (const auto &find : findid)
+                        {
+                            if (find[1] == to_string(id_job))
+                            {
+                                id=find[1];
+                            }
+                        }      
+                        updateApplicationStatus(id, "accepted");
+                        break;
+                    }
+                    else
+                    {
+                        string ok;
+                        cout << "pls choose in bracket(enter)";
+                        cin.ignore();
+                        cin.get();
+                    }
+                    }
+                    catch(const char* n)
+                    {
+                        p=0;
+                        cin.clear();
+                        cin.ignore(500,'\n');
+                        cout<<n<<endl;
+                    }
+                 
+                
+                if(p==1)break;
+            }
+            if ((strcmp(numtoaccept, "one") == 0)) // อัพเดทสถาะงานของไฟล์ทางบริษัท
+            {
+                updatestatusfromappli(id, "accept"); // อยู่ข้างล่าง
             }
         }
         else if (strcmp(choice, "6") == 0)

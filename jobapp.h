@@ -2,19 +2,21 @@
 #include <fstream>
 #include <vector>
 #include <iomanip>
+#include "bstclass.h"
 using namespace std;
 
 void apply_job(string user_id, string job_id);
 void addNewApplication(string user_id, string job_id);
-int read_jobs();
+int read_jobs(BST &);
 vector<vector<string>> read_applications();
 
 vector<string> extractFields(const string &line);
 
 void apply_job(string user_id, string job_id)
 {
+    BST one;
     int selected_job;
-    read_jobs();
+    read_jobs(one);
     cout << "Select a job (ID) you would like to apply:" << endl;
     cin >> selected_job;
     addNewApplication(user_id, to_string(selected_job));
@@ -151,7 +153,7 @@ vector<vector<string>> read_applications()
     return applications;
 }
 
-int read_jobs()
+int read_jobs(BST &one)
 {
     ifstream file("job_data.txt");
 
@@ -163,7 +165,7 @@ int read_jobs()
 
     string line;
     int lineNumber = 1;
-
+    
     // Header
     cout << left << setw(6) << "ID"
          << setw(15) << "Company"
@@ -186,6 +188,7 @@ int read_jobs()
         string g = fields[6];
         string status = fields[7];
         // Data output
+        if(status=="recruiting")
         cout << left << setw(6) << id
              << setw(15) << company_name
              << setw(6) << c
@@ -194,8 +197,14 @@ int read_jobs()
              << setw(6) << f
              << setw(6) << g
              << setw(12) << status << endl;
-    }
-
+             job n1(tag, type, compa, loca, max, min, stat, require);
+                if (n1.check_com(comname))
+                {
+                    one.insertNode(n1, sor); // ยัดเข้าbst
+                }
+                n1.clear_vector();
+        
+        }
     file.close();
     return 0;
 }
