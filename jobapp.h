@@ -2,19 +2,21 @@
 #include <fstream>
 #include <vector>
 #include <iomanip>
+#include "bstclass.h"
 using namespace std;
 
 void apply_job(string user_id, string job_id);
 void addNewApplication(string user_id, string job_id);
-int read_jobs();
+int read_jobs(BST &,int);
 vector<vector<string>> read_applications();
 
 vector<string> extractFields(const string &line);
 
 void apply_job(string user_id, string job_id)
 {
+    BST one;
     int selected_job;
-    read_jobs();
+    read_jobs(one,0);
     cout << "Select a job (ID) you would like to apply:" << endl;
     cin >> selected_job;
     addNewApplication(user_id, to_string(selected_job));
@@ -45,7 +47,7 @@ void updateApplicationStatus(string application_id, string status)
         auto fields = extractFields(line);
         if (fields[0] == application_id)
         {
-            fields[3] = status;
+            fields[5] = status;
             line = rebuildLine(fields);
         }
         lines.push_back(line);
@@ -63,6 +65,19 @@ void updateApplicationStatus(string application_id, string status)
 
 void addNewApplication(string user_id, string job_id)
 {
+    BST one;
+    job clone;
+    read_jobs(one,1);
+    int tag_num, tag;
+    string jobtype, company, location, status, requir; // status pending end
+    double max_sal, min_sal;
+    tag=stoi(job_id);
+    //if(one.exists(tag)) //=check ตอนทำ
+        //cout<<"find"<<endl;
+    one.read_bst(tag,clone);
+    //clone.display();
+    clone.getdata(tag_num, jobtype, company, location, max_sal, min_sal, status, requir);
+    //cin.get();
     ifstream file("application_data.txt");
     string line;
     int lineno = 1;
@@ -72,8 +87,7 @@ void addNewApplication(string user_id, string job_id)
             lineno++;
     }
     file.close();
-
-    string newLine = "\"" + to_string(lineno) + "\" \"" + job_id + "\" \"" + user_id + "\" \"" + "pending" + "\"";
+    string newLine = "\"" + to_string(lineno) + "\" \"" +job_id+"\" \""+ jobtype + "\" \"" +company+"\" \"" + user_id + "\" \"" + "pending" + "\"";
     // Append the new application to the file
     ofstream outFile("application_data.txt", ios::app);
     if (!outFile)
@@ -89,20 +103,25 @@ void addNewApplication(string user_id, string job_id)
 void view_applications_by_company(string company_id)
 {
     vector<vector<string>> applications;
-
+    BST one;
+    read_jobs(one,1);
     applications = read_applications();
     // Header
     cout << left << setw(15) << "Application ID"
+        <<setw(15)<<"Job ID"
+        <<setw(15)<<"Job Name"
          << setw(15) << "Company ID"
          << setw(15) << "JobSeeker ID" << endl;
     cout << string(55, '-') << endl;
     for (const auto &application : applications)
     {
-        if (application[1] == company_id)
+        if (application[3] == company_id)
         {
             cout << left << setw(15) << application[0]
                  << setw(15) << application[1]
-                 << setw(15) << application[2] << endl;
+                 << setw(15) << application[2] 
+                 << setw(15) << application[3]
+                 << setw(15) << application[4]<< endl;
         }
     }
 }
@@ -151,10 +170,9 @@ vector<vector<string>> read_applications()
     return applications;
 }
 
-int read_jobs()
+int read_jobs(BST &one,int show)
 {
     ifstream file("job_data.txt");
-
     if (!file)
     {
         cerr << "Failed to open file." << endl;
@@ -163,7 +181,8 @@ int read_jobs()
 
     string line;
     int lineNumber = 1;
-
+    if(show==0)
+    {
     // Header
     cout << left << setw(6) << "ID"
          << setw(15) << "Company"
@@ -174,18 +193,22 @@ int read_jobs()
          << setw(6) << "G"
          << setw(12) << "Status" << endl;
     cout << string(75, '-') << endl;
+    }
     while (getline(file, line))
     {
         vector<string> fields = extractFields(line);
         string id = fields[0];
-        string company_name = fields[1];
-        string c = fields[2];
+        string company_name = fields[2];
+        string c = fields[1];
         string skills = fields[3];
         string e = fields[4];
         string f = fields[5];
         string g = fields[6];
         string status = fields[7];
         // Data output
+        if(show==0)
+        {
+        if(status=="recruiting")
         cout << left << setw(6) << id
              << setw(15) << company_name
              << setw(6) << c
@@ -194,8 +217,16 @@ int read_jobs()
              << setw(6) << f
              << setw(6) << g
              << setw(12) << status << endl;
-    }
-
+        }
+             int tid;
+             double max,min;
+             max=stod(f);
+             min=stod(g);
+            tid=stoi(id);
+             job n1(tid,c, company_name, e, max, min, status, skills);
+                one.insertNode(n1, "nofilter"); // ยัดเข้าbst
+                n1.clear_vector();
+        }
     file.close();
     return 0;
 }
