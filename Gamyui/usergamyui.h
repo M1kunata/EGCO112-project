@@ -21,6 +21,7 @@ void editUserInfo(user* currentUser);
 void display_jobseeker_dashboard(user* currentUser);
 void forget_password(const string& userfile);
 void apply_job(string user_id, string job_id);
+void display_jobseeker_dashboard(user* currentUser);
 
 class user {
 private:
