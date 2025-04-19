@@ -236,6 +236,7 @@ int read_jobs(BST &one, int show,string sort)
         one.insertNode(n1, sort); // ยัดเข้าbst
         n1.clear_vector();
     }
+    if(show==0)
     one.displayInOrder();
     file.close();
     return 0;

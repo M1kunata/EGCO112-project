@@ -569,10 +569,13 @@ void jobseeker_dashboard(user* currentUser) {
             cin.get();
         }
         else if (choice == 3) {
+            while(1)
+            {int tim=0;
             cout<<"1.by max"<<endl;
             cout<<"2.by min"<<endl;
             cout<<"3.by tag"<<endl;
             string sort;
+            cout<<"choose:";
             cin>>sort;
             if(sort=="1")
                 apply_job(currentUser->getUsername(), "","max");
@@ -580,7 +583,28 @@ void jobseeker_dashboard(user* currentUser) {
                 apply_job(currentUser->getUsername(), "","min");
             else if(sort=="3")
                 apply_job(currentUser->getUsername(), "","");
+            else {
+                tim=1;
+                cout<<"Invalid choice"<<endl;
+            }
             cin.get();
+            int t=0;
+            if(tim==0)
+            {
+                while(1)
+                {
+                cout<<"Do want to view agin?(a[again],n[no]):";
+                string again;
+                cin>>again;
+                if(again=="a"||again=="no"||again=="again"||again=="n")
+                    {
+                        if(again=="no"||again=="n")
+                            t=1;
+                        break;
+                    }
+                }}
+            if(t==1)break;
+        }
         }
         else if (choice != 4) {
             cout << "Invalid choice.\n";
