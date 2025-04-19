@@ -145,7 +145,7 @@ inline void display_userInfo(user* u, const string& warning) {
          << "   b or back  - to return to menu without saving\n"
          << "   cc or cancel - to cancel all edits\n";
 
-    if (!warning.empty()) {
+    if (warning.empty()) {
         cout << warning << "\n";
     } else {
         cout << endl;
