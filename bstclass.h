@@ -1,3 +1,5 @@
+#ifndef bstclass_h
+#define bstclass_h
 #include "jobclass.h"
 #include <iostream>
 #include <fstream>
@@ -51,9 +53,9 @@ private:
             if (node->data.compare("equal", id)) {
                 getdata.setjob(node->data);
             } else if (node->data.compare("less", id)) {
-                search(node->leftPtr, id, getdata);
+                get_job_from_bst(node->leftPtr, id, getdata);
             } else {
-                search(node->rightPtr, id, getdata);
+                get_job_from_bst(node->rightPtr, id, getdata);
             }
         }
     }
@@ -130,3 +132,4 @@ public:
         return size;
     }
 };
+#endif

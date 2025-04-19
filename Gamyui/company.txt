@@ -1,10 +1,6 @@
-buildtech01 hr@buildtech.com 0212345678 BuildTech_Construction Innovative_infrastructure_solutions Civil_Engineer,Project_Manager
-medicare_hr hr@medicare.com 0267891234 MediCare_Hospital Advanced_patient_care_and_research Nurse,Lab_Technician
-foodiez_admin contact@foodiez.co.th 0278945612 Foodiez_Group Fast_casual_dining_chain Chef,Kitchen_Manager
-futuresoft_hr hr@futuresoft.dev 0234567890 FutureSoft_Solutions Cutting-edge_software_and_AI Software_Engineer,QA_Analyst
-greenhome_admin admin@greenhome.co 0256789012 GreenHome_Design Eco-friendly_home_and_office_design Architect,Interior_Designer
-artcore_admin admin@artcore.co.th 0243216789 ArtCore_Studios Creative_studio_specializing_in_design Graphic_Designer,Animator
-SaifonDring fksfkld kfdskfs Saifon flsdfl
-
-Jaja @ 0123456789 Jajahome ;sald ;s'adl;s'
-RYGL contact@ryangl.com 0000000000 RYGL_Holdings Specializes_in_tech data_engineer,programmer,IoT,Accounting
+buildtech01|hr@buildtech.com|0212345678|BuildTech Construction|Innovative infrastructure solutions|Civil Engineer,Project Manager
+medicare_hr|hr@medicare.com|0267891234|MediCare Hospital|Advanced patient care and research|Nurse,Lab Technician
+foodiez_admin|contact@foodiez.co.th|0278945612|Foodiez Group|Fast casual dining chain|Chef,Kitchen Manager
+futuresoft_hr|hr@futuresoft.dev|0234567890|FutureSoft Solutions|Cutting-edge software and AI|Software Engineer,QA Analyst
+greenhome_admin|admin@greenhome.co|0256789012|GreenHome Design|Eco-friendly home and office design|Architect,Interior Designer
+artcore_admin|admin@artcore.co.th|0243216789|ArtCore Studios|Creative studio specializing in design|Graphic Designer,Animator

@@ -8,6 +8,8 @@
 #include <sstream>
 #include <algorithm> 
 #include <cctype>
+
+#include "pass.h"
 //#include "../edit.h"
 #include "../display.h"    
 using namespace std;
@@ -21,7 +23,9 @@ void editUserInfo(user* currentUser);
 void display_jobseeker_dashboard(user* currentUser);
 void forget_password(const string& userfile);
 void apply_job(string user_id, string job_id);
-void display_jobseeker_dashboard(user* currentUser);
+void display_userInfo(user* u, const string& warning = "");
+bool is_username_taken(const string& uname);
+void display_regisInfo(user* u, const string& warning);
 
 class user {
 private:
@@ -73,194 +77,320 @@ public:
     string getSkills() const { return skills; }
 
     static void save_user_to_file(const string& userfile, const string& jobfile, const string& companyfile, const user& new_user) {
-        // เขียน user.txt
+        // เขียน user.txt (ไม่มีช่องว่างในฟิลด์นี้)
         ofstream ufile(userfile, ios::app);
-        ufile << new_user.username << " " << new_user.password << " DummySchool DummyPet DummyColor\n";
+        ufile << new_user.getUsername() << "|"
+              << new_user.getPassword() << "|"
+              << "DummySchool|DummyPet|DummyColor" << "\n"; 
         ufile.close();
-
-        // เขียน jobseeker หรือ company
-        ofstream outfile;
-        if (new_user.role == "jobseeker") {
-            outfile.open(jobfile, ios::app);
-            outfile << new_user.username << " " << new_user.email << " " << new_user.phone << " "
-                    << new_user.name << " " << new_user.document << " " << new_user.skills << "\n";
-        
-        } else if (new_user.role == "company") {
-            outfile.open(companyfile, ios::app);
-            outfile << new_user.username << " " << new_user.email << " " << new_user.phone << " "
-                    << new_user.name << " " << new_user.document << "\n"; // ใช้ name เป็นชื่อบริษัท
-        }
-        outfile.close();
-    }
-
-    static user* login(const string& filename, const string& uname, const string& pass) {
-        ifstream infile(filename);
-        string line;
-        while (getline(infile, line)) {
-            istringstream iss(line);
-            string u, p, school, pet, color;
-            if (iss >> u >> p >> school >> pet >> color) {
-                if (u == uname && p == pass) {
-                    cout << "\n✅ Login success! Welcome, " << uname << "\n";
-                    infile.close();
     
-                    // jobseeker
-                    ifstream job("jobseeker.txt");
-                    while (getline(job, line)) {
-                        istringstream jobiss(line);
-                        string ju, email, phone, name, doc, skills;
-                        if (jobiss >> ju >> email >> phone >> name >> doc >> skills && ju == uname) {
-                            job.close();
-                            return new user(ju, p, name, email, phone, doc, "jobseeker", skills);
-                        }
-                    }
-                    job.close();
-    
-                    // company
-                    ifstream comp("company.txt");
-                    while (getline(comp, line)) {
-                        istringstream compiss(line);
-                        string cu, email, phone, compname, compdesc, jobs;
-                        if (compiss >> cu >> email >> phone >> compname >> compdesc >> jobs && cu == uname) {
-                            comp.close();
-                            return new user(cu, p, compname, email, phone, compdesc, "company", jobs);
-                        }
-                    }
-                    comp.close();
-                }
-            }
+        // jobseeker ใช้ | คั่น
+        if (new_user.getRole() == "jobseeker") {
+            ofstream outfile(jobfile, ios::app);
+            outfile << new_user.getUsername() << "|"
+                    << new_user.getEmail() << "|"
+                    << new_user.getPhone() << "|"
+                    << new_user.getName() << "|"
+                    << new_user.getDocument() << "|"
+                    << new_user.getSkills() << "\n";
+            outfile.close();
         }
     
-        cout << "\n❌ Login failed: Invalid username or password.\n";
-    
-        // forgot password
-        char opt;
-        cout << "Forgot your password? (y/n): ";
-        cin >> opt;
-        if (opt == 'y' || opt == 'Y') {
-            forget_password("user.txt");
+        // company ใช้ | คั่น
+        else if (new_user.getRole() == "company") {
+            ofstream outfile(companyfile, ios::app);
+            outfile << new_user.getUsername() << "|"
+                    << new_user.getEmail() << "|"
+                    << new_user.getPhone() << "|"
+                    << new_user.getName() << "|"  // ใช้ name เป็น company name
+                    << new_user.getDocument() << "|"  // ใช้ document เก็บ description
+                    << new_user.getSkills() << "\n";  // skills คือ jobs_offered
+            outfile.close();
         }
-    
-        return nullptr;
     }
     
-
     static void register_user(const string& userfile, const string& jobfile, const string& companyfile) {
         string uname, pass, name, email, phone, doc, role, skills;
         string school, pet, color;
         string role_input;
+
         display_register();
         getline(cin, role_input);
+        if (role_input == "1") role = "jobseeker";
+        else if (role_input == "2") role = "company";
+        else return;
 
-        if (role_input == "1") {
-            role = "jobseeker";
-        } else if (role_input == "2") {
-            role = "company";
-        } else if (role_input == "3") {
-            cout << "↩️  Back to main menu.\n";
-            return;
-        } else {
-            cout << "❌ Invalid choice. Registration cancelled.\n";
-            return;
-        }
-    
-        cout << "\nUsername: "; cin >> uname;
-        cout << "Password: "; cin >> pass;
-        if (role == "company") {
-            cout << "Company Name: "; cin >> name;
-        } else {
-            cout << "Full Name: "; cin >> name;
-        }
-        do {
-            cout << "Email: ";
-            cin >> email;
-        
-            if (email.find('@') == string::npos) {
-                cout << "❌ Invalid email. Email must contain '@'. Please try again.\n";
+        while (true) {
+            cout << "Username (or type 'cc' to cancel): ";
+            getline(cin, uname);
+            if (uname == "cc" || uname == "cancel") return;
+            if (uname.empty()) {
+                cout << "❌ Username cannot be empty.\n";
+                continue;
             }
-        
-        } while (email.find('@') == string::npos);
-        
+            if (is_username_taken(uname)) {
+                cout << "❌ Username already taken. Please try another.\n";
+                continue;
+            }
+            break;
+        }
+
         do {
-            cout << "Phone: ";
-            cin >> phone;
+            pass = getPasswordMaskedPreview("Password (or type 'cc' to cancel): ");
+            if (pass == "cc" || pass == "cancel") return;
+            if (pass.empty()) cout << "❌ Password cannot be empty.\n";
+        } while (pass.empty());
+
+        do {
+            cout << (role == "company" ? "Company Name" : "Full Name") << " (or type 'cc' to cancel): ";
+            getline(cin, name);
+            if (name == "cc" || name == "cancel") return;
+            if (name.empty()) cout << "❌ Name cannot be empty.\n";
+        } while (name.empty());
+
+        do {
+            cout << "Email (or type 'cc' to cancel): ";
+            getline(cin, email);
+            if (email == "cc" || email == "cancel") return;
+            if (email.empty() || email.find('@') == string::npos)
+                cout << "❌ Invalid email. Must contain '@' and not be empty.\n";
+        } while (email.empty() || email.find('@') == string::npos);
+
+        do {
+            cout << "Phone (or type 'cc' to cancel): ";
+            getline(cin, phone);
+            if (phone == "cc" || phone == "cancel") return;
+            if (phone.empty() || phone.length() != 10 || !all_of(phone.begin(), phone.end(), ::isdigit))
+                cout << "❌ Invalid phone number. Must be 10 digits.\n";
+        } while (phone.empty() || phone.length() != 10 || !all_of(phone.begin(), phone.end(), ::isdigit));
+
+        do {
+            cout << "Document Filename (or type 'cc' to cancel): ";
+            getline(cin, doc);
+            if (doc == "cc" || doc == "cancel") return;
+            if (doc.empty() || (
+                doc.find(".pdf") == string::npos &&
+                doc.find(".jpg") == string::npos &&
+                doc.find(".png") == string::npos &&
+                doc.find(".jpeg") == string::npos &&
+                doc.find(".doc") == string::npos)) {
+                cout << "❌ Invalid or empty file. Use .pdf, .jpg, .png, .jpeg, or .doc only.\n";
+            }
+        } while (doc.empty() || (
+            doc.find(".pdf") == string::npos &&
+            doc.find(".jpg") == string::npos &&
+            doc.find(".png") == string::npos &&
+            doc.find(".jpeg") == string::npos &&
+            doc.find(".doc") == string::npos));
+
+        cout << "School you graduated from: "; getline(cin, school);
+        cout << "First pet's name: "; getline(cin, pet);
+        cout << "Favorite color: "; getline(cin, color);
+
+        if (role == "jobseeker") {
+            vector<string> skill_list;
+            while (true) {
+                string s;
+                cout << "Skill (or type 'cc' to cancel, 'cf' to confirm): ";
+                getline(cin, s);
+                if (s == "cc" || s == "cancel") return;
+                if (s == "cf" || s == "confirm") {
+                    if (skill_list.empty()) {
+                        cout << "❌ You must enter at least one skill.\n";
+                        continue;
+                    }
+                    break;
+                } if (s.empty()) {
+                    cout << "❌ Skill cannot be empty.\n";
+                    continue;
+                }
+                if (find(skill_list.begin(), skill_list.end(), s) != skill_list.end()) {
+                    cout << "⚠️  You already entered \"" << s << "\". Please enter a different skill.\n";
+                    continue;
+                }
+                skill_list.push_back(s);
+            }
+
+            skills = "";
+            for (size_t i = 0; i < skill_list.size(); ++i) {
+                skills += skill_list[i];
+                if (i < skill_list.size() - 1) skills += ",";
+            }
+        } else {
+            cout << "Company Description: "; getline(cin, doc);
+            vector<string> job_list;
+            cout << "Enter jobs offered one by one. Type 'cf' to confirm, 'cc' to cancel:\n";
+            while (true) {
+                string job;
+                cout << "Job (or type 'cc' to cancel, 'cf' to confirm): ";
+                getline(cin, job);
+
+                if (job == "cc" || job == "cancel") return;
+
+                if (job == "cf" || job == "confirm") {
+                    if (job_list.empty()) {
+                        cout << "❌ You must enter at least one job before confirming.\n";
+                        continue;
+                    }
+                    break;
+                }
+
+                if (job.empty()) {
+                    cout << "❌ Job cannot be empty.\n";
+                    continue;
+                }
+
+                if (find(job_list.begin(), job_list.end(), job) != job_list.end()) {
+                    cout << "⚠️  You already entered \"" << job << "\". Please enter a different job.\n";
+                    continue;
+                }
+
+                job_list.push_back(job);
+            }
+            skills = "";
+            for (size_t i = 0; i < job_list.size(); ++i) {
+                skills += job_list[i];
+                if (i < job_list.size() - 1) skills += ",";
+            }
+        }
+
         
-            bool valid = (phone.length() == 10);
-        
-            for (char c : phone) {
-                if (!isdigit(c)) {
-                    valid = false;
+        string confirm,warning="";
+        while (true) {
+            user temp(uname, pass, name, email, phone, doc, role, skills);
+            display_regisInfo(&temp, warning);
+            getline(cin, confirm);
+            if (confirm == "s" || confirm == "save") break;
+            if (confirm == "cc" || confirm == "cancel") {
+                cout << "❌ Registration cancelled.\n";
+                return;
+            }
+            if (confirm == "1") {
+                while (true) {
+                    cout << "New Username (or type 'cc' to cancel): ";
+                    getline(cin, uname);
+                    if (uname == "cc" || uname == "cancel") break;
+                    if (uname.empty()) {
+                        cout << "❌ Username cannot be empty.\n";
+                        continue;
+                    }
+                    if (is_username_taken(uname)) {
+                        cout << "❌ Username already taken.\n";
+                        continue;
+                    }
                     break;
                 }
             }
-        
-            if (!valid) {
-                cout << "❌ Invalid phone number. Must be 10 digits only.\n";
+            else if (confirm == "2") {
+                do {
+                    cout << "New Name (or type 'cc' to cancel): ";
+                    getline(cin, name);
+                    if (name == "cc" || name == "cancel") break;
+                    if (name.empty()) cout << "❌ Name cannot be empty.\n";
+                } while (name.empty());                
             }
-        
-        } while (
-            phone.length() != 10 || 
-            !all_of(phone.begin(), phone.end(), ::isdigit)
-        );
-
-    
-    do {
-        cout << "Document Filename: ";
-        cin >> doc;
-
-        if (
-        doc.find(".pdf") == string::npos &&
-        doc.find(".jpg") == string::npos &&
-        doc.find(".png") == string::npos &&
-        doc.find(".jpeg") == string::npos &&
-        doc.find(".doc") == string::npos
-    ) {
-        cout << "❌ Invalid file format. Please use .pdf, .jpg, .png, .jpeg, or .doc\n";
-    }
-
-    } while (
-        doc.find(".pdf") == string::npos &&
-        doc.find(".jpg") == string::npos &&
-        doc.find(".png") == string::npos &&
-        doc.find(".jpeg") == string::npos &&
-        doc.find(".doc") == string::npos
-    );
-
-    
-        //  Security questions (ทุกคนกรอก)
-        cout << "School you graduated from: "; cin >> school;
-        cout << "First pet's name: "; cin >> pet;
-        cout << "Favorite color: "; cin >> color;
-    
-        if (role == "jobseeker") {
-            cout << "Skills (comma separated): "; cin >> skills;
+            else if (confirm == "3") {
+                do {
+                    string new_pass = getPasswordMaskedPreview("Enter new password (or type 'cc' to cancel): ");
+                    if (new_pass == "cc" || new_pass == "cancel") break;
+                    if (new_pass.empty()) {
+                        cout << "❌ Password cannot be empty.\n";
+                        continue;
+                    }
+                    pass = new_pass;
+                    break;
+                } while (true);
+                
+            }
+            else if (confirm == "4") {
+                do {
+                    cout << "New Email (or type 'cc' to cancel): ";
+                    getline(cin, email);
+                    if (email == "cc" || email == "cancel") break;
+                    if (email.empty() || email.find('@') == string::npos)
+                        cout << "❌ Invalid email. Must contain '@' and not be empty.\n";
+                } while (email.empty() || email.find('@') == string::npos);
+            }
+            else if (confirm == "5") {
+                do {
+                    cout << "New Phone (or type 'cc' to cancel): ";
+                    getline(cin, phone);
+                    if (phone == "cc" || phone == "cancel") break;
+                    if (phone.empty() || phone.length() != 10 || !all_of(phone.begin(), phone.end(), ::isdigit))
+                        cout << "❌ Invalid phone number. Must be 10 digits.\n";
+                } while (phone.empty() || phone.length() != 10 || !all_of(phone.begin(), phone.end(), ::isdigit));
+            }
+            else if (confirm == "6") {
+                do {
+                    cout << (role == "jobseeker" ? "New Resume (or type 'cc' to cancel): " : "New Description (or type 'cc' to cancel): ");
+                    getline(cin, doc);
+                    if (doc == "cc" || doc == "cancel") break;
+                    if (role == "jobseeker" && (
+                        doc.empty() ||
+                        (doc.find(".pdf") == string::npos &&
+                         doc.find(".jpg") == string::npos &&
+                         doc.find(".png") == string::npos &&
+                         doc.find(".jpeg") == string::npos &&
+                         doc.find(".doc") == string::npos))) {
+                        cout << "❌ Invalid or empty file. Must be .pdf, .jpg, .png, .jpeg, or .doc only.\n";
+                    } else break;
+                } while (true);
+            }
+            else if (confirm == "7") {
+                vector<string> items;
+                cout << (role == "company" ? "Enter new jobs offered" : "Enter new skills")
+                     << " one by one. Type 'cf' to confirm, 'cc' to cancel:\n";
+            
+                while (true) {
+                    string input;
+                    cout << (role == "company" ? "Job: " : "Skill: ");
+                    getline(cin, input);
+            
+                    if (input == "cc" || input == "cancel") break;
+            
+                    if (input == "cf" || input == "confirm") {
+                        if (items.empty()) {
+                            cout << "❌ You must enter at least one item before confirming.\n";
+                            continue;
+                        }
+                        // รวมข้อมูลเข้า skills
+                        skills = "";
+                        for (size_t i = 0; i < items.size(); ++i) {
+                            skills += items[i];
+                            if (i < items.size() - 1) skills += ",";
+                        }
+                        break;
+                    }
+            
+                    if (input.empty()) {
+                        cout << "❌ This field cannot be empty.\n";
+                        continue;
+                    }
+            
+                    if (find(items.begin(), items.end(), input) != items.end()) {
+                        cout << "⚠️  \"" << input << "\" is already added. Please enter something new.\n";
+                        continue;
+                    }
+            
+                    items.push_back(input);
+                }
+            }else {
+                warning = "❌ Invalid choice. Please try again.";
+                continue;
+            }
+            
         }
-    
-        // บันทึก user.txt
-        ofstream ufile(userfile, ios::app);
-        ufile << uname << " " << pass << " " << school << " " << pet << " " << color << "\n";
-        ufile.close();
-    
-        if (role == "company") {
-            string company_desc, jobs;
-            cout << "Company Description (ใช้ _ แทนช่องว่าง): "; cin >> company_desc;
-            cout << "Jobs Offered (comma-separated): "; cin >> jobs;
-        
-            ofstream comp(companyfile, ios::app);
-            comp << uname << " " << email << " " << phone << " "
-                 << name << " " << company_desc << " " << jobs << "\n";
-            comp.close();
-        }
-        else {
-            ofstream job(jobfile, ios::app);
-            job << uname << " " << name << " " << email << " " << phone << " "
-            << doc << " " << skills << "\n";
-            job.close();
-        }
-    
+
+        save_user_to_file(userfile, jobfile, companyfile, user(uname, pass, name, email, phone, doc, role, skills));
         cout << "\n✅ Registered successfully as " << role << "!\n";
-    }    
+    }
 };
+string trim(const string& str) {
+    size_t first = str.find_first_not_of(" \t\r\n");
+    if (first == string::npos) return "";
+    size_t last = str.find_last_not_of(" \t\r\n");
+    return str.substr(first, (last - first + 1));
+}
 void forget_password(const string& userfile) {
     string uname;
     cout << "\n== 🔐 Forgot Password ==" << endl;
@@ -270,10 +400,11 @@ void forget_password(const string& userfile) {
     display_security();
     int q_choice;
     cin >> q_choice;
+    cin.ignore();
 
     string answer;
     cout << "Your answer: ";
-    cin >> answer;
+    getline(cin, answer);
 
     ifstream infile(userfile);
     vector<string> lines;
@@ -281,29 +412,38 @@ void forget_password(const string& userfile) {
     bool reset_success = false;
 
     while (getline(infile, line)) {
+        cout << "[LINE DEBUG] raw line: " << line << endl;
         istringstream iss(line);
-        string u, p, s, pet, color;
-        if (iss >> u >> p >> s >> pet >> color) {
-            if (u == uname) {
-                bool match = false;
-                if (q_choice == 1 && answer == s) match = true;
-                else if (q_choice == 2 && answer == pet) match = true;
-                else if (q_choice == 3 && answer == color) match = true;
+        string u, p, school, pet, color;
 
-                if (match) {
-                    string new_pass;
-                    cout << "✅ Verified. Enter new password: ";
-                    cin >> new_pass;
+        getline(iss, u, '|');       u = trim(u);
+        getline(iss, p, '|');       p = trim(p);
+        getline(iss, school, '|');  school = trim(school);
+        getline(iss, pet, '|');     pet = trim(pet);
+        getline(iss, color);        color = trim(color);
 
-                    ostringstream updated;
-                    updated << u << " " << new_pass << " " << s << " " << pet << " " << color;
-                    lines.push_back(updated.str());
-                    reset_success = true;
-                    continue;
-                }
+        cout << "[DEBUG] Read from file: " << u << ", " << school << ", " << pet << ", " << color << "\n";
+
+        if (u == uname) {
+            bool match = false;
+            if (q_choice == 1 && answer == school) match = true;
+            else if (q_choice == 2 && answer == pet) match = true;
+            else if (q_choice == 3 && answer == color) match = true;
+
+            if (match) {
+                string new_pass;
+                cout << "✅ Verified. Enter new password: ";
+                cin >> new_pass;
+
+                ostringstream updated;
+                updated << u << "|" << new_pass << "|" << school << "|" << pet << "|" << color;
+                lines.push_back(updated.str());
+                reset_success = true;
+                continue;
             }
         }
-        lines.push_back(line); // keep เดิม
+
+        lines.push_back(line);
     }
     infile.close();
 
@@ -319,6 +459,8 @@ void forget_password(const string& userfile) {
     }
 }
 
+
+
 void user_register() {
     user::register_user("user.txt", "jobseeker.txt", "company.txt");
 }
@@ -327,58 +469,83 @@ user* user_login() {
     string uname, pass;
     cout << "== Login ==" << endl;
     cout << "Username: "; cin >> uname;
-    cout << "Password: "; cin >> pass;
+    cin.ignore();
+    pass = getPasswordMaskedPreview("Password: ");
 
     ifstream userfile("user.txt");
     string line;
     while (getline(userfile, line)) {
         istringstream iss(line);
         string u, p, school, pet, color;
-        if (iss >> u >> p >> school >> pet >> color) {
-            if (u == uname && p == pass) {
-                cout << "\n✅ Login success! Welcome, " << uname << "\n";
-                userfile.close();
-                // ลองหาข้อมูลใน jobseeker
-                ifstream job("jobseeker.txt");
-                while (getline(job, line)) {
-                    istringstream jobiss(line);
-                    string ju, email, phone, name, doc, skills;
-                    if (jobiss >> ju >> email >> phone >> name >> doc >> skills && ju == uname) {
-                        job.close();
-                        return new user(ju, p, name, email, phone, doc, "jobseeker", skills);
-                    }
-                }
-                job.close(); 
+        getline(iss, u, '|');
+        getline(iss, p, '|');
+        getline(iss, school, '|');
+        getline(iss, pet, '|');
+        getline(iss, color);
 
-                // หรือ company
-                ifstream comp("company.txt");
-                    while (getline(comp, line)) {
-                        istringstream compiss(line);
-                        string cu, email, phone, compname, compdesc, jobs;
-                         if (compiss >> cu >> email >> phone >> compname >> compdesc >> jobs && cu == uname) {
-                        comp.close();
-                        return new user(cu, p, compname, email, phone, compdesc, "company", jobs);
-                    }
+        if (u == uname && p == pass) {
+            userfile.close();
+            cout << "\n✅ Login success! Welcome, " << uname << "\n";
+
+            // 👉 ลองหาใน jobseeker
+            ifstream job("jobseeker.txt");
+            string line_job;
+            while (getline(job, line_job)) {
+                istringstream jobiss(line_job);
+                string ju, email, phone, name, doc, skills;
+
+                getline(jobiss, ju, '|');
+                getline(jobiss, email, '|');
+                getline(jobiss, phone, '|');
+                getline(jobiss, name, '|');
+                getline(jobiss, doc, '|');
+                getline(jobiss, skills);
+
+                if (ju == uname) {
+                    job.close();
+                    return new user(ju, p, name, email, phone, doc, "jobseeker", skills);
                 }
-                comp.close();
             }
+            job.close();
+
+            // 👉 หรือเป็น company
+            ifstream comp("company.txt");
+            while (getline(comp, line)) {
+                istringstream compiss(line);
+                string cu, email, phone, cname, desc, jobs;
+
+                getline(compiss, cu, '|');
+                getline(compiss, email, '|');
+                getline(compiss, phone, '|');
+                getline(compiss, cname, '|');
+                getline(compiss, desc, '|');
+                getline(compiss, jobs);
+
+                if (cu == uname) {
+                    comp.close();
+                    return new user(cu, p, cname, email, phone, desc, "company", jobs);
+                }
+            }
+            comp.close();
+
+            // 👉 ถ้าหาใน jobseeker/company ไม่เจอ
+            return new user(u, p, "Unknown", "N/A", "N/A", "N/A", "unknown");
         }
     }
 
     cout << "\n❌ Login failed: Invalid username or password.\n";
 
-
-    // เสนอลืมรหัสผ่าน
     char opt;
     cout << "Forgot your password? (y/n): ";
     cin >> opt;
-
     if (opt == 'y' || opt == 'Y') {
-    forget_password("user.txt");
+        forget_password("user.txt");
     }
 
     return nullptr;
 }
+
+
 void jobseeker_dashboard(user* currentUser) {
     int choice;
     do {

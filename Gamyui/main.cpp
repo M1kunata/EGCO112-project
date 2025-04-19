@@ -2,6 +2,7 @@
 #include "edit.h"
 #include "usergamyui.h"
 #include "../company.h"
+
 void welcome();
 void main_menu();
 void exit();
@@ -27,7 +28,7 @@ do {
         }
         else if (main_input == "2") {
             system("clear");
-            user* currentUser = user_login();
+            currentUser = user_login();
             if (currentUser != nullptr) {
                 if (currentUser->getRole() == "jobseeker") {
                     jobseeker_dashboard(currentUser);
