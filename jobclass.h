@@ -80,17 +80,16 @@ bool job::check_com(string comcheck)
 }
 void job::display()
 {
-    cout<<"JOB::";
-    cout <<"ID: "<<left<<setw(3)<<tag_num ;
-    cout<<"Name: "<<setw(10)<< jobtype <<endl;
-    cout<<"requirment skill:"; 
+    cout << left << setw(6) << tag_num
+    << setw(15) << jobtype
+    << setw(15) << company;
     for (const auto& f : requiresskill) {
         cout << f <<",";
     }
-    cout <<"By: "<< setw(10)<<company ;
-    cout <<"Work at: "<<setw(10)<<location ;
-    cout <<"salary(max:min): "<< max_salary << ":" << min_salary << endl;
-    cout <<"Status: "<< status << endl;
+    cout<< setw(20) << location
+    << setw(15) << max_salary
+    << setw(15) << min_salary
+    << setw(12) << status<< endl;
 }
 void job::clear_vector()
 {

@@ -22,7 +22,7 @@ void clear_screen();
 void editUserInfo(user* currentUser);
 void display_jobseeker_dashboard(user* currentUser);
 void forget_password(const string& userfile);
-void apply_job(string user_id, string job_id);
+void apply_job(string user_id, string job_id,string sort);
 void display_userInfo(user* u, const string& warning = "");
 bool is_username_taken(const string& uname);
 void display_regisInfo(user* u, const string& warning);
@@ -569,8 +569,17 @@ void jobseeker_dashboard(user* currentUser) {
             cin.get();
         }
         else if (choice == 3) {
-            
-            apply_job(currentUser->getUsername(), "");
+            cout<<"1.by max"<<endl;
+            cout<<"2.by min"<<endl;
+            cout<<"3.by tag"<<endl;
+            string sort;
+            cin>>sort;
+            if(sort=="1")
+                apply_job(currentUser->getUsername(), "","max");
+            else if(sort=="2")
+                apply_job(currentUser->getUsername(), "","min");
+            else if(sort=="3")
+                apply_job(currentUser->getUsername(), "","");
             cin.get();
         }
         else if (choice != 4) {

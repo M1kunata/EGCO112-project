@@ -5,19 +5,19 @@
 #include "bstclass.h"
 using namespace std;
 
-void apply_job(string user_id, string job_id);
+void apply_job(string user_id, string job_id,string sort);
 void addNewApplication(string user_id, string job_id);
-int read_jobs(BST &, int);
+int read_jobs(BST &, int,string sort);
 vector<vector<string>> read_applications();
 
 vector<string> extractFields(const string &line);
 
-void apply_job(string user_id, string job_id)
+void apply_job(string user_id, string job_id,string sort)
 {
     BST one;
     string back;
     int selected_job;
-    read_jobs(one, 0);
+    read_jobs(one, 0,sort);
     cout << "type back to go back else type anything" << endl;
     cin >> back;
     if (back == "back")
@@ -79,7 +79,7 @@ void addNewApplication(string user_id, string job_id)
 {
     BST one;
     job clone;
-    read_jobs(one, 1);
+    read_jobs(one, 1,"");
     int tag_num, tag;
     string jobtype, company, location, status, requir; // status pending end
     double max_sal, min_sal;
@@ -116,7 +116,7 @@ void view_applications_by_company(string company_id)
 {
     vector<vector<string>> applications;
     BST one;
-    read_jobs(one, 1);
+    read_jobs(one, 1,"");
     applications = read_applications();
     // Header
     cout << left << setw(15) << "Application ID"
@@ -182,7 +182,7 @@ vector<vector<string>> read_applications()
     return applications;
 }
 
-int read_jobs(BST &one, int show)
+int read_jobs(BST &one, int show,string sort)
 {
     ifstream file("job_data.txt");
     if (!file)
@@ -231,7 +231,8 @@ int read_jobs(BST &one, int show)
                      << setw(12) << status << endl;
         }
         job n1(stoi(id), job_title, company_name, requirements, stod(max), stod(min), status, requirements);
-        one.insertNode(n1, "nofilter"); // ยัดเข้าbst
+        if (status == "recruiting")
+        one.insertNode(n1, sort); // ยัดเข้าbst
         n1.clear_vector();
     }
     file.close();

@@ -85,7 +85,7 @@ void company_dashboard(user *company)
                 {
                 vector<vector<string>> applications;
                 applications = read_applications();
-                cout << "choose job ID:" << endl;
+                cout << "choose job Application:" << endl;
                 cin >> id_job;
                 if(cin.fail())
                     throw "Don't stupid!!";
@@ -274,9 +274,19 @@ void read_job(BST &one, string comname, string sor) // เพื่อเพิ�
                 n1.clear_vector();
             }
         }
-        if (comname != "all")
+        if (comname != "all"){
+            cout << left << setw(6) << "ID"
+            << setw(15) << "Job Title"
+            << setw(15) << "Company"
+            << setw(25) << "Requirements"
+            << setw(20) << "Location"
+            << setw(15) << "Max Salary"
+            << setw(15) << "Min Salary"
+            << setw(12) << "Status" << endl;
+       cout << string(125, '-') << endl;
             one.displayInOrder(); // เรียงออกมาให้ดูตอนนี้เรียงตามลำดับid
-    }
+        }
+        }
     Out.close();
 }
 void updatestatusfromappli(string id_job, string stat)

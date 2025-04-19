@@ -90,7 +90,7 @@ public:
                 double max1, min1, max2, min2;
     
                 t->data.getdata(tag, jobtype, company, loca, max1, min1, stas, requir);
-                g.getdata(tag, jobtype, company, loca, max2, min2, stas, requir);
+                new_node->data.getdata(tag, jobtype, company, loca, max2, min2, stas, requir);
     
                 bool goLeft = false;
     
@@ -120,6 +120,7 @@ public:
             }
         }
         size++;
+    }
     }
 
     void displayInOrder() {
