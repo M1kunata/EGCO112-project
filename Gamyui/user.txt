@@ -18,3 +18,4 @@ RYGL|ryangl|Mahidol|N/A|BLue
 ryan|ryan|Mahidol|N/A|Blue
 A|A|DummySchool|DummyPet|DummyColor
 Korn|yui123546|DummySchool|DummyPet|DummyColor
+ryan2|ryan|DummySchool|DummyPet|DummyColor

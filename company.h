@@ -66,7 +66,7 @@ void company_dashboard(user *company)
         else if (strcmp(choice, "5") == 0) // อันนี้นะไรอัน
         {
             int p=1;
-            string id,check;
+            string idforjob,idforappli,check;
             int id_job;
             char numtoaccept[10];
             view_applications_by_company(companyname);
@@ -94,15 +94,15 @@ void company_dashboard(user *company)
                     if (application[0] == to_string(id_job))
                     {   
                         i=1;
-                        id=application[1];
+                        idforjob=application[1];
+                        idforappli=application[0];
                         break;
                     }
                 }
-                updateApplicationStatus(id, "accepted");//อัพเดทสถานะงานappli
-                updatestatusfromappli(id, "accept");//อัะเดทสถานะไฟล์งานบริษัท
+                updateApplicationStatus(idforappli,idforjob, "accepted");//อัพเดทสถานะงานappli
+                updatestatusfromappli(idforjob, "accept");//อัะเดทสถานะไฟล์งานบริษัท
                 if(i==1)break;
                 }
-                   
                     }
                     catch(const char* n)
                     {
@@ -212,15 +212,20 @@ void add_job(string compa)
 {
     while (1)
     { // ลูปเพิ่มงาน
-        string in;
-        input(compa);
-        display_add_another();
-        cin >> in;
-        if (in == "1")
-            clear_screen(); // clear screen
-        // เพิ่มงาน
-        else if (in == "2")
+        string in,check;
+        cout<<"type back to back else type anything"<<endl;
+        cin>>check;
+        if(check=="back")
             break;
+        else{input(compa);
+            display_add_another();
+            cin >> in;
+            if (in == "1")
+                clear_screen(); // clear screen
+            // เพิ่มงาน
+            else if (in == "2")
+                break;
+            }
     }
 }
 void read_job(BST &one, string comname, string sor) // เพื่อเพิ่มเข้า bst

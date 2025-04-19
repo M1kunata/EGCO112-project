@@ -12,4 +12,4 @@ fon_digital|fon.s@example.com|0800000000|Fon Saetang|resume_fon.pdf|Content_Crea
 
 ryan gleeson.ryanj@gmail.com 0811111111 Ryan ryan.png C++,Java,Docker,Python,WebDev
 Korn yui@ 0123456789 korn phu uyi.pdf c++
-somsri|@|0123456789|kittcharn somsri|.pdf|plp
+C|C@|0215478963|C|.pdf|C

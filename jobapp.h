@@ -15,8 +15,12 @@ vector<string> extractFields(const string &line);
 void apply_job(string user_id, string job_id)
 {
     BST one;
+    string back;
     int selected_job;
     read_jobs(one,0);
+    cout<<"type back to go back else type anything"<<endl;
+    cin>>back;
+    if(back=="back")return;
     cout << "Select a job (ID) you would like to apply:" << endl;
     cin >> selected_job;
     addNewApplication(user_id, to_string(selected_job));
@@ -34,7 +38,7 @@ std::string rebuildLine(const std::vector<std::string> &fields)
     return result;
 }
 
-void updateApplicationStatus(string application_id, string status)
+void updateApplicationStatus(string application_id,string jobid, string status)
 {
 
     ifstream inFile("application_data.txt");
@@ -45,10 +49,17 @@ void updateApplicationStatus(string application_id, string status)
     while (getline(inFile, line))
     {
         auto fields = extractFields(line);
-        if (fields[0] == application_id)
+        //cout << "Checking " << fields[0] << " vs " << application_id << endl;
+        //cin.get();
+        if (fields.size() > 5 && fields[0] == application_id)
         {
             fields[5] = status;
             line = rebuildLine(fields);
+        }
+        else if(fields.size() > 5 && fields[1] == jobid)
+        {
+            fields[5] = "rejected";
+            line = rebuildLine(fields);    
         }
         lines.push_back(line);
         currentline++;
@@ -115,7 +126,7 @@ void view_applications_by_company(string company_id)
     cout << string(55, '-') << endl;
     for (const auto &application : applications)
     {
-        if (application[3] == company_id)
+        if (application[3] == company_id&&application[5]=="pending")
         {
             cout << left << setw(15) << application[0]
                  << setw(15) << application[1]
