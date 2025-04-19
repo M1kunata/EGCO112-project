@@ -85,7 +85,24 @@ public:
         } else {
             bool inserted = false;
             while (!inserted) {
-                if (new_node->data<=t->data) {
+                int tag;
+                string jobtype, company, requir, loca, stas;
+                double max1, min1, max2, min2;
+    
+                t->data.getdata(tag, jobtype, company, loca, max1, min1, stas, requir);
+                g.getdata(tag, jobtype, company, loca, max2, min2, stas, requir);
+    
+                bool goLeft = false;
+    
+                if (sor == "max") {
+                    goLeft = (max2 <= max1);
+                } else if (sor == "min") {
+                    goLeft = (min2 <= min1);
+                } else {
+                    goLeft = (new_node->data <= t->data);
+                }
+    
+                if (goLeft) {
                     if (!t->leftPtr) {
                         t->leftPtr = new_node;
                         inserted = true;
@@ -99,7 +116,7 @@ public:
                     } else {
                         t = t->rightPtr;
                     }
-                }
+    
             }
         }
         size++;

@@ -569,6 +569,7 @@ void jobseeker_dashboard(user* currentUser) {
             cin.get();
         }
         else if (choice == 3) {
+            
             apply_job(currentUser->getUsername(), "");
             cin.get();
         }
