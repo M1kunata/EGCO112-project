@@ -16,3 +16,4 @@ greenhome_admin GreenHome88 Kasetsart Fish Green
 artcore_admin ArtCore@Design Silpakorn Lizard Purple
 RYGL ryangl Mahidol N/A BLue
 ryan ryan Mahidol N/A Blue
+A A DummySchool DummyPet DummyColor

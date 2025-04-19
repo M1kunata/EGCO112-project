@@ -43,7 +43,6 @@ inline void editUserInfo(user* currentUser) {
     string input;
     bool editing = true;
     string warning = "";
-
     while (editing) {
         clear_screen();
         user tempUser(username, password, name, email, phone, document, role, skills);
