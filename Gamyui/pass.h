@@ -39,14 +39,12 @@ inline string getPasswordMaskedPreview(const string& prompt = "") {
         } else if (!iscntrl(ch)) {
             password += ch;
         }
-
-        // เคลียร์บรรทัดก่อนแสดงใหม่ (ล้างคราบเก่า)
         cout << "\r" << string(80, ' ') << "\r" << prompt;
 
         if (!password.empty()) {
             for (size_t i = 0; i < password.length() - 1; ++i)
                 cout << "*";
-            cout << password.back(); // ตัวล่าสุดแสดงจริง
+            cout << password.back(); 
         }
 
         cout.flush();
