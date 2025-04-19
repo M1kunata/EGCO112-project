@@ -77,26 +77,36 @@ public:
     string getSkills() const { return skills; }
 
     static void save_user_to_file(const string& userfile, const string& jobfile, const string& companyfile, const user& new_user) {
-        // เขียน user.txt
+        // เขียน user.txt (ไม่มีช่องว่างในฟิลด์นี้)
         ofstream ufile(userfile, ios::app);
-        ufile << new_user.username << " " << new_user.password << " DummySchool DummyPet DummyColor\n";
+        ufile << new_user.getUsername() << " " << new_user.getPassword() << " DummySchool DummyPet DummyColor\n";
         ufile.close();
-
-        // เขียน jobseeker หรือ company
-        ofstream outfile;
-        if (new_user.role == "jobseeker") {
-            outfile.open(jobfile, ios::app);
-            outfile << new_user.username << " " << new_user.email << " " << new_user.phone << " "
-                    << new_user.name << " " << new_user.document << " " << new_user.skills << "\n";
-        
-        } else if (new_user.role == "company") {
-            outfile.open(companyfile, ios::app);
-            outfile << new_user.username << " " << new_user.email << " " << new_user.phone << " "
-                    << new_user.name << " " << new_user.document << "\n"; // ใช้ name เป็นชื่อบริษัท
+    
+        // jobseeker ใช้ | คั่น
+        if (new_user.getRole() == "jobseeker") {
+            ofstream outfile(jobfile, ios::app);
+            outfile << new_user.getUsername() << "|"
+                    << new_user.getEmail() << "|"
+                    << new_user.getPhone() << "|"
+                    << new_user.getName() << "|"
+                    << new_user.getDocument() << "|"
+                    << new_user.getSkills() << "\n";
+            outfile.close();
         }
-        outfile.close();
+    
+        // company ใช้ | คั่น
+        else if (new_user.getRole() == "company") {
+            ofstream outfile(companyfile, ios::app);
+            outfile << new_user.getUsername() << "|"
+                    << new_user.getEmail() << "|"
+                    << new_user.getPhone() << "|"
+                    << new_user.getName() << "|"  // ใช้ name เป็น company name
+                    << new_user.getDocument() << "|"  // ใช้ document เก็บ description
+                    << new_user.getSkills() << "\n";  // skills คือ jobs_offered
+            outfile.close();
+        }
     }
-
+    
     static void register_user(const string& userfile, const string& jobfile, const string& companyfile) {
         string uname, pass, name, email, phone, doc, role, skills;
         string school, pet, color;
@@ -449,49 +459,68 @@ user* user_login() {
         string u, p, school, pet, color;
         if (iss >> u >> p >> school >> pet >> color) {
             if (u == uname && p == pass) {
-                cout << "\n✅ Login success! Welcome, " << uname << "\n";
                 userfile.close();
-                // ลองหาข้อมูลใน jobseeker
+                cout << "\n✅ Login success! Welcome, " << uname << "\n";
+
+                // 👉 ลองหาใน jobseeker
                 ifstream job("jobseeker.txt");
                 while (getline(job, line)) {
                     istringstream jobiss(line);
                     string ju, email, phone, name, doc, skills;
-                    if (jobiss >> ju >> email >> phone >> name >> doc >> skills && ju == uname) {
+
+                    getline(jobiss, ju, '|');
+                    getline(jobiss, email, '|');
+                    getline(jobiss, phone, '|');
+                    getline(jobiss, name, '|');
+                    getline(jobiss, doc, '|');
+                    getline(jobiss, skills);
+
+                    if (ju == uname) {
                         job.close();
                         return new user(ju, p, name, email, phone, doc, "jobseeker", skills);
                     }
-
                 }
                 job.close();
 
-                // หรือ company
+                // 👉 หรือเป็น company
                 ifstream comp("company.txt");
-                    while (getline(comp, line)) {
-                        istringstream compiss(line);
-                        string cu, email, phone, compname, compdesc, jobs;
-                         if (compiss >> cu >> email >> phone >> compname >> compdesc >> jobs && cu == uname) {
+                while (getline(comp, line)) {
+                    istringstream compiss(line);
+                    string cu, email, phone, cname, desc, jobs;
+
+                    getline(compiss, cu, '|');
+                    getline(compiss, email, '|');
+                    getline(compiss, phone, '|');
+                    getline(compiss, cname, '|');
+                    getline(compiss, desc, '|');
+                    getline(compiss, jobs);
+
+                    if (cu == uname) {
                         comp.close();
-                        return new user(cu, p, compname, email, phone, compdesc, "company", jobs);
+                        return new user(cu, p, cname, email, phone, desc, "company", jobs);
                     }
                 }
                 comp.close();
+
+                // 👉 ถ้าหาใน jobseeker/company ไม่เจอ
+                return new user(u, p, "Unknown", "N/A", "N/A", "N/A", "unknown");
             }
         }
     }
+
     cout << "\n❌ Login failed: Invalid username or password.\n";
 
-
-    // เสนอลืมรหัสผ่าน
     char opt;
     cout << "Forgot your password? (y/n): ";
     cin >> opt;
-
     if (opt == 'y' || opt == 'Y') {
-    forget_password("user.txt");
+        forget_password("user.txt");
     }
 
     return nullptr;
 }
+
+
 void jobseeker_dashboard(user* currentUser) {
     int choice;
     do {

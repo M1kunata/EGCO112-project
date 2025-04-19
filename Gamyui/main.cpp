@@ -28,7 +28,7 @@ do {
         }
         else if (main_input == "2") {
             system("clear");
-            user* currentUser = user_login();
+            currentUser = user_login();
             if (currentUser != nullptr) {
                 if (currentUser->getRole() == "jobseeker") {
                     jobseeker_dashboard(currentUser);
