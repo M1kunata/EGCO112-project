@@ -54,6 +54,7 @@ void company_dashboard(user *company)
                     {
                         break;
                     }
+                    else cout<<"Invalid choice"<<endl;
                 }
                 else if (strcmp(isfilter, "2") == 0)
                 {
@@ -61,6 +62,7 @@ void company_dashboard(user *company)
                 }
                 else if (strcmp(isfilter, "3") == 0)
                     break;
+                else cout<<"Invalid choice"<<endl;
             }
         }
         else if (strcmp(choice, "5") == 0) // อันนี้นะไรอัน
@@ -70,54 +72,61 @@ void company_dashboard(user *company)
             int id_job;
             char numtoaccept[10];
             view_applications_by_company(companyname);
-            while (1)
-            {
-            cout<<"'type back to go back else type anything'"<<endl;
-            cin>>check;
-            if (check=="back")
-            {
-                break;
-            }else 
-            {
+            while(1)
+            {    
                 try {
-                int i=0;
-                while(1)
-                {
-                vector<vector<string>> applications;
-                applications = read_applications();
-                cout << "choose job Application:" << endl;
-                cin >> id_job;
-                if(cin.fail())
-                    throw "Don't stupid!!";
-                for (const auto &application : applications)
-                {
-                    if (application[0] == to_string(id_job))
-                    {   
-                        i=1;
-                        idforjob=application[1];
-                        idforappli=application[0];
+                int i=0,continue1=0;
+                  
+                    vector<vector<string>> applications;
+                    applications = read_applications();
+                    while(1)
+                    {
+                        cout<<"'type back to go back else type anything'"<<endl;
+                        cin>>check;
+                        if (check=="back")
+                        {
                         break;
+                        }
+                        cout << "choose job Application:" ;
+                        cin >> id_job;
+                        if(cin.fail())
+                           throw "Don't stupid!!";
+                        for (const auto &application : applications)
+                        {
+                            if (application[0] == to_string(id_job)&&application[3]==companyname)
+                            {   
+                                i=1;
+                                continue1=1;
+                                idforjob=application[1];
+                                idforappli=application[0];
+                                break;
+                            }
+                        }
+                        if(i==1) break;
+                        else cout<<"Invalid ID"<<endl;   
+                    }
+                    if(continue1==1)
+                    {
+                        updateApplicationStatus(idforappli,idforjob, "accepted");//อัพเดทสถานะงานappli
+                        updatestatusfromappli(idforjob, "accept");//อัะเดทสถานะไฟล์งานบริษัท
                     }
                 }
-                updateApplicationStatus(idforappli,idforjob, "accepted");//อัพเดทสถานะงานappli
-                updatestatusfromappli(idforjob, "accept");//อัะเดทสถานะไฟล์งานบริษัท
-                if(i==1)break;
-                }
-                    }
-                    catch(const char* n)
+            
+            catch(const char* n)
                     {
                         p=0;
                         cin.clear();
                         cin.ignore(500,'\n');
                         cout<<n<<endl;
                     }
-            }
-                    
                 if(p==1)break;
-            } 
-        }
+        } 
+    }
         else if (strcmp(choice, "6") == 0)
             break;
+        else {
+            cout<<"invalid choice"<<endl;
+        }
     }
 }
 void edit_job(string companyname)
@@ -125,17 +134,21 @@ void edit_job(string companyname)
     int id;
     BST edit_root, collection;
     read_job(collection, "all", "nofilter");
+    
     while (1)
     {
+        string check;
+    cout<<"connect to editing job"<<endl;
+    cout<<"type back to back else type anything"<<endl;
+    cin>>check;
+    if(check=="back")
+        return;
         char thing[10];
         read_job(edit_root, companyname, "nofilter");
+        while(1)
+        {
         cout << "which id you want to edit?" << endl;
-        cout<<"[back] to back:";
-        char back[10];
-        cin>>back;
-        if(strcmp(back,"back")==0)break;
-        else
-        { cout << "choose:";
+        cout << "choose:";
             string sid;
             cin >> sid;
             id = stoi(sid);
@@ -190,8 +203,16 @@ void edit_job(string companyname)
             else
                 cout << "pls input the real infomation" << endl;
         }
-        cout << "status(recuiting OR end):";
+        while(1)
+        {
+        cout << "status(r[recruiting] OR a[accept]):";
         cin >> status;
+        if(status=="r")status="recruiting";
+        if(status=="a")status="accept";
+        if(status=="recruiting"||status=="accept")
+            break;
+        else cout<<"type in bracket"<<endl;
+        }
         job edit(id, type, companyname, loca, max, min, status, req);
         collection.editJob(id, edit);
         ofstream rewrite("job_data.txt");
@@ -210,14 +231,16 @@ void rechecktomenu(string compa)
 }
 void add_job(string compa)
 {
+    string check;
+    cout<<"type back to back else type anything"<<endl;
+    cin>>check;
+    if(check=="back")
+        return;
+    else{
     while (1)
     { // ลูปเพิ่มงาน
-        string in,check;
-        cout<<"type back to back else type anything"<<endl;
-        cin>>check;
-        if(check=="back")
-            break;
-        else{input(compa);
+        string in;
+        input(compa);
             display_add_another();
             cin >> in;
             if (in == "1")

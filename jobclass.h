@@ -33,6 +33,7 @@ public:
     void update_numofjob();
     void clear_vector();
     void display();
+    void getidcompa(int&,string&);
     bool check_com(string comcheck);
     bool compare(string sor,int data);
     void getdata(int &tag,string &job, string &compa, string &loca,double &max_salary,double &min_salary, string &stat, string &skill);
@@ -41,6 +42,11 @@ public:
         cout<<"already add job!!"<<endl;
     }
 };
+void job::getidcompa(int &tag,string &compa)
+{
+    tag=tag_num;
+    compa=company;
+}
 void job::setjob(job &another)
 {
     tag_num=another.tag_num;

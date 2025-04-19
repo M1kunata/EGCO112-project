@@ -5,3 +5,4 @@ futuresoft_hr|hr@futuresoft.dev|0234567890|FutureSoft Solutions|Cutting-edge sof
 greenhome_admin|admin@greenhome.co|0256789012|GreenHome Design|Eco-friendly home and office design|Architect,Interior Designer
 artcore_admin|admin@artcore.co.th|0243216789|ArtCore Studios|Creative studio specializing in design|Graphic Designer,Animator
 RYGL|contact@ryangl.com|0000000001|ryan|A company specializing in data technology|Data Analysis,Programmer,IoT Engineer,Chef,Receptionist,Intern - IT support
+B|B@|0123456789|B|B|B
