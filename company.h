@@ -27,6 +27,7 @@ void company_dashboard(user *company)
         }
         else if(strcmp(choice,"2")==0)
         {
+            cin.ignore(50,'\n');
             editUserInfo(company);
         }
         else if (strcmp(choice, "3") == 0)
