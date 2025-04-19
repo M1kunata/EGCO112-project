@@ -41,8 +41,9 @@ private:
 public:
     user() = default;
 
-    user(string u, string p, string n, string e, string ph, string doc, string r, string sk = "")
-        : username(u), password(p), name(n), email(e), phone(ph), document(doc), role(r), skills(sk) {}
+    user(string u, string p, string n, string e, string ph, string doc, string r, string sk)
+    : username(u), password(p), name(n), email(e), phone(ph), document(doc), role(r), skills(sk) {}
+
         string getEmail() const { return email; }
         string getPhone() const { return phone; }
         string getDocument() const { return document; }
@@ -76,13 +77,18 @@ public:
     string getPassword() const { return password; }
     string getSkills() const { return skills; }
 
-    static void save_user_to_file(const string& userfile, const string& jobfile, const string& companyfile, const user& new_user) {
+    static void save_user_to_file(const string& userfile,
+        const string& jobfile,
+        const string& companyfile,
+        const user& new_user,
+        const string& school,
+        const string& pet,
+        const string& color){
         // เขียน user.txt (ไม่มีช่องว่างในฟิลด์นี้)
         ofstream ufile(userfile, ios::app);
-        ufile << new_user.getUsername() << "|"
-              << new_user.getPassword() << "|"
-              << "DummySchool|DummyPet|DummyColor" << "\n"; 
-        ufile.close();
+        ufile << new_user.getUsername() << "|"<< new_user.getPassword() << "|"<< school << "|" << pet << "|" << color << "\n";
+
+    ufile.close();
     
         // jobseeker ใช้ | คั่น
         if (new_user.getRole() == "jobseeker") {
@@ -381,7 +387,8 @@ public:
             
         }
 
-        save_user_to_file(userfile, jobfile, companyfile, user(uname, pass, name, email, phone, doc, role, skills));
+        user temp(uname, pass, name, email, phone, doc, role, skills);
+        save_user_to_file(userfile, jobfile, companyfile, temp, school, pet, color);        
         cout << "\n✅ Registered successfully as " << role << "!\n";
     }
 };
@@ -527,7 +534,7 @@ user* user_login() {
             comp.close();
 
             // 👉 ถ้าหาใน jobseeker/company ไม่เจอ
-            return new user(u, p, "Unknown", "N/A", "N/A", "N/A", "unknown");
+            return new user(u, p, "Unknown", "N/A", "N/A", "N/A", "unknown","none");
         }
     }
 
