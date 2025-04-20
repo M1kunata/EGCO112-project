@@ -5,19 +5,19 @@
 #include "bstclass.h"
 using namespace std;
 
-void apply_job(string user_id, string job_id,string sort);
+void apply_job(string user_id, string job_id, string sort);
 void addNewApplication(string user_id, string job_id);
-int read_jobs(BST &, int,string sort);
+int read_jobs(BST &, int, string sort);
 vector<vector<string>> read_applications();
 
 vector<string> extractFields(const string &line);
 
-void apply_job(string user_id, string job_id,string sort)
+void apply_job(string user_id, string job_id, string sort)
 {
     BST one;
     string back;
     int selected_job;
-    read_jobs(one, 0,sort);
+    read_jobs(one, 0, sort);
     cout << "type back to go back else type anything" << endl;
     cin >> back;
     if (back == "back")
@@ -79,7 +79,7 @@ void addNewApplication(string user_id, string job_id)
 {
     BST one;
     job clone;
-    read_jobs(one, 1,"");
+    read_jobs(one, 1, "");
     int tag_num, tag;
     string jobtype, company, location, status, requir; // status pending end
     double max_sal, min_sal;
@@ -116,7 +116,7 @@ void view_applications_by_company(string company_id)
 {
     vector<vector<string>> applications;
     BST one;
-    read_jobs(one, 1,"");
+    read_jobs(one, 1, "");
     applications = read_applications();
     // Header
     cout << left << setw(15) << "Application ID"
@@ -145,19 +145,21 @@ void view_applications_by_jobseeker(string jobseeker_id)
     applications = read_applications();
     // Header
     cout << left << setw(15) << "Application ID"
-         << setw(15) << "Company ID"
-         << setw(15) << "JobSeeker ID"
+         << setw(15) << "Job"
+         << setw(15) << "Company Name"
+         << setw(15) << "JobSeeker"
          << setw(15) << "status" << endl;
-         
-    cout << string(55, '-') << endl;
+
+    cout << string(75, '-') << endl;
     for (const auto &application : applications)
     {
         if (application[4] == jobseeker_id)
         {
             cout << left << setw(15) << application[0]
+                 << setw(15) << application[2]
                  << setw(15) << application[3]
-                 << setw(15) << application[4] 
-                 <<setw(15) << application[5]<< endl;
+                 << setw(15) << application[4]
+                 << setw(15) << application[5] << endl;
         }
     }
 }
@@ -185,7 +187,7 @@ vector<vector<string>> read_applications()
     return applications;
 }
 
-int read_jobs(BST &one, int show,string sort)
+int read_jobs(BST &one, int show, string sort)
 {
     ifstream file("job_data.txt");
     if (!file)
@@ -220,27 +222,27 @@ int read_jobs(BST &one, int show,string sort)
         string max = fields[5];
         string min = fields[6];
         string status = fields[7];
-    
+
         // Data output
-       /* if (show == 0)
-        {
-            if (status == "recruiting")
-                cout << left << setw(6) << id
-                     << setw(15) << job_title
-                     << setw(15) << company_name
-                     << setw(25) << requirements
-                     << setw(20) << location
-                     << setw(15) << max
-                     << setw(15) << min
-                     << setw(12) << status << endl;
-        }*/
+        /* if (show == 0)
+         {
+             if (status == "recruiting")
+                 cout << left << setw(6) << id
+                      << setw(15) << job_title
+                      << setw(15) << company_name
+                      << setw(25) << requirements
+                      << setw(20) << location
+                      << setw(15) << max
+                      << setw(15) << min
+                      << setw(12) << status << endl;
+         }*/
         job n1(stoi(id), job_title, company_name, location, stod(max), stod(min), status, requirements);
         if (status == "recruiting")
-        one.insertNode(n1, sort); // ยัดเข้าbst
+            one.insertNode(n1, sort); // ยัดเข้าbst
         n1.clear_vector();
     }
-    if(show==0)
-    one.displayInOrder();
+    if (show == 0)
+        one.displayInOrder();
     file.close();
     return 0;
 }
