@@ -8,3 +8,5 @@
 "8" "Programmer" "RYGL" "3rd_year_student," "Bangkok,TH" "100000" "25000" "recruiting"
 "9" "king" "B" "jo," "ko" "100" "1" "recruiting"
 "10" "gigi" "B" "gigi,mk," "jin" "100" "1" "recruiting"
+"11" "helo" "B" "gin,ko," "kok" "1" "1" "recruiting"
+"12" "b" "B" "f," "ko" "1" "1" "recruiting"
