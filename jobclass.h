@@ -144,12 +144,11 @@ void input(string name)
     {
         string skill;
         cout << "requirment(stop type back):";
-        cin>>skill;
+        getline(cin,skill);
         if(skill=="back")
              break;
         else req+=(skill+",");
     }
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
     cout << "location:";
     getline(cin, loca);
     /*cout << "BY company:";

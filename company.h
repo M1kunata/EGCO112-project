@@ -240,15 +240,26 @@ void add_job(string compa)
     while (1)
     { // ลูปเพิ่มงาน
         string in;
+        int i=0;
         input(compa);
-            display_add_another();
+        while(1)
+        {    
+        display_add_another();
             cin >> in;
             if (in == "1")
+            {
                 clear_screen(); // clear screen
-            // เพิ่มงาน
-            else if (in == "2")
                 break;
-            }
+            }    // เพิ่มงาน
+            else if (in == "2")
+                {
+                    i=1;
+                    break;
+                }
+            else cout<<"Invalid choice"<<endl;
+        }
+        if(i==1)break;
+    }
     }
 }
 void read_job(BST &one, string comname, string sor) // เพื่อเพิ่มเข้า bst
