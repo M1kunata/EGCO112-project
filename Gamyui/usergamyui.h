@@ -26,7 +26,7 @@ void apply_job(string user_id, string job_id,string sort);
 void display_userInfo(user* u, const string& warning = "");
 bool is_username_taken(const string& uname);
 void display_regisInfo(user* u, const string& warning);
-
+void view_applications_by_jobseeker(string jobseeker_id);
 class user {
 private:
     string username;
@@ -557,10 +557,11 @@ void jobseeker_dashboard(user* currentUser) {
         display_jobseeker_dashboard(currentUser);
         cin >> choice;
         cin.ignore();
-
+        string users=currentUser->getUsername();
         if (choice == 1) {
             clear_screen();
             currentUser->display();
+            view_applications_by_jobseeker(users);
             cout << "\n[Press Enter to go back to the menu]";
             cin.get();
         }

@@ -146,15 +146,18 @@ void view_applications_by_jobseeker(string jobseeker_id)
     // Header
     cout << left << setw(15) << "Application ID"
          << setw(15) << "Company ID"
-         << setw(15) << "JobSeeker ID" << endl;
+         << setw(15) << "JobSeeker ID"
+         << setw(15) << "status" << endl;
+         
     cout << string(55, '-') << endl;
     for (const auto &application : applications)
     {
-        if (application[2] == jobseeker_id)
+        if (application[4] == jobseeker_id)
         {
             cout << left << setw(15) << application[0]
-                 << setw(15) << application[1]
-                 << setw(15) << application[2] << endl;
+                 << setw(15) << application[3]
+                 << setw(15) << application[4] 
+                 <<setw(15) << application[5]<< endl;
         }
     }
 }
