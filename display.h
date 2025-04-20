@@ -142,8 +142,7 @@ inline void display_userInfo(user* u, const string& warning) {
 
     cout << "🔧 Enter the number to edit, or type\n"
          << "   s or save  - to confirm all changes\n"
-         << "   b or back  - to return to menu without saving\n"
-         << "   cc or cancel - to cancel all edits\n";
+         << "   b or back  - to return to menu without saving\n";
 
     if (!warning.empty()) {
         cout << warning << "\n";
