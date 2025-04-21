@@ -68,19 +68,8 @@ inline void editUserInfo(user* currentUser) {
         }
 
         if (input == "1") {
-            while (true) {
-                string temp_input;
-                cout << "New Username (or type 'cc' to cancel): ";
-                getline(cin, temp_input);
-                if (temp_input == "cc" || temp_input == "CC") break;
-                if (temp_input.find(' ') != string::npos) {
-                    cout << "❌ Username cannot contain spaces. Please try again.\n";
-                } else if (temp_input == username) {
-                    cout << "⚠️  Same as old username. Please try again.\n";
-                } else if (is_username_taken(temp_input)) {
-                    cout << "❌ Username already taken. Please try another.\n";
-                } else { username = temp_input; break; }
-            }
+            warning="❌cannot edit";
+    
         } else if (input == "2") {
             string temp_input;
             cout << "New Full Name (or type 'cc' to cancel): ";
@@ -95,24 +84,17 @@ inline void editUserInfo(user* currentUser) {
                     continue;
                 }
                 string new_pass = getPasswordMaskedPreview("Enter new password (or type 'cc' to cancel): ");
-                if (new_pass != "cc" && new_pass != "CC") {
-                    if (new_pass.find(' ') != string::npos) {
-                        cout << "❌ Password cannot contain spaces. Please try again.\n";
-                        continue;
-                    }
                     password = new_pass;
-                }
-                break;
+                
+                break;}
             }
-        } else if (input == "4") {
+         else if (input == "4") {
             while (true) {
                 string temp_input;
                 cout << "New Email (or type 'cc' to cancel): ";
                 getline(cin, temp_input);
                 if (temp_input == "cc" || temp_input == "CC") break;
-                if (temp_input.find(' ') != string::npos) {
-                    cout << "❌ Email cannot contain spaces. Please try again.\n";
-                } else if (temp_input.find('@') == string::npos) {
+                if (temp_input.find('@') == string::npos) {
                     cout << "❌ Invalid email. Email must contain '@'. Please try again.\n";
                 } else { email = temp_input; break; }
             }
@@ -121,10 +103,8 @@ inline void editUserInfo(user* currentUser) {
                 string temp_input;
                 cout << "New Phone (10 digits, or type 'cc' to cancel): ";
                 getline(cin, temp_input);
-                bool has_space = (temp_input.find(' ') != string::npos);
                 bool valid = (temp_input.length() == 10 && all_of(temp_input.begin(), temp_input.end(), ::isdigit));
                 if (temp_input == "cc" || temp_input == "CC") break;
-                if (has_space || !valid) cout << "❌ Invalid phone number. Must be 10 digits without spaces.\n";
                 else { phone = temp_input; break; }
             }
         } else if (input == "6") {
@@ -182,16 +162,22 @@ inline void editUserInfo(user* currentUser) {
     vector<string> userlines;
     string line;
     while (getline(userfile, line)) {
-        istringstream iss(line);
+        stringstream ss(line);
         string u, p, s, pet, color;
-        if (iss >> u >> p >> s >> pet >> color) {
-            if (u == original_username) {
-                ostringstream updated;
-                updated << username << " " << password << " " << s << " " << pet << " " << color;
-                userlines.push_back(updated.str());
-            } else {
-                userlines.push_back(line);
-            }
+
+        if (!getline(ss, u, '|') || !getline(ss, p, '|') || !getline(ss, s, '|') ||
+            !getline(ss, pet, '|') || !getline(ss, color)) {
+            cout << "❌Failed to parse user line: " << line << endl;
+            userlines.push_back(line); // หรือข้ามบรรทัดนี้ก็ได้
+            continue;
+        }
+
+        if (u == original_username) {
+            ostringstream updated;
+            updated << username << "|" << password << "|" << s << "|" << pet << "|" << color;
+            userlines.push_back(updated.str());
+        } else {
+            userlines.push_back(line);
         }
     }
     userfile.close();
@@ -203,24 +189,19 @@ inline void editUserInfo(user* currentUser) {
         ifstream fin("jobseeker.txt");
         vector<string> lines;
         while (getline(fin, line)) {
-            istringstream iss(line);
-            string u, e, ph, n, docx;
-            string sk;
+            stringstream ss(line);
+            string u, e, ph, n, docx, sk;
 
-            if (!(iss >> u >> e >> ph >> n >> docx)) {
+            if (!getline(ss, u, '|') || !getline(ss, e, '|') || !getline(ss, ph, '|') ||
+                !getline(ss, n, '|') || !getline(ss, docx, '|') || !getline(ss, sk)) {
                 cout << "❌Failed to parse line: " << line << endl;
                 lines.push_back(line);
                 continue;
             }
 
-            getline(iss, sk);
-            size_t start = sk.find_first_not_of(" \t");
-            if (start != string::npos) sk = sk.substr(start);
-            else sk = "";
-
             if (u == original_username) {
                 ostringstream updated;
-                updated << username << " " << email << " " << phone << " " << name << " " << document << " " << skills;
+                updated << username << "|" << email << "|" << phone << "|" << name << "|" << document << "|" << skills;
                 lines.push_back(updated.str());
             } else {
                 lines.push_back(line);
@@ -228,7 +209,8 @@ inline void editUserInfo(user* currentUser) {
         }
         fin.close();
         ofstream fout("jobseeker.txt");
-        for (const auto& l : lines) fout << l << '\n';
+        for (const auto& l : userlines) userout << l << '\n';
+
         fout.close();
     } else if (role == "company") {
         ifstream fin("company.txt");

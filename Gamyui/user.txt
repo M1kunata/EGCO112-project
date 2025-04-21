@@ -1,4 +1,3 @@
-
 somsak|P@ssword123|Sarasas Donmuang|Dog|Blue
 ployploy|PloyNurse@2023|Saint Joseph|Cat|Pink
 keng_mechanic|M3chaN1c!45|Rajamangala|Fish|Black
@@ -19,5 +18,6 @@ A|A|DummySchool|DummyPet|DummyColor
 Korn|yui123546|DummySchool|DummyPet|DummyColor
 ryan2|ryan|DummySchool|DummyPet|DummyColor
 RYGL|ryangl|DummySchool|DummyPet|DummyColor
-C|C|C|C|C
+C|AC C|C|C|C
 B|B|B|B|B
+a|a|a|a|a

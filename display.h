@@ -129,7 +129,7 @@ inline void display_userInfo(user* u, const string& warning) {
     }
     clear_screen();
     cout << "📄 === User Info ===\n";
-    cout << "1. Username        : " << u->getUsername() << endl;
+    cout << "1. Username        : " << u->getUsername()<<"(cannot edit)" << endl;
     cout << "2. Name            : " << u->getName() << endl;
     cout << "3. Password        : ********" << endl;
     cout << "4. Email           : " << u->getEmail() << endl;
